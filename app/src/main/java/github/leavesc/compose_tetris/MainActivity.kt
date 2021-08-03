@@ -20,7 +20,7 @@ import github.leavesc.compose_tetris.logic.previewTetrisState
 import github.leavesc.compose_tetris.ui.TetrisBody
 import github.leavesc.compose_tetris.ui.TetrisButton
 import github.leavesc.compose_tetris.ui.TetrisScreen
-import github.leavesc.compose_tetris.ui.theme.ComposetetrisTheme
+import github.leavesc.compose_tetris.ui.theme.ComposeTetrisTheme
 import github.leavesc.compose_tetris.utils.StatusBarUtil
 
 /**
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                     lifecycle.removeObserver(observer)
                 }
             }
-            ComposetetrisTheme {
+            ComposeTetrisTheme {
                 Surface {
                     val tetrisState by tetrisViewModel.tetrisStateLD.collectAsState()
                     TetrisBody(tetrisScreen = {

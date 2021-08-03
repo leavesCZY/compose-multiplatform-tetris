@@ -9,12 +9,12 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/icon_tetris"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Composetetris">
+        android:theme="@style/Theme.ComposeTetris">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Composetetris.NoActionBar">
+            android:theme="@style/Theme.ComposeTetris.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
