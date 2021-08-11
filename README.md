@@ -1,4 +1,4 @@
-# compose-tetris
+# compose_tetris
 
 用 Jetpack Compose 实现一个**俄罗斯方块**
 
