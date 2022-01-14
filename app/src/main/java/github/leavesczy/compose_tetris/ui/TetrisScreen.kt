@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris.ui
+package github.leavesczy.compose_tetris.ui
 
 import android.graphics.Paint
 import androidx.compose.animation.core.*
@@ -20,18 +20,18 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import github.leavesc.compose_tetris.logic.GameStatus
-import github.leavesc.compose_tetris.logic.TetrisState
-import github.leavesc.compose_tetris.logic.previewTetrisState
-import github.leavesc.compose_tetris.ui.theme.BrickAlpha
-import github.leavesc.compose_tetris.ui.theme.BrickFill
-import github.leavesc.compose_tetris.ui.theme.ScreenBackground
+import github.leavesczy.compose_tetris.logic.GameStatus
+import github.leavesczy.compose_tetris.logic.TetrisState
+import github.leavesczy.compose_tetris.logic.previewTetrisState
+import github.leavesczy.compose_tetris.ui.theme.BrickAlpha
+import github.leavesczy.compose_tetris.ui.theme.BrickFill
+import github.leavesczy.compose_tetris.ui.theme.ScreenBackground
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/5/28 17:19
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 
 @Preview(widthDp = 420, heightDp = 640)

@@ -1,10 +1,10 @@
-package github.leavesc.compose_tetris.logic
+package github.leavesczy.compose_tetris.logic
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/6/3 17:07
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 val mockData = arrayOf(
     arrayOf(//I

@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris.ui.theme
+package github.leavesczy.compose_tetris.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

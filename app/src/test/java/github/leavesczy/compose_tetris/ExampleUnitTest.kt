@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris
+package github.leavesczy.compose_tetris
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

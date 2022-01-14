@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris.utils
+package github.leavesczy.compose_tetris.utils
 
 import android.app.Activity
 import android.graphics.Color
@@ -6,12 +6,11 @@ import android.view.View
 import android.view.WindowManager
 import androidx.annotation.ColorInt
 
-
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/6/4 22:26
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 object StatusBarUtil {
 

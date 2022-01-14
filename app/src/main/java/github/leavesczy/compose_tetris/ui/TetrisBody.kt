@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris.ui
+package github.leavesczy.compose_tetris.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -13,13 +13,13 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import github.leavesc.compose_tetris.ui.theme.BodyBackground
+import github.leavesczy.compose_tetris.ui.theme.BodyBackground
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/5/28 17:19
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 @Preview(widthDp = 360, heightDp = 700)
 @Composable

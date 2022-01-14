@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris.ui
+package github.leavesczy.compose_tetris.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,19 +17,19 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import github.leavesc.compose_tetris.logic.PlayListener
-import github.leavesc.compose_tetris.logic.TransformationType.*
-import github.leavesc.compose_tetris.logic.combinedPlayListener
-import github.leavesc.compose_tetris.ui.theme.PlayButtonColor
-import github.leavesc.compose_tetris.ui.theme.PlayButtonColor2
-import github.leavesc.compose_tetris.ui.theme.PlayButtonColor3
-import github.leavesc.compose_tetris.ui.theme.PlayButtonShape
+import github.leavesczy.compose_tetris.logic.PlayListener
+import github.leavesczy.compose_tetris.logic.TransformationType.*
+import github.leavesczy.compose_tetris.logic.combinedPlayListener
+import github.leavesczy.compose_tetris.ui.theme.PlayButtonColor
+import github.leavesczy.compose_tetris.ui.theme.PlayButtonColor2
+import github.leavesczy.compose_tetris.ui.theme.PlayButtonColor3
+import github.leavesczy.compose_tetris.ui.theme.PlayButtonShape
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/5/28 17:10
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 @Preview(backgroundColor = 0xffefcc19, showBackground = true)
 @Composable

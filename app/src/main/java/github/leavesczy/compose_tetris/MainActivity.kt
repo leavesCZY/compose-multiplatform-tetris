@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris
+package github.leavesczy.compose_tetris
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,20 +13,20 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import github.leavesc.compose_tetris.logic.Action
-import github.leavesc.compose_tetris.logic.TetrisViewModel
-import github.leavesc.compose_tetris.logic.combinedPlayListener
-import github.leavesc.compose_tetris.logic.previewTetrisState
-import github.leavesc.compose_tetris.ui.TetrisBody
-import github.leavesc.compose_tetris.ui.TetrisButton
-import github.leavesc.compose_tetris.ui.TetrisScreen
-import github.leavesc.compose_tetris.ui.theme.ComposeTetrisTheme
+import github.leavesczy.compose_tetris.logic.Action
+import github.leavesczy.compose_tetris.logic.TetrisViewModel
+import github.leavesczy.compose_tetris.logic.combinedPlayListener
+import github.leavesczy.compose_tetris.logic.previewTetrisState
+import github.leavesczy.compose_tetris.ui.TetrisBody
+import github.leavesczy.compose_tetris.ui.TetrisButton
+import github.leavesczy.compose_tetris.ui.TetrisScreen
+import github.leavesczy.compose_tetris.ui.theme.ComposeTetrisTheme
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/6/3 22:06
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 class MainActivity : ComponentActivity() {
 

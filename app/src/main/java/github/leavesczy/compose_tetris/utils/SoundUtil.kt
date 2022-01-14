@@ -1,15 +1,15 @@
-package github.leavesc.compose_tetris.utils
+package github.leavesczy.compose_tetris.utils
 
 import android.app.Application
 import android.media.AudioManager
 import android.media.SoundPool
-import github.leavesc.compose_tetris.R
+import github.leavesczy.compose_tetris.R
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/6/4 22:26
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 
 enum class SoundType(val audioId: Int) {

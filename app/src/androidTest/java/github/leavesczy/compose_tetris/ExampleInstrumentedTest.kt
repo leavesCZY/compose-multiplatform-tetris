@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris
+package github.leavesczy.compose_tetris
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("github.leavesc.compose_tetris", appContext.packageName)
+        assertEquals("github.leavesczy.compose_tetris", appContext.packageName)
     }
 }

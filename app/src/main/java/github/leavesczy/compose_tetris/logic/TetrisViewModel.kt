@@ -1,9 +1,9 @@
-package github.leavesc.compose_tetris.logic
+package github.leavesczy.compose_tetris.logic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import github.leavesc.compose_tetris.utils.SoundType
-import github.leavesc.compose_tetris.utils.SoundUtil
+import github.leavesczy.compose_tetris.utils.SoundType
+import github.leavesczy.compose_tetris.utils.SoundUtil
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/5/31 18:20
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 class TetrisViewModel : ViewModel() {
 

@@ -1,13 +1,13 @@
-package github.leavesc.compose_tetris
+package github.leavesczy.compose_tetris
 
 import android.app.Application
-import github.leavesc.compose_tetris.utils.SoundUtil
+import github.leavesczy.compose_tetris.utils.SoundUtil
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/6/3 22:15
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 class TetrisApplication : Application() {
 

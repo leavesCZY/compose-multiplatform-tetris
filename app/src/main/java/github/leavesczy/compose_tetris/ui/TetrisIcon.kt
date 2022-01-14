@@ -1,4 +1,4 @@
-package github.leavesc.compose_tetris.ui
+package github.leavesczy.compose_tetris.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -16,15 +16,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import github.leavesc.compose_tetris.ui.theme.BodyBackground
-import github.leavesc.compose_tetris.ui.theme.BrickAlpha
-import github.leavesc.compose_tetris.ui.theme.ScreenBackground
+import github.leavesczy.compose_tetris.ui.theme.BodyBackground
+import github.leavesczy.compose_tetris.ui.theme.BrickAlpha
+import github.leavesczy.compose_tetris.ui.theme.ScreenBackground
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/6/6 15:31
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 @Preview(widthDp = 400, heightDp = 400, backgroundColor = 0x00000000, showBackground = true)
 @Composable

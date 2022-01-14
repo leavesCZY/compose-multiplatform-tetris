@@ -1,12 +1,12 @@
-package github.leavesc.compose_tetris.logic
+package github.leavesczy.compose_tetris.logic
 
 import kotlin.random.Random
 
 /**
- * @Author: leavesC
+ * @Author: leavesCZY
  * @Date: 2021/5/28 23:43
  * @Desc:
- * @Github：https://github.com/leavesC
+ * @Github：https://github.com/leavesCZY
  */
 
 private const val BRICK_WIDTH = 10
