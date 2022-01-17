@@ -6,6 +6,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,11 +19,9 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import github.leavesczy.compose_tetris.logic.GameStatus
 import github.leavesczy.compose_tetris.logic.TetrisState
-import github.leavesczy.compose_tetris.logic.previewTetrisState
 import github.leavesczy.compose_tetris.ui.theme.BrickAlpha
 import github.leavesczy.compose_tetris.ui.theme.BrickFill
 import github.leavesczy.compose_tetris.ui.theme.ScreenBackground
@@ -33,13 +32,6 @@ import github.leavesczy.compose_tetris.ui.theme.ScreenBackground
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-
-@Preview(widthDp = 420, heightDp = 640)
-@Composable
-fun PreviewTetrisScreen() {
-    TetrisScreen(tetrisState = previewTetrisState.copy(gameStatus = GameStatus.Running))
-}
-
 @Composable
 fun TetrisScreen(
     tetrisState: TetrisState
@@ -80,7 +72,7 @@ fun TetrisScreen(
                     ) {
                         drawBrick(
                             brickSize = brickSize,
-                            color = if (isFill == 1) BrickFill else BrickAlpha
+                            brickColor = if (isFill == 1) BrickFill else BrickAlpha
                         )
                     }
                 }
@@ -138,23 +130,23 @@ fun TetrisScreen(
     }
 }
 
-fun DrawScope.drawBrick(brickSize: Float, color: Color) {
-    drawRect(color = color, size = Size(brickSize, brickSize))
+fun DrawScope.drawBrick(brickSize: Float, brickColor: Color) {
+    drawRect(color = brickColor, size = Size(brickSize, brickSize))
     val strokeWidth = brickSize / 9f
-    translate(left = strokeWidth, top = strokeWidth) {
-        drawRect(
-            color = ScreenBackground,
-            size = Size(
-                width = brickSize - 2 * strokeWidth,
-                height = brickSize - 2 * strokeWidth
-            )
-        )
-    }
+//    translate(left = strokeWidth, top = strokeWidth) {
+//        drawRect(
+//            color = ScreenBackground,
+//            size = Size(
+//                width = brickSize - 2 * strokeWidth,
+//                height = brickSize - 2 * strokeWidth
+//            )
+//        )
+//    }
     val brickInnerSize = brickSize / 2.0f
     val translateLeft = (brickSize - brickInnerSize) / 2
     translate(left = translateLeft, top = translateLeft) {
         drawRect(
-            color = color,
+            color = brickColor,
             size = Size(brickInnerSize, brickInnerSize)
         )
     }
@@ -192,7 +184,7 @@ private fun DrawScope.drawRightPanel(tetrisState: TetrisState, width: Float, hei
                     ) {
                         drawBrick(
                             brickSize = brickSize,
-                            color = BrickFill
+                            brickColor = BrickFill
                         )
                     }
                 }

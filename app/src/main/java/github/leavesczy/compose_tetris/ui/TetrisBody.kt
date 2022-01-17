@@ -1,7 +1,6 @@
 package github.leavesczy.compose_tetris.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,7 +12,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import github.leavesczy.compose_tetris.ui.theme.BodyBackground
 
 /**
  * @Author: leavesCZY
@@ -45,7 +43,6 @@ fun TetrisBody(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = BodyBackground)
             .padding(bottom = 30.dp)
     ) {
         Box(

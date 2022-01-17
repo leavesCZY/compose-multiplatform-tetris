@@ -1,7 +1,8 @@
 package github.leavesczy.compose_tetris
 
 import android.app.Application
-import github.leavesczy.compose_tetris.utils.SoundUtil
+import github.leavesczy.compose_tetris.utils.AndroidSoundPlayer
+import github.leavesczy.compose_tetris.utils.SoundPlayerInstance
 
 /**
  * @Author: leavesCZY
@@ -13,7 +14,7 @@ class TetrisApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        SoundUtil.init(this)
+        SoundPlayerInstance = AndroidSoundPlayer(context = this)
     }
 
 }

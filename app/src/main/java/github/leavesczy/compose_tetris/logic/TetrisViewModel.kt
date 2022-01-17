@@ -2,8 +2,8 @@ package github.leavesczy.compose_tetris.logic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import github.leavesczy.compose_tetris.utils.SoundPlayerInstance
 import github.leavesczy.compose_tetris.utils.SoundType
-import github.leavesczy.compose_tetris.utils.SoundUtil
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -241,7 +241,7 @@ class TetrisViewModel : ViewModel() {
 
     private fun playSound(soundType: SoundType) {
         tetrisState.soundEnable.takeIf { it } ?: return
-        SoundUtil.play(soundType)
+        SoundPlayerInstance.play(soundType)
     }
 
 }
