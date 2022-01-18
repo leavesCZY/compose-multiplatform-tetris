@@ -3,27 +3,25 @@ package github.leavesczy.compose_tetris.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import github.leavesczy.compose_tetris.logic.PlayListener
 import github.leavesczy.compose_tetris.logic.TransformationType.*
-import github.leavesczy.compose_tetris.logic.combinedPlayListener
-import github.leavesczy.compose_tetris.ui.theme.PlayButtonColor
-import github.leavesczy.compose_tetris.ui.theme.PlayButtonColor2
-import github.leavesczy.compose_tetris.ui.theme.PlayButtonColor3
-import github.leavesczy.compose_tetris.ui.theme.PlayButtonShape
+import github.leavesczy.compose_tetris.ui.theme.ButtonColor
 
 /**
  * @Author: leavesCZY
@@ -31,87 +29,86 @@ import github.leavesczy.compose_tetris.ui.theme.PlayButtonShape
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-@Preview(backgroundColor = 0xffefcc19, showBackground = true)
 @Composable
-fun TetrisButton(
-    playListener: PlayListener = combinedPlayListener()
-) {
+fun TetrisButton(playListener: PlayListener) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .padding(horizontal = 14.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            val controlPadding = 20.dp
-            ControlButton(hint = "Start", modifier = Modifier.padding(end = controlPadding)) {
+            ControlButton(
+                modifier = Modifier
+                    .weight(weight = 1f),
+                text = "Start"
+            ) {
                 playListener.onStart()
             }
             ControlButton(
-                hint = "Pause",
-                modifier = Modifier.padding(start = controlPadding, end = controlPadding)
+                modifier = Modifier
+                    .weight(weight = 1f),
+                text = "Pause"
             ) {
                 playListener.onPause()
             }
             ControlButton(
-                hint = "Reset",
-                modifier = Modifier.padding(start = controlPadding, end = controlPadding)
+                modifier = Modifier
+                    .weight(weight = 1f),
+                text = "Reset"
             ) {
                 playListener.onReset()
             }
-            ControlButton(hint = "Sound", modifier = Modifier.padding(start = controlPadding)) {
+            ControlButton(
+                modifier = Modifier
+                    .weight(weight = 1f),
+                text = "Sound"
+            ) {
                 playListener.onSound()
             }
         }
-        ConstraintLayout(
+        Row(
             modifier = Modifier
-                .padding(top = 20.dp)
                 .fillMaxWidth()
-                .wrapContentWidth(align = Alignment.CenterHorizontally)
+                .padding(horizontal = 14.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
-            val (leftBtn, rightBtn, fastDownBtn, rotateBtn, fallBtn) = createRefs()
-            val innerMargin = 24.dp
-            PlayButton(icon = "◀", modifier = Modifier.constrainAs(leftBtn) {
-                start.linkTo(anchor = parent.start)
-                top.linkTo(anchor = parent.top)
-                end.linkTo(anchor = rightBtn.start, margin = innerMargin)
-            }) {
+            PlayButton(
+                modifier = Modifier.weight(weight = 1f),
+                icon = Icons.Filled.ArrowLeft
+            ) {
                 playListener.onTransformation(Left)
             }
-            PlayButton(icon = "▶", modifier = Modifier.constrainAs(rightBtn) {
-                start.linkTo(anchor = leftBtn.end, margin = innerMargin)
-                top.linkTo(anchor = leftBtn.top)
-                bottom.linkTo(anchor = leftBtn.bottom)
-            }) {
+            PlayButton(
+                modifier = Modifier.weight(weight = 1f),
+                icon = Icons.Filled.ArrowRight
+            ) {
                 playListener.onTransformation(Right)
             }
             PlayButton(
-                icon = "Rotate",
-                fontSize = 18.sp,
-                modifier = Modifier.constrainAs(rotateBtn) {
-                    top.linkTo(anchor = rightBtn.top)
-                    start.linkTo(anchor = rightBtn.end, margin = innerMargin)
-                }) {
+                modifier = Modifier.weight(weight = 1f),
+                icon = Icons.Filled.RotateLeft
+            ) {
                 playListener.onTransformation(Rotate)
             }
-            PlayButton(icon = "▼", modifier = Modifier.constrainAs(fastDownBtn) {
-                top.linkTo(anchor = leftBtn.bottom)
-                start.linkTo(anchor = leftBtn.start)
-                end.linkTo(anchor = rightBtn.end)
-            }) {
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            PlayButton(
+                modifier = Modifier.padding(horizontal = 18.dp),
+                icon = Icons.Filled.FastForward
+            ) {
                 playListener.onTransformation(FastDown)
             }
             PlayButton(
-                icon = "▼\n▼",
-                modifier = Modifier.constrainAs(fallBtn) {
-                    top.linkTo(anchor = fastDownBtn.top)
-                    start.linkTo(anchor = rightBtn.end)
-                    end.linkTo(anchor = rotateBtn.start)
-                }) {
+                modifier = Modifier.padding(horizontal = 18.dp),
+                icon = Icons.Filled.WaterfallChart
+            ) {
                 playListener.onTransformation(Fall)
             }
         }
@@ -119,20 +116,12 @@ fun TetrisButton(
 
 }
 
-private val brush = Brush.linearGradient(
-    colors = listOf(
-        PlayButtonColor,
-        PlayButtonColor2,
-        PlayButtonColor3
-    )
-)
-
 @Composable
-fun ControlButton(
+private fun ControlButton(
     modifier: Modifier,
-    hint: String,
-    fontSize: TextUnit = 18.sp,
-    btnSize: Dp = 46.dp,
+    text: String,
+    fontSize: TextUnit = 14.sp,
+    btnSize: Dp = 34.dp,
     onPress: () -> Unit = {},
 ) {
     Column(
@@ -140,20 +129,15 @@ fun ControlButton(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding(2.dp),
-            text = hint,
+            modifier = Modifier.padding(all = 2.dp),
+            text = text,
             fontSize = fontSize,
-            color = Color.Black.copy(0.8f),
-            maxLines = 1
+            color = Color.Black.copy(alpha = 0.8f),
         )
         Box(
             modifier = Modifier
                 .size(width = btnSize, height = btnSize)
-                .shadow(elevation = 60.dp, shape = PlayButtonShape)
-                .clip(shape = PlayButtonShape)
-                .background(
-                    brush = brush
-                )
+                .addShadow()
                 .clickable {
                     onPress()
                 }
@@ -162,29 +146,35 @@ fun ControlButton(
 }
 
 @Composable
-fun PlayButton(
-    size: Dp = 70.dp, icon: String,
+private fun PlayButton(
     modifier: Modifier,
-    fontSize: TextUnit = 22.sp,
+    icon: ImageVector,
+    size: Dp = 70.dp,
     onPress: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .size(width = size, height = size)
-            .shadow(elevation = 60.dp, shape = PlayButtonShape)
-            .clip(shape = PlayButtonShape)
-            .background(
-                brush = brush
+    Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
+        Box(
+            modifier = Modifier
+                .size(size = size)
+                .addShadow()
+                .clickable {
+                    onPress()
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(size = size / 1.3f),
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface
             )
-            .clickable {
-                onPress()
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = icon,
-            fontSize = fontSize,
-            color = Color.Black.copy(0.8f)
-        )
+        }
     }
+}
+
+private fun Modifier.addShadow(): Modifier {
+    return shadow(elevation = 3.dp, shape = CircleShape)
+        .background(
+            brush = ButtonColor
+        )
 }

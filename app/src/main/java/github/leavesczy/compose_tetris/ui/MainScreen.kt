@@ -1,6 +1,5 @@
 package github.leavesczy.compose_tetris.ui
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import github.leavesczy.compose_tetris.logic.PlayListener
@@ -13,7 +12,6 @@ import github.leavesczy.compose_tetris.ui.theme.ComposeTetrisTheme
  * @Desc:
  * @Github：https://github.com/leavesC
  */
-@ExperimentalMaterial3Api
 @Composable
 fun MainScreen(tetrisState: TetrisState, playListener: PlayListener) {
     ComposeTetrisTheme {

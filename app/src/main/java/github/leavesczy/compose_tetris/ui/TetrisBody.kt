@@ -9,7 +9,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -19,41 +18,22 @@ import androidx.compose.ui.unit.dp
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-@Preview(widthDp = 360, heightDp = 700)
-@Composable
-fun PreviewTetrisBody() {
-    TetrisBody(tetrisScreen = {
-
-    }, tetrisButton = {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.4f)
-        ) {
-
-        }
-    })
-}
-
 @Composable
 fun TetrisBody(
     tetrisScreen: @Composable (() -> Unit),
     tetrisButton: @Composable (() -> Unit),
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 30.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
+        Spacer(modifier = Modifier.height(height = 40.dp))
         Box(
-            Modifier
-                .align(alignment = Alignment.CenterHorizontally)
+            modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f)
-                .padding(start = 40.dp, top = 50.dp, end = 40.dp, bottom = 10.dp),
+                .align(alignment = Alignment.CenterHorizontally)
+                .padding(horizontal = 40.dp),
         ) {
-
-            //绘制边框
             val borderPadding = 8.dp
             Canvas(modifier = Modifier.fillMaxSize()) {
                 drawScreenBorder(
@@ -63,19 +43,17 @@ fun TetrisBody(
                     borderPadding = borderPadding,
                 )
             }
-
-            //游戏屏幕
             Row(
                 modifier = Modifier
-                    .matchParentSize()
+                    .fillMaxWidth()
                     .padding(all = borderPadding)
             ) {
                 tetrisScreen()
             }
         }
-
-        //控制按钮
+        Spacer(modifier = Modifier.height(height = 6.dp))
         tetrisButton()
+        Spacer(modifier = Modifier.height(height = 30.dp))
     }
 }
 

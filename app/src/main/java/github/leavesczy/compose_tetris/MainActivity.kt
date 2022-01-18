@@ -3,11 +3,9 @@ package github.leavesczy.compose_tetris
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -16,11 +14,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import github.leavesczy.compose_tetris.logic.Action
 import github.leavesczy.compose_tetris.logic.TetrisViewModel
 import github.leavesczy.compose_tetris.logic.combinedPlayListener
-import github.leavesczy.compose_tetris.logic.previewTetrisState
 import github.leavesczy.compose_tetris.ui.MainScreen
-import github.leavesczy.compose_tetris.ui.TetrisBody
-import github.leavesczy.compose_tetris.ui.TetrisButton
-import github.leavesczy.compose_tetris.ui.TetrisScreen
 
 /**
  * @Author: leavesCZY
@@ -28,7 +22,6 @@ import github.leavesczy.compose_tetris.ui.TetrisScreen
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-@ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,14 +85,4 @@ class MainActivity : ComponentActivity() {
             tetrisViewModel.dispatch(action = Action.Welcome)
         }
     }
-}
-
-@Composable
-@Preview(widthDp = 420, heightDp = 760)
-fun DefaultPreview() {
-    TetrisBody(tetrisScreen = {
-        TetrisScreen(tetrisState = previewTetrisState)
-    }, tetrisButton = {
-        TetrisButton()
-    })
 }

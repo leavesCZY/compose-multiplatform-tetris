@@ -6,13 +6,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryColorLight,
-    onPrimary = OnPrimaryColorLight,
-    primaryContainer = PrimaryContainerColorLight,
-    surface = SurfaceColorLight,
-    onSurface = OnSurfaceColorLight,
     background = BackgroundColorLight,
-    onSecondaryContainer = onSecondaryContainerLight,
     onBackground = OnBackgroundColorLight
 )
 

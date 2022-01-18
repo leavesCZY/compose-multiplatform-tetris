@@ -55,6 +55,19 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += [
+                "-Xjvm-default=all",
+                "-Xallow-jvm-ir-dependencies",
+                "-Xskip-prerelease-check",
+                "-Xopt-in=kotlin.RequiresOptIn",
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
+                "-Xopt-in=com.google.accompanist.insets.ExperimentalAnimatedInsets",
+                "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+                "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        ]
         useIR = true
     }
     buildFeatures {
@@ -74,11 +87,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.0-alpha01'
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0"
     implementation "androidx.compose.material3:material3:1.0.0-alpha03"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
 }
