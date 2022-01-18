@@ -109,12 +109,22 @@ class TetrisViewModel : ViewModel() {
 
     private fun onWelcome() {
         startClearScreenJob {
-            dispatchState(TetrisState().copy(gameStatus = GameStatus.Welcome))
+            dispatchState(
+                TetrisState().copy(
+                    gameStatus = GameStatus.Welcome,
+                    soundEnable = tetrisState.soundEnable
+                )
+            )
         }
     }
 
     private fun onStartGame() {
-        dispatchState(TetrisState().copy(gameStatus = GameStatus.Running))
+        dispatchState(
+            TetrisState().copy(
+                gameStatus = GameStatus.Running,
+                soundEnable = tetrisState.soundEnable
+            )
+        )
         startDownJob()
     }
 
@@ -128,7 +138,10 @@ class TetrisViewModel : ViewModel() {
     private fun onGameOver() {
         startClearScreenJob {
             dispatchState(
-                TetrisState().copy(gameStatus = GameStatus.GameOver)
+                TetrisState().copy(
+                    gameStatus = GameStatus.GameOver,
+                    soundEnable = tetrisState.soundEnable
+                )
             )
         }
     }
@@ -217,21 +230,25 @@ class TetrisViewModel : ViewModel() {
 
             }
             Action.Sound -> {
-                playSound(SoundType.Transformation)
+                if (!tetrisState.soundEnable) {
+                    playSound(SoundType.Transformation)
+                }
             }
             is Action.Transformation -> {
-                when (action.transformationType) {
-                    TransformationType.Left, TransformationType.Right, TransformationType.FastDown -> {
-                        playSound(SoundType.Transformation)
-                    }
-                    TransformationType.Fall -> {
-                        playSound(SoundType.Fall)
-                    }
-                    TransformationType.Down -> {
+                if (tetrisState.isRunning) {
+                    when (action.transformationType) {
+                        TransformationType.Left, TransformationType.Right, TransformationType.FastDown -> {
+                            playSound(SoundType.Transformation)
+                        }
+                        TransformationType.Fall -> {
+                            playSound(SoundType.Fall)
+                        }
+                        TransformationType.Down -> {
 
-                    }
-                    TransformationType.Rotate -> {
-                        playSound(SoundType.Rotate)
+                        }
+                        TransformationType.Rotate -> {
+                            playSound(SoundType.Rotate)
+                        }
                     }
                 }
             }

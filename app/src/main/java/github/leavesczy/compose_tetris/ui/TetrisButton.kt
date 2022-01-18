@@ -14,15 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import github.leavesczy.compose_tetris.logic.PlayListener
+import github.leavesczy.compose_tetris.logic.TetrisState
 import github.leavesczy.compose_tetris.logic.TransformationType.*
-import github.leavesczy.compose_tetris.ui.theme.ButtonColor
+import github.leavesczy.compose_tetris.ui.theme.ButtonDisableColor
+import github.leavesczy.compose_tetris.ui.theme.ButtonEnabledColor
 
 /**
  * @Author: leavesCZY
@@ -31,7 +35,7 @@ import github.leavesczy.compose_tetris.ui.theme.ButtonColor
  * @Github：https://github.com/leavesCZY
  */
 @Composable
-fun TetrisButton(playListener: PlayListener) {
+fun TetrisButton(tetrisState: TetrisState, playListener: PlayListener) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -66,7 +70,12 @@ fun TetrisButton(playListener: PlayListener) {
             ControlButton(
                 modifier = Modifier
                     .weight(weight = 1f),
-                text = "Sound"
+                text = "Sound",
+                btnColor = if (tetrisState.soundEnable) {
+                    ButtonEnabledColor
+                } else {
+                    ButtonDisableColor
+                }
             ) {
                 playListener.onSound()
             }
@@ -125,6 +134,7 @@ private fun ControlButton(
     text: String,
     fontSize: TextUnit = 14.sp,
     btnSize: Dp = 34.dp,
+    btnColor: Brush = ButtonEnabledColor,
     onPress: () -> Unit = {},
 ) {
     Column(
@@ -135,12 +145,13 @@ private fun ControlButton(
             modifier = Modifier.padding(all = 2.dp),
             text = text,
             fontSize = fontSize,
+            fontFamily = FontFamily.Serif,
             color = Color.Black.copy(alpha = 0.8f),
         )
         Box(
             modifier = Modifier
                 .size(width = btnSize, height = btnSize)
-                .addShadow()
+                .addShadow(color = btnColor)
                 .clickable {
                     onPress()
                 }
@@ -159,7 +170,7 @@ private fun PlayButton(
         Box(
             modifier = Modifier
                 .size(size = size)
-                .addShadow()
+                .addShadow(color = ButtonEnabledColor)
                 .clickable {
                     onPress()
                 },
@@ -175,9 +186,9 @@ private fun PlayButton(
     }
 }
 
-private fun Modifier.addShadow(): Modifier {
+private fun Modifier.addShadow(color: Brush): Modifier {
     return shadow(elevation = 3.dp, shape = CircleShape)
         .background(
-            brush = ButtonColor
+            brush = color
         )
 }

@@ -19,7 +19,7 @@ fun MainScreen(tetrisState: TetrisState, playListener: PlayListener) {
             TetrisBody(tetrisScreen = {
                 TetrisScreen(tetrisState = tetrisState)
             }, tetrisButton = {
-                TetrisButton(playListener = playListener)
+                TetrisButton(tetrisState = tetrisState, playListener = playListener)
             })
         }
     }
