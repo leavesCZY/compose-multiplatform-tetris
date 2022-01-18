@@ -12,25 +12,6 @@ import kotlin.random.Random
 private const val BRICK_WIDTH = 10
 private const val BRICK_HEIGHT = 24
 
-val previewTetrisState = TetrisState().run {
-    val previewBrickArray = brickArray.clone().apply {
-        fun randomData(lineIndex: Int) {
-            val line = get(lineIndex)
-            line.forEachIndexed { index, _ ->
-                line[index] = if (index == line.size - 1) 0 else 1
-            }
-        }
-        randomData(size - 1)
-        randomData(size - 2)
-        randomData(size - 3)
-    }
-    copy(
-        brickArray = previewBrickArray,
-        tetris = Tetris().copy(offset = Location(2, 4)),
-        gameStatus = GameStatus.Running,
-    )
-}
-
 data class Location(val x: Int, val y: Int)
 
 data class Tetris constructor(

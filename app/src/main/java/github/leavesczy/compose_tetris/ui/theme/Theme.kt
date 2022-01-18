@@ -15,13 +15,8 @@ fun ComposeTetrisTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        LightColorScheme
-    } else {
-        LightColorScheme
-    }
     MaterialTheme(
-        colorScheme = colors,
+        colorScheme = LightColorScheme,
         typography = LightTypography,
         content = content
     )

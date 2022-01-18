@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 lifecycle.removeObserver(observer)
             }
         }
-        val tetrisState by tetrisViewModel.tetrisStateLD.collectAsState()
+        val tetrisState by tetrisViewModel.tetrisStateFlow.collectAsState()
         val playListener by remember {
             mutableStateOf(
                 combinedPlayListener(

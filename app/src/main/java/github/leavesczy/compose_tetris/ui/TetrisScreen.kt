@@ -5,25 +5,24 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import github.leavesczy.compose_tetris.logic.GameStatus
 import github.leavesczy.compose_tetris.logic.TetrisState
-import github.leavesczy.compose_tetris.ui.theme.BrickAlpha
-import github.leavesczy.compose_tetris.ui.theme.BrickFill
-import github.leavesczy.compose_tetris.ui.theme.ScreenBackground
+import github.leavesczy.compose_tetris.ui.theme.BrickColorAlpha
+import github.leavesczy.compose_tetris.ui.theme.BrickColorFill
 
 /**
  * @Author: leavesCZY
@@ -36,186 +35,265 @@ fun TetrisScreen(
     tetrisState: TetrisState
 ) {
     val screenMatrix = tetrisState.screenMatrix
-    val matrixHeight = tetrisState.height
     val matrixWidth = tetrisState.width
-    val spiritPadding = 2.dp
-    val screenPadding = 8.dp
-    val animateValue by rememberInfiniteTransition().animateFloat(
-        initialValue = 0.8f, targetValue = 0.0f,
+    val matrixHeight = tetrisState.height
+    val brickMarginDp = 2.dp
+    val screenInnerMarginDp = 8.dp
+    val alphaAnimate by rememberInfiniteTransition().animateFloat(
+        initialValue = 1.0f,
+        targetValue = 0.0f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = LinearEasing),
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse,
         ),
     )
+    val bgColor = MaterialTheme.colorScheme.onBackground
     Canvas(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = ScreenBackground)
-            .padding(
-                start = screenPadding, top = screenPadding,
-                end = screenPadding, bottom = screenPadding
-            )
+            .background(color = bgColor)
     ) {
-        val width = size.width
-        val height = size.height
-        val screenPaddingPx = screenPadding.toPx()
-        val spiritPaddingPx = spiritPadding.toPx()
-        val brickSize = (height - spiritPaddingPx * (matrixHeight - 1)) / matrixHeight
+        val borderWidthDp = 8.dp
+        val borderWidth = borderWidthDp.toPx()
 
-        kotlin.run {
+        drawBorder(
+            width = size.width,
+            height = size.height,
+            borderWidth = borderWidth,
+        )
+
+        val brickMargin = brickMarginDp.toPx()
+        val screenInnerMargin = screenInnerMarginDp.toPx()
+        val brickSize = (size.height - 2 * borderWidth - 2 * screenInnerMargin -
+                brickMargin * (matrixHeight - 1)) / matrixHeight
+        val brickSizeWithMargin = brickSize + brickMargin
+
+        val leftPanelWith =
+            matrixWidth * brickSize + (matrixWidth - 1) * brickMargin + screenInnerMargin * 2
+        val leftPanelHeight =
+            matrixHeight * brickSize + (matrixHeight - 1) * brickMargin + screenInnerMargin * 2
+
+        translate(
+            left = borderWidth,
+            top = borderWidth
+        ) {
+            val startPoint = screenInnerMargin / 2f
+            val lineWidth =
+                screenInnerMargin + brickSize * matrixWidth + brickMargin * (matrixWidth - 1)
+            val lineHeight =
+                screenInnerMargin + brickSize * matrixHeight + brickMargin * (matrixHeight - 1)
+            val path = Path().apply {
+                moveTo(x = startPoint, y = startPoint)
+                relativeLineTo(
+                    dx = lineWidth,
+                    dy = 0f
+                )
+                relativeLineTo(
+                    dx = 0f,
+                    dy = lineHeight
+                )
+                relativeLineTo(
+                    dx = -lineWidth,
+                    dy = 0f
+                )
+                close()
+            }
+            drawPath(
+                path = path,
+                color = Color.Black.copy(alpha = 0.6f),
+                style = Stroke(width = 3f)
+            )
+        }
+
+        translate(
+            left = borderWidth + screenInnerMargin,
+            top = borderWidth + screenInnerMargin
+        ) {
             screenMatrix.forEachIndexed { y, ints ->
                 ints.forEachIndexed { x, isFill ->
                     translate(
-                        left = x * (brickSize + spiritPaddingPx),
-                        top = y * (brickSize + spiritPaddingPx)
+                        left = x * brickSizeWithMargin,
+                        top = y * brickSizeWithMargin
                     ) {
                         drawBrick(
+                            bgColor = bgColor,
                             brickSize = brickSize,
-                            brickColor = if (isFill == 1) BrickFill else BrickAlpha
+                            brickColor = if (isFill == 1) {
+                                BrickColorFill
+                            } else {
+                                BrickColorAlpha
+                            }
                         )
                     }
                 }
             }
         }
 
-        kotlin.run {
-            val borderOffset = screenPaddingPx / 2
-            val borderWidth =
-                matrixWidth * (brickSize + spiritPaddingPx) + screenPaddingPx - spiritPaddingPx
-            val borderHeight =
-                matrixHeight * (brickSize + spiritPaddingPx) + screenPaddingPx - spiritPaddingPx
-            translate(left = -borderOffset, top = -borderOffset) {
-                val path = Path().apply {
-                    relativeLineTo(
-                        dx = borderWidth,
-                        dy = 0f
-                    )
-                    relativeLineTo(
-                        dx = 0f,
-                        dy = borderHeight
-                    )
-                    relativeLineTo(
-                        dx = -borderWidth,
-                        dy = 0f
-                    )
-                    close()
-                }
-                drawPath(
-                    path = path, color = Color.Black.copy(alpha = 0.6f),
-                    style = Stroke(width = 3f)
-                )
-            }
-        }
-
-        val leftBordOffsetX = matrixWidth * (brickSize + spiritPaddingPx) + screenPaddingPx
-
-        kotlin.run {
-            val leftBordWidth = width - leftBordOffsetX
-            translate(left = leftBordOffsetX) {
-                drawRightPanel(
-                    tetrisState = tetrisState,
-                    width = leftBordWidth, height = height
-                )
-            }
-        }
-
-        kotlin.run {
-            drawHint(
+        translate(
+            left = borderWidth,
+            top = borderWidth
+        ) {
+            drawText(
                 tetrisState = tetrisState,
-                width = leftBordOffsetX, height = height,
-                alpha = animateValue
+                width = leftPanelWith,
+                height = leftPanelHeight,
+                alpha = alphaAnimate
+            )
+        }
+
+        translate(
+            left = borderWidth + leftPanelWith - screenInnerMargin / 2,
+            top = borderWidth + screenInnerMargin
+        ) {
+            drawRightPanel(
+                bgColor = bgColor,
+                tetrisState = tetrisState,
+                width = size.width - 2 * borderWidth - leftPanelWith + screenInnerMargin / 2,
+                height = size.height - 2 * screenInnerMargin - 2 * borderWidth
             )
         }
     }
 }
 
-fun DrawScope.drawBrick(brickSize: Float, brickColor: Color) {
-    drawRect(color = brickColor, size = Size(brickSize, brickSize))
-    val strokeWidth = brickSize / 9f
-//    translate(left = strokeWidth, top = strokeWidth) {
-//        drawRect(
-//            color = ScreenBackground,
-//            size = Size(
-//                width = brickSize - 2 * strokeWidth,
-//                height = brickSize - 2 * strokeWidth
-//            )
-//        )
-//    }
-    val brickInnerSize = brickSize / 2.0f
-    val translateLeft = (brickSize - brickInnerSize) / 2
-    translate(left = translateLeft, top = translateLeft) {
-        drawRect(
-            color = brickColor,
-            size = Size(brickInnerSize, brickInnerSize)
-        )
+private fun DrawScope.drawBorder(
+    width: Float,
+    height: Float,
+    borderWidth: Float
+) {
+    val leftBottom = Offset(0f, height)
+    val rightTop = Offset(width, 0f)
+    val rightBottom = Offset(width, height)
+
+    val path = Path().apply {
+        lineTo(borderWidth, borderWidth)
+        lineTo(rightTop.x - borderWidth, borderWidth)
+        lineTo(rightTop.x, rightTop.y)
+        close()
     }
+    drawPath(path, Color.Black.copy(alpha = 0.7f))
+
+    path.apply {
+        reset()
+        lineTo(borderWidth, borderWidth)
+        lineTo(borderWidth, leftBottom.y - borderWidth)
+        lineTo(leftBottom.x, leftBottom.y)
+        close()
+    }
+    drawPath(path, Color.Black.copy(alpha = 0.5f))
+
+    path.apply {
+        reset()
+        moveTo(leftBottom.x, leftBottom.y)
+        relativeLineTo(borderWidth, -borderWidth)
+        lineTo(rightBottom.x - borderWidth, rightBottom.y - borderWidth)
+        lineTo(rightBottom.x, rightBottom.y)
+        close()
+    }
+    drawPath(path, Color.Black.copy(alpha = 0.7f))
+
+    path.apply {
+        reset()
+        moveTo(rightTop.x, rightTop.y)
+        relativeLineTo(-borderWidth, borderWidth)
+        lineTo(rightBottom.x - borderWidth, rightBottom.y - borderWidth)
+        lineTo(rightBottom.x, rightBottom.y)
+        close()
+    }
+    drawPath(path, Color.Black.copy(alpha = 0.5f))
 }
 
-private fun DrawScope.drawRightPanel(tetrisState: TetrisState, width: Float, height: Float) {
-    drawIntoCanvas {
+private fun DrawScope.drawRightPanel(
+    bgColor: Color,
+    tetrisState: TetrisState,
+    width: Float,
+    height: Float
+) {
+    if (tetrisState.gameStatus == GameStatus.Running || tetrisState.gameStatus == GameStatus.Paused) {
+        val canvas = drawContext.canvas.nativeCanvas
         val textPaint = Paint().apply {
-            color = BrickFill.toArgb()
+            color = BrickColorFill.toArgb()
             textSize = 60f
             textAlign = Paint.Align.CENTER
             style = Paint.Style.FILL
             strokeWidth = 12f
             isAntiAlias = true
         }
-        it.nativeCanvas.drawText(
+        canvas.drawText(
             "Next",
             width / 2f,
             height / 8f,
             textPaint
         )
-        if (tetrisState.gameStatus == GameStatus.Running || tetrisState.gameStatus == GameStatus.Paused) {
-            val brickSize = 15.dp.toPx()
-            val spiritPaddingPx = 1.dp.toPx()
-            translate(
-                left = minOf(brickSize, 50f),
-                top = height / 7f
-            ) {
-                for (location in tetrisState.nextTetris.shape) {
-                    val x = location.x.toFloat()
-                    val y = location.y.toFloat()
-                    translate(
-                        left = x * (brickSize + spiritPaddingPx),
-                        top = y * (brickSize + spiritPaddingPx)
-                    ) {
-                        drawBrick(
-                            brickSize = brickSize,
-                            brickColor = BrickFill
-                        )
-                    }
+        val nextTetrisShape = tetrisState.nextTetris.shape
+        val shapeMaxWidth = nextTetrisShape.map { it.x }.toSet().size
+        val brickSize = 15.dp.toPx()
+        val brickMargin = 1.dp.toPx()
+        val brickSizeWithMargin = brickSize + brickMargin
+        translate(
+            left = (width - brickSize * shapeMaxWidth + brickMargin * (shapeMaxWidth - 1)) / 2f,
+            top = height / 6.5f
+        ) {
+            for (location in nextTetrisShape) {
+                translate(
+                    left = location.x * brickSizeWithMargin,
+                    top = location.y * brickSizeWithMargin
+                ) {
+                    drawBrick(
+                        bgColor = bgColor,
+                        brickSize = brickSize,
+                        brickColor = BrickColorFill
+                    )
                 }
             }
         }
     }
-
 }
 
-private fun DrawScope.drawHint(
+private fun DrawScope.drawBrick(bgColor: Color, brickSize: Float, brickColor: Color) {
+    drawRect(color = brickColor, size = Size(width = brickSize, height = brickSize))
+    val strokeWidth = brickSize / 9f
+    translate(left = strokeWidth, top = strokeWidth) {
+        drawRect(
+            color = bgColor,
+            size = Size(
+                width = brickSize - 2 * strokeWidth,
+                height = brickSize - 2 * strokeWidth
+            )
+        )
+    }
+    val brickInnerSize = brickSize / 2.0f
+    val translateLeft = (brickSize - brickInnerSize) / 2
+    translate(left = translateLeft, top = translateLeft) {
+        drawRect(
+            color = brickColor,
+            size = Size(width = brickInnerSize, height = brickInnerSize)
+        )
+    }
+}
+
+private fun DrawScope.drawText(
     tetrisState: TetrisState,
-    width: Float, height: Float,
+    width: Float,
+    height: Float,
     alpha: Float
 ) {
     val drawText = { hint: String, fontSize: Float ->
-        drawIntoCanvas {
-            it.nativeCanvas.drawText(
-                hint,
-                width / 2,
-                height / 3,
-                Paint().apply {
-                    color = Color.Black.copy(alpha = alpha).toArgb()
-                    textSize = fontSize
-                    textAlign = Paint.Align.CENTER
-                    style = Paint.Style.FILL_AND_STROKE
-                    strokeWidth = fontSize / 12
-                    isAntiAlias = true
-                }
-            )
-        }
+        val canvas = drawContext.canvas.nativeCanvas
+        canvas.drawText(
+            hint,
+            width / 2,
+            height / 3,
+            Paint().apply {
+                color = Color.Black.copy(alpha = alpha).toArgb()
+                textSize = fontSize
+                textAlign = Paint.Align.CENTER
+                style = Paint.Style.FILL_AND_STROKE
+                strokeWidth = fontSize / 12
+                isAntiAlias = true
+            }
+        )
     }
-    val unit = when (tetrisState.gameStatus) {
+    return when (tetrisState.gameStatus) {
         GameStatus.Welcome -> {
             drawText("TETRIS", 90f)
         }
@@ -223,7 +301,7 @@ private fun DrawScope.drawHint(
             drawText("PAUSE", 90f)
         }
         GameStatus.GameOver -> {
-            drawText("GAME OVER", 66f)
+            drawText("GAME OVER", 80f)
         }
         GameStatus.Running -> {
 

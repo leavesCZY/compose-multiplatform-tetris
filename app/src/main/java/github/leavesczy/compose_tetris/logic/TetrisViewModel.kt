@@ -26,12 +26,12 @@ class TetrisViewModel : ViewModel() {
 
     }
 
-    private val _tetrisStateLD: MutableStateFlow<TetrisState> = MutableStateFlow(TetrisState())
+    private val _tetrisStateFlow = MutableStateFlow(TetrisState())
 
-    val tetrisStateLD = _tetrisStateLD.asStateFlow()
+    val tetrisStateFlow = _tetrisStateFlow.asStateFlow()
 
     private val tetrisState: TetrisState
-        get() = _tetrisStateLD.value
+        get() = _tetrisStateFlow.value
 
     private var downJob: Job? = null
 
@@ -39,7 +39,7 @@ class TetrisViewModel : ViewModel() {
 
     fun dispatch(action: Action) {
         playSound(action)
-        val unit = when (action) {
+        when (action) {
             Action.Welcome, Action.Reset -> {
                 onWelcome()
             }
@@ -69,11 +69,10 @@ class TetrisViewModel : ViewModel() {
                 }
                 val viewState =
                     tetrisState.onTransformation(transformationType = action.transformationType)
-                        ?: return
                 when (viewState.gameStatus) {
                     GameStatus.Running -> {
                         dispatchState(viewState)
-                        val unit = when (action.transformationType) {
+                        when (action.transformationType) {
                             TransformationType.Left, TransformationType.Right -> {
 
                             }
@@ -101,7 +100,7 @@ class TetrisViewModel : ViewModel() {
                         onGameOver()
                     }
                     else -> {
-                        Unit
+
                     }
                 }
             }
@@ -197,11 +196,11 @@ class TetrisViewModel : ViewModel() {
     }
 
     private fun dispatchState(tetrisState: TetrisState) {
-        _tetrisStateLD.value = tetrisState
+        _tetrisStateFlow.value = tetrisState
     }
 
     private fun playSound(action: Action) {
-        val unit = when (action) {
+        when (action) {
             Action.Welcome -> {
                 playSound(SoundType.Welcome)
             }
@@ -240,8 +239,9 @@ class TetrisViewModel : ViewModel() {
     }
 
     private fun playSound(soundType: SoundType) {
-        tetrisState.soundEnable.takeIf { it } ?: return
-        SoundPlayerInstance.play(soundType)
+        if (tetrisState.soundEnable) {
+            SoundPlayerInstance.play(soundType)
+        }
     }
 
 }
