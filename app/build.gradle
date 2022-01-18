@@ -3,22 +3,27 @@ plugins {
     id 'kotlin-android'
 }
 
-def keyAliasExt = "leavesCZY"
-def keyPasswordExt = "123456"
-def storePasswordExt = "123456"
+static String generateBuildTime() {
+    return new Date().format("yyyy_MM_dd_HH_mm_ss", TimeZone.getTimeZone('Asia/Shanghai'))
+}
 
 android {
-    compileSdk 31
-    buildToolsVersion "30.0.3"
+    compileSdk compileSdkVersionExt.toInteger()
+    buildToolsVersion buildToolsVersionExt.toString()
     defaultConfig {
-        applicationId "github.leavesczy.compose_tetris"
-        minSdk 21
-        targetSdk 30
-        versionCode 1
-        versionName "1.0"
+        applicationId applicationIdExt.toString()
+        minSdk minSdkVersionExt.toInteger()
+        targetSdk targetSdkVersionExt.toInteger()
+        versionCode versionCodeExt.toInteger()
+        versionName versionNameExt.toString()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
+        }
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "compose_tetris_${variant.name}_versionCode_${versionCode}_versionName_${versionName}_${generateBuildTime()}.apk"
+            }
         }
     }
     signingConfigs {
