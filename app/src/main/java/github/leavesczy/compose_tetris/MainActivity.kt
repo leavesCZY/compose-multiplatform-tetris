@@ -39,16 +39,22 @@ class MainActivity : ComponentActivity() {
             color = Color.Transparent,
             darkIcons = true
         )
+
         val tetrisViewModel = viewModel<TetrisViewModel>()
+        val tetrisState by tetrisViewModel.tetrisStateFlow.collectAsState()
+        fun dispatchAction(action: Action) {
+            tetrisViewModel.dispatch(action = action)
+        }
+
         val lifecycle = LocalLifecycleOwner.current.lifecycle
         DisposableEffect(key1 = Unit) {
             val observer = object : DefaultLifecycleObserver {
                 override fun onResume(owner: LifecycleOwner) {
-                    tetrisViewModel.dispatch(Action.Resume)
+                    dispatchAction(action = Action.Resume)
                 }
 
                 override fun onPause(owner: LifecycleOwner) {
-                    tetrisViewModel.dispatch(Action.Background)
+                    dispatchAction(action = Action.Background)
                 }
             }
             lifecycle.addObserver(observer)
@@ -56,24 +62,24 @@ class MainActivity : ComponentActivity() {
                 lifecycle.removeObserver(observer)
             }
         }
-        val tetrisState by tetrisViewModel.tetrisStateFlow.collectAsState()
+
         val playListener by remember {
             mutableStateOf(
                 combinedPlayListener(
                     onStart = {
-                        tetrisViewModel.dispatch(Action.Start)
+                        dispatchAction(action = Action.Start)
                     },
                     onPause = {
-                        tetrisViewModel.dispatch(Action.Pause)
+                        dispatchAction(action = Action.Pause)
                     },
                     onReset = {
-                        tetrisViewModel.dispatch(Action.Reset)
+                        dispatchAction(action = Action.Reset)
                     },
                     onTransformation = {
-                        tetrisViewModel.dispatch(Action.Transformation(it))
+                        dispatchAction(action = Action.Transformation(it))
                     },
                     onSound = {
-                        tetrisViewModel.dispatch(Action.Sound)
+                        dispatchAction(action = Action.Sound)
                     },
                 )
             )
@@ -82,7 +88,7 @@ class MainActivity : ComponentActivity() {
             tetrisState = tetrisState, playListener = playListener
         )
         LaunchedEffect(key1 = Unit) {
-            tetrisViewModel.dispatch(action = Action.Welcome)
+            dispatchAction(action = Action.Welcome)
         }
     }
 }

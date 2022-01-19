@@ -147,6 +147,9 @@ data class TetrisState(
     val isRunning: Boolean
         get() = gameStatus == GameStatus.Running
 
+    val isPaused: Boolean
+        get() = gameStatus == GameStatus.Paused
+
     val canStartGame: Boolean
         get() {
             return when (gameStatus) {

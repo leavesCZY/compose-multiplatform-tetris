@@ -13,7 +13,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun ComposeTetrisTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colorScheme = LightColorScheme,

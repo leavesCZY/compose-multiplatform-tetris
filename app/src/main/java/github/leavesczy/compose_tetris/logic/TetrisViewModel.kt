@@ -38,119 +38,107 @@ class TetrisViewModel : ViewModel() {
     private var clearScreenJob: Job? = null
 
     fun dispatch(action: Action) {
-        playSound(action)
-        when (action) {
-            Action.Welcome, Action.Reset -> {
-                onWelcome()
-            }
-            Action.Start -> {
-                if (!tetrisState.canStartGame) {
-                    return
+        viewModelScope.launch {
+            when (action) {
+                Action.Welcome, Action.Reset -> {
+                    onWelcome()
                 }
-                if (tetrisState.gameStatus == GameStatus.Paused) {
-                    dispatchState(tetrisState.copy(gameStatus = GameStatus.Running))
-                    startDownJob()
-                } else {
+                Action.Start -> {
                     onStartGame()
                 }
-            }
-            Action.Background, Action.Pause -> {
-                onPauseGame()
-            }
-            Action.Resume -> {
-
-            }
-            Action.Sound -> {
-                dispatchState(tetrisState.copy(soundEnable = !tetrisState.soundEnable))
-            }
-            is Action.Transformation -> {
-                if (!tetrisState.isRunning) {
-                    return
+                Action.Background, Action.Pause -> {
+                    onPauseGame()
                 }
-                val viewState =
-                    tetrisState.onTransformation(transformationType = action.transformationType)
-                when (viewState.gameStatus) {
-                    GameStatus.Running -> {
-                        dispatchState(viewState)
-                        when (action.transformationType) {
-                            TransformationType.Left, TransformationType.Right -> {
+                Action.Resume -> {
 
-                            }
-                            TransformationType.FastDown -> {
-                                startDownJob()
-                            }
-                            TransformationType.Fall -> {
-
-                            }
-                            TransformationType.Down -> {
-                                startDownJob()
-                            }
-                            TransformationType.Rotate -> {
-
-                            }
-                        }
-                    }
-                    GameStatus.LineClearing -> {
-                        playSound(SoundType.Clean)
-                        dispatchState(viewState.copy(gameStatus = GameStatus.Running))
-                        startDownJob()
-                    }
-                    GameStatus.GameOver -> {
-                        dispatchState(viewState)
-                        onGameOver()
-                    }
-                    else -> {
-
-                    }
+                }
+                Action.Sound -> {
+                    onSound()
+                }
+                is Action.Transformation -> {
+                    onTransformation(transformation = action)
                 }
             }
+            playSound(action = action)
         }
     }
 
-    private fun onWelcome() {
-        startClearScreenJob {
+    private suspend fun onWelcome() {
+        startClearScreen(nextStatus = GameStatus.Welcome)
+    }
+
+    private suspend fun onGameOver() {
+        startClearScreen(nextStatus = GameStatus.GameOver)
+    }
+
+    private suspend fun onStartGame() {
+        if (!tetrisState.canStartGame) {
+            return
+        }
+        if (tetrisState.isPaused) {
+            dispatchState(newState = tetrisState.copy(gameStatus = GameStatus.Running))
+        } else {
             dispatchState(
-                TetrisState().copy(
-                    gameStatus = GameStatus.Welcome,
+                newState = TetrisState().copy(
+                    gameStatus = GameStatus.Running,
                     soundEnable = tetrisState.soundEnable
                 )
             )
         }
     }
 
-    private fun onStartGame() {
-        dispatchState(
-            TetrisState().copy(
-                gameStatus = GameStatus.Running,
-                soundEnable = tetrisState.soundEnable
-            )
-        )
-        startDownJob()
-    }
-
-    private fun onPauseGame() {
+    private suspend fun onPauseGame() {
         if (tetrisState.isRunning) {
-            cancelDownJob()
-            dispatchState(tetrisState.copy(gameStatus = GameStatus.Paused))
+            dispatchState(newState = tetrisState.copy(gameStatus = GameStatus.Paused))
         }
     }
 
-    private fun onGameOver() {
-        startClearScreenJob {
-            dispatchState(
-                TetrisState().copy(
-                    gameStatus = GameStatus.GameOver,
-                    soundEnable = tetrisState.soundEnable
-                )
-            )
+    private suspend fun onSound() {
+        dispatchState(newState = tetrisState.copy(soundEnable = !tetrisState.soundEnable))
+    }
+
+    private suspend fun onTransformation(transformation: Action.Transformation) {
+        if (!tetrisState.isRunning) {
+            return
+        }
+        val viewState =
+            tetrisState.onTransformation(transformationType = transformation.transformationType)
+        when (viewState.gameStatus) {
+            GameStatus.Running -> {
+                dispatchState(newState = viewState)
+            }
+            GameStatus.LineClearing -> {
+                playSound(soundType = SoundType.Clean)
+                dispatchState(newState = viewState.copy(gameStatus = GameStatus.Running))
+            }
+            GameStatus.GameOver -> {
+                playSound(soundType = SoundType.Welcome)
+                dispatchState(newState = viewState)
+                onGameOver()
+            }
+            else -> {
+                throw RuntimeException("非法状态")
+            }
         }
     }
 
-    private fun startClearScreenJob(invokeOnCompletion: () -> Unit) {
+    private fun startDownJob() {
         cancelDownJob()
         cancelClearScreenJob()
+        downJob = viewModelScope.launch {
+            while (tetrisState.isRunning) {
+                delay(timeMillis = DOWN_SPEED)
+                dispatch(action = Action.Transformation(TransformationType.Down))
+            }
+        }
+    }
+
+    private suspend fun startClearScreen(nextStatus: GameStatus) {
+        cancelDownJob()
+        if (clearScreenJob?.isActive == true) {
+            return
+        }
         clearScreenJob = viewModelScope.launch {
-            playSound(Action.Welcome)
             val width = tetrisState.width
             val height = tetrisState.height
             for (y in height - 1 downTo 0) {
@@ -160,8 +148,8 @@ class TetrisViewModel : ViewModel() {
                 }
                 dispatchState(
                     tetrisState.copy(
-                        gameStatus = GameStatus.ScreenClearing,
-                        tetris = Tetris()
+                        tetris = Tetris(),
+                        gameStatus = GameStatus.ScreenClearing
                     )
                 )
                 delay(CLEAR_SCREEN_SPEED)
@@ -173,33 +161,19 @@ class TetrisViewModel : ViewModel() {
                 }
                 dispatchState(
                     tetrisState.copy(
-                        gameStatus = GameStatus.ScreenClearing,
-                        tetris = Tetris()
+                        tetris = Tetris(),
+                        gameStatus = GameStatus.ScreenClearing
                     )
                 )
                 delay(CLEAR_SCREEN_SPEED)
             }
             delay(100)
-        }.apply {
-            invokeOnCompletion {
-                if (it == null) {
-                    invokeOnCompletion()
-                }
-            }
-        }
-    }
-
-    private fun cancelClearScreenJob() {
-        clearScreenJob?.cancel()
-        clearScreenJob = null
-    }
-
-    private fun startDownJob() {
-        cancelDownJob()
-        cancelClearScreenJob()
-        downJob = viewModelScope.launch {
-            delay(DOWN_SPEED)
-            dispatch(Action.Transformation(TransformationType.Down))
+            dispatchState(
+                TetrisState().copy(
+                    gameStatus = nextStatus,
+                    soundEnable = tetrisState.soundEnable
+                )
+            )
         }
     }
 
@@ -208,20 +182,30 @@ class TetrisViewModel : ViewModel() {
         downJob = null
     }
 
-    private fun dispatchState(tetrisState: TetrisState) {
-        _tetrisStateFlow.value = tetrisState
+    private fun cancelClearScreenJob() {
+        clearScreenJob?.cancel()
+        clearScreenJob = null
+    }
+
+    private suspend fun dispatchState(newState: TetrisState) {
+        _tetrisStateFlow.emit(newState)
+        if (newState.gameStatus == GameStatus.Running) {
+            if (downJob?.isActive != true) {
+                startDownJob()
+                return
+            }
+        } else {
+            cancelDownJob()
+        }
     }
 
     private fun playSound(action: Action) {
         when (action) {
-            Action.Welcome -> {
-                playSound(SoundType.Welcome)
+            Action.Welcome, Action.Reset -> {
+                playSound(soundType = SoundType.Welcome)
             }
             Action.Start, Action.Pause -> {
-                playSound(SoundType.Transformation)
-            }
-            Action.Reset -> {
-
+                playSound(soundType = SoundType.Transformation)
             }
             Action.Background -> {
 
@@ -230,24 +214,22 @@ class TetrisViewModel : ViewModel() {
 
             }
             Action.Sound -> {
-                if (!tetrisState.soundEnable) {
-                    playSound(SoundType.Transformation)
-                }
+                playSound(soundType = SoundType.Transformation)
             }
             is Action.Transformation -> {
                 if (tetrisState.isRunning) {
                     when (action.transformationType) {
                         TransformationType.Left, TransformationType.Right, TransformationType.FastDown -> {
-                            playSound(SoundType.Transformation)
+                            playSound(soundType = SoundType.Transformation)
                         }
                         TransformationType.Fall -> {
-                            playSound(SoundType.Fall)
+                            playSound(soundType = SoundType.Fall)
                         }
                         TransformationType.Down -> {
 
                         }
                         TransformationType.Rotate -> {
-                            playSound(SoundType.Rotate)
+                            playSound(soundType = SoundType.Rotate)
                         }
                     }
                 }

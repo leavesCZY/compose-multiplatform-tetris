@@ -149,7 +149,8 @@ fun TetrisScreen(
                 bgColor = bgColor,
                 tetrisState = tetrisState,
                 width = size.width - 2 * borderWidth - leftPanelWith + screenInnerMargin / 2,
-                height = size.height - 2 * screenInnerMargin - 2 * borderWidth
+                height = size.height - 2 * screenInnerMargin - 2 * borderWidth,
+                alpha = alphaAnimate
             )
         }
     }
@@ -206,24 +207,29 @@ private fun DrawScope.drawRightPanel(
     bgColor: Color,
     tetrisState: TetrisState,
     width: Float,
-    height: Float
+    height: Float,
+    alpha: Float
 ) {
-    if (tetrisState.gameStatus == GameStatus.Running || tetrisState.gameStatus == GameStatus.Paused) {
-        val canvas = drawContext.canvas.nativeCanvas
-        val textPaint = Paint().apply {
-            color = BrickColorFill.toArgb()
-            textSize = 60f
-            textAlign = Paint.Align.CENTER
-            style = Paint.Style.FILL
-            strokeWidth = 12f
-            isAntiAlias = true
+    val canvas = drawContext.canvas.nativeCanvas
+    val textPaint = Paint().apply {
+        color = if (tetrisState.isRunning) {
+            Color.Black.toArgb()
+        } else {
+            Color.Black.copy(alpha = alpha).toArgb()
         }
-        canvas.drawText(
-            "Next",
-            width / 2f,
-            height / 8f,
-            textPaint
-        )
+        textSize = 60f
+        textAlign = Paint.Align.CENTER
+        style = Paint.Style.FILL
+        strokeWidth = 12f
+        isAntiAlias = true
+    }
+    canvas.drawText(
+        "Next",
+        width / 2f,
+        height / 8f,
+        textPaint
+    )
+    if (tetrisState.gameStatus == GameStatus.Running || tetrisState.gameStatus == GameStatus.Paused) {
         val nextTetrisShape = tetrisState.nextTetris.shape
         val shapeMaxWidth = nextTetrisShape.map { it.x }.toSet().size
         val brickSize = 15.dp.toPx()
@@ -295,13 +301,13 @@ private fun DrawScope.drawText(
     }
     return when (tetrisState.gameStatus) {
         GameStatus.Welcome -> {
-            drawText("TETRIS", 90f)
+            drawText("TETRIS", 100f)
         }
         GameStatus.Paused -> {
-            drawText("PAUSE", 90f)
+            drawText("PAUSE", 100f)
         }
         GameStatus.GameOver -> {
-            drawText("GAME OVER", 80f)
+            drawText("GAME OVER", 90f)
         }
         GameStatus.Running -> {
 
