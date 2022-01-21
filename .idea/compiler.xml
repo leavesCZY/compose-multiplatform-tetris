@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="11">
+      <module name="ComposeTetris.common.commonMain" target="11" />
+      <module name="ComposeTetris.common.commonTest" target="11" />
+      <module name="ComposeTetris.common.desktopMain" target="11" />
+      <module name="ComposeTetris.common.desktopTest" target="11" />
+      <module name="ComposeTetris.desktop.commonMain" target="11" />
+      <module name="ComposeTetris.desktop.commonTest" target="11" />
+      <module name="ComposeTetris.desktop.jvmMain" target="11" />
+      <module name="ComposeTetris.desktop.jvmTest" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

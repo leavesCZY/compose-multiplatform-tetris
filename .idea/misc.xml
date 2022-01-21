@@ -4,18 +4,10 @@
     <asm skipDebug="true" skipFrames="true" skipCode="false" expandFrames="false" />
     <groovy codeStyle="LEGACY" />
   </component>
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/CZY/Desktop/A/compose-tetris/app/src/main/res/drawable/ic_launcher_background.xml" value="0.30277777777777776" />
-        <entry key="..\:/Users/CZY/Desktop/A/compose-tetris/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.29074074074074074" />
-      </map>
-    </option>
+  <component name="ASMPluginConfiguration">
+    <asm skipDebug="false" skipFrames="false" skipCode="false" expandFrames="false" />
+    <groovy codeStyle="LEGACY" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/build/classes" />
-  </component>
-  <component name="ProjectType">
-    <option name="id" value="Android" />
-  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>
