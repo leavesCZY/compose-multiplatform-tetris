@@ -134,7 +134,7 @@ fun TetrisScreen(
         ) {
             drawText(
                 tetrisState = tetrisState,
-                width = leftPanelWith,
+                width = size.width,
                 height = leftPanelHeight,
                 alpha = alphaAnimate
             )
@@ -148,8 +148,7 @@ fun TetrisScreen(
                 bgColor = bgColor,
                 tetrisState = tetrisState,
                 width = size.width - 2 * borderWidth - leftPanelWith + screenInnerMargin / 2,
-                height = size.height - 2 * screenInnerMargin - 2 * borderWidth,
-                alpha = alphaAnimate
+                height = size.height - 2 * screenInnerMargin - 2 * borderWidth
             )
         }
     }
@@ -206,23 +205,8 @@ private fun DrawScope.drawRightPanel(
     bgColor: Color,
     tetrisState: TetrisState,
     width: Float,
-    height: Float,
-    alpha: Float
+    height: Float
 ) {
-    val textColor = if (tetrisState.isRunning) {
-        Color.Black
-    } else {
-        Color.Black.copy(alpha = alpha)
-    }
-    drawContext.canvas.drawText(
-        text = "Next",
-        color = textColor.toArgb(),
-        fontSize = 64f,
-        strokeWidth = 4f,
-        x = width / 2f,
-        y = height / 8f,
-    )
-
     if (tetrisState.gameStatus == GameStatus.Running || tetrisState.gameStatus == GameStatus.Paused) {
         val nextTetrisShape = tetrisState.nextTetris.shape
         val shapeMaxWidth = nextTetrisShape.map { it.x }.toSet().size
@@ -284,8 +268,8 @@ private fun DrawScope.drawText(
             color = Color.Black.copy(alpha = alpha).toArgb(),
             fontSize = fontSize,
             strokeWidth = 10f,
-            x = width / 2f,
-            y = height / 3f
+            x = width,
+            y = height
         )
     }
     return when (tetrisState.gameStatus) {

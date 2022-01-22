@@ -1,7 +1,7 @@
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import github.leavesczy.compose_tetris.desktop.DesktopMainScreen
 
 /**
@@ -11,10 +11,12 @@ import github.leavesczy.compose_tetris.desktop.DesktopMainScreen
  * @Desc:
  */
 fun main() = application {
+    val windowState = rememberWindowState(width = 1200.dp, height = 900.dp)
     Window(
         title = "compose_tetris",
         resizable = false,
-        state = WindowState(width = 1200.dp, height = 900.dp),
+        focusable = true,
+        state = windowState,
         onCloseRequest = ::exitApplication
     ) {
         DesktopMainScreen()

@@ -66,15 +66,13 @@ actual fun getSoundPlayer(): SoundPlayer {
 }
 
 private val textPaint = Paint().apply {
-    this.mode = PaintMode.FILL
+    this.mode = PaintMode.STROKE_AND_FILL
     this.strokeWidth = strokeWidth
     this.isAntiAlias = true
     this.isDither = true
 }
 
-private val font = Font().apply {
-    size = 40f
-}
+private val font = Font()
 
 actual fun Canvas.drawText(
     text: String,
@@ -85,6 +83,8 @@ actual fun Canvas.drawText(
     y: Float,
 ) {
     textPaint.color = color
-    textPaint.strokeWidth = strokeWidth / 3f
-    nativeCanvas.drawString(s = text, x = x / 2, y = y, font = font, paint = textPaint)
+    textPaint.strokeWidth = strokeWidth / 2f
+    font.size = fontSize * 1.5f
+    val measureWidth = font.measureTextWidth(s = text, p = textPaint)
+    nativeCanvas.drawString(s = text, x = x / 2f - measureWidth / 2f, y = y / 2f, font = font, paint = textPaint)
 }
