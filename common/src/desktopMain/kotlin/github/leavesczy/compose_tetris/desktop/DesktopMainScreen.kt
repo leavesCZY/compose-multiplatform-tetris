@@ -10,6 +10,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import github.leavesczy.compose_tetris.common.logic.Action
+import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
 import github.leavesczy.compose_tetris.common.logic.TransformationType
 import github.leavesczy.compose_tetris.common.ui.MainScreen
 
@@ -23,7 +24,7 @@ import github.leavesczy.compose_tetris.common.ui.MainScreen
 @Composable
 fun DesktopMainScreen() {
     val tetrisLogic by remember {
-        mutableStateOf(DesktopTetrisLogic())
+        mutableStateOf(DesktopTetrisLogic(delegate = TetrisLogicImpl()))
     }
     val onKeyEvent: (KeyEvent) -> Boolean = remember {
         {

@@ -16,13 +16,13 @@ interface ITetrisLogic {
 
     val tetrisStateFlow: StateFlow<TetrisState>
 
+    fun provideScope(coroutineScope: CoroutineScope)
+
     fun dispatch(action: Action)
 
 }
 
-class TetrisLogic(
-    private val coroutineScope: CoroutineScope
-) : ITetrisLogic {
+class TetrisLogicImpl : ITetrisLogic {
 
     companion object {
 
@@ -31,6 +31,8 @@ class TetrisLogic(
         private const val CLEAR_SCREEN_SPEED = 30L
 
     }
+
+    private lateinit var coroutineScope: CoroutineScope
 
     private val _tetrisStateFlow = MutableStateFlow(TetrisState())
 
@@ -44,6 +46,11 @@ class TetrisLogic(
     private var clearScreenJob: Job? = null
 
     private val soundPlayer = getSoundPlayer()
+
+
+    override fun provideScope(coroutineScope: CoroutineScope) {
+        this.coroutineScope = coroutineScope
+    }
 
     override fun dispatch(action: Action) {
         coroutineScope.launch(context = Dispatchers.IO) {

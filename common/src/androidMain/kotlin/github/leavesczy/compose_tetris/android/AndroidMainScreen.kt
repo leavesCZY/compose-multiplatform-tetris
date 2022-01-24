@@ -10,11 +10,14 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import github.leavesczy.compose_tetris.common.logic.Action
+import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
 import github.leavesczy.compose_tetris.common.ui.MainScreen
 
 /**
@@ -31,7 +34,12 @@ fun AndroidMainScreen() {
         darkIcons = true
     )
 
-    val tetrisViewModel = viewModel<TetrisViewModel>()
+    val tetrisViewModel = viewModel<TetrisViewModel>(factory = object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return TetrisViewModel(delegate = TetrisLogicImpl()) as T
+        }
+    })
+
     fun dispatchAction(action: Action) {
         tetrisViewModel.dispatch(action = action)
     }

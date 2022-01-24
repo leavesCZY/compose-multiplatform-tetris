@@ -26,7 +26,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "DesktopMainKt"
+        mainClass = "github.leavesczy.compose_tetris.desktop.DesktopMainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "jvm"

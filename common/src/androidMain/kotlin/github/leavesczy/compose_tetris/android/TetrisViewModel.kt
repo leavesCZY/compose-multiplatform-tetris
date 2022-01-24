@@ -2,11 +2,8 @@ package github.leavesczy.compose_tetris.android
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import github.leavesczy.compose_tetris.common.logic.Action
 import github.leavesczy.compose_tetris.common.logic.ITetrisLogic
-import github.leavesczy.compose_tetris.common.logic.TetrisLogic
-import github.leavesczy.compose_tetris.common.logic.TetrisState
-import kotlinx.coroutines.flow.StateFlow
+import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
 
 /**
  * @Author: leavesCZY
@@ -14,16 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class TetrisViewModel : ViewModel(), ITetrisLogic {
+class TetrisViewModel(delegate: TetrisLogicImpl) : ViewModel(), ITetrisLogic by delegate {
 
-    private val tetrisLogic =
-        TetrisLogic(coroutineScope = viewModelScope)
-
-    override val tetrisStateFlow: StateFlow<TetrisState>
-        get() = tetrisLogic.tetrisStateFlow
-
-    override fun dispatch(action: Action) {
-        tetrisLogic.dispatch(action = action)
+    init {
+        provideScope(coroutineScope = viewModelScope)
     }
 
 }
