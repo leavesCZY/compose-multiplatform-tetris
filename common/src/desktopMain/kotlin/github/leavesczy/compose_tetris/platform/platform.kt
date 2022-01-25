@@ -38,21 +38,25 @@ private val DesktopSoundPlayer = object : SoundPlayer {
     private fun getAudioFile(soundType: SoundType): File {
         return when (soundType) {
             SoundType.Welcome -> {
-                File("common/src/commonMain/res/raw/welcome.mp3")
+                getAudioFile("welcome.mp3")
             }
             SoundType.Transformation -> {
-                File("common/src/commonMain/res/raw/transformation.mp3")
+                getAudioFile("transformation.mp3")
             }
             SoundType.Rotate -> {
-                File("common/src/commonMain/res/raw/rotate.mp3")
+                getAudioFile("rotate.mp3")
             }
             SoundType.Fall -> {
-                File("common/src/commonMain/res/raw/fall.mp3")
+                getAudioFile("fall.mp3")
             }
             SoundType.Clean -> {
-                File("common/src/commonMain/res/raw/clean.mp3")
+                getAudioFile("clean.mp3")
             }
         }
+    }
+
+    private fun getAudioFile(fileName: String): File {
+        return File(javaClass.getResource("/raw/$fileName").path)
     }
 
 }
@@ -66,10 +70,10 @@ actual fun getSoundPlayer(): SoundPlayer {
 }
 
 private val textPaint = Paint().apply {
-    this.mode = PaintMode.STROKE_AND_FILL
-    this.strokeWidth = strokeWidth
-    this.isAntiAlias = true
-    this.isDither = true
+    mode = PaintMode.STROKE_AND_FILL
+    strokeWidth = strokeWidth
+    isAntiAlias = true
+    isDither = true
 }
 
 private val font = Font()
@@ -86,5 +90,11 @@ actual fun Canvas.drawText(
     textPaint.strokeWidth = strokeWidth / 2f
     font.size = fontSize * 1.5f
     val measureWidth = font.measureTextWidth(s = text, p = textPaint)
-    nativeCanvas.drawString(s = text, x = x / 2f - measureWidth / 2f, y = y / 2f, font = font, paint = textPaint)
+    nativeCanvas.drawString(
+        s = text,
+        x = x / 2f - measureWidth / 2f,
+        y = y / 2f,
+        font = font,
+        paint = textPaint
+    )
 }

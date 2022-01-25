@@ -8,13 +8,9 @@ plugins {
 
 kotlin {
     android()
-    jvm("desktop") {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
-    }
+    jvm("desktop")
     sourceSets {
-        val commonMain by getting {
+        named("commonMain") {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             dependencies {
                 implementation(compose.runtime)
@@ -24,38 +20,31 @@ kotlin {
                 implementation(compose.materialIconsExtended)
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        val androidMain by getting {
+        named("androidMain") {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.4.1")
                 api("androidx.activity:activity-compose:1.4.0")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
-                implementation("com.google.accompanist:accompanist-insets:0.22.0-rc")
-                implementation("com.google.accompanist:accompanist-systemuicontroller:0.22.0-rc")
+                implementation("com.google.accompanist:accompanist-insets:0.24.0-alpha")
+                implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.0-alpha")
             }
         }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13.2")
-            }
-        }
-        val desktopMain by getting {
+        named("desktopMain") {
             dependencies {
                 implementation("javazoom:jlayer:1.0.1")
             }
         }
-        val desktopTest by getting
     }
 }
 
 android {
     compileSdk = Integer.parseInt(project.ext["compileSdkVersionExt"] as String)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDir("src/commonMain/res")
+    sourceSets {
+        named("main") {
+            manifest.srcFile("src/androidMain/AndroidManifest.xml")
+            res.srcDirs("src/androidMain/res")
+        }
+    }
     defaultConfig {
         minSdk = Integer.parseInt(project.ext["minSdkVersionExt"] as String)
         targetSdk = Integer.parseInt(project.ext["targetSdkVersionExt"] as String)

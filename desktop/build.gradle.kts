@@ -8,19 +8,15 @@ plugins {
 
 kotlin {
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
         withJava()
     }
     sourceSets {
-        val jvmMain by getting {
+        named("jvmMain") {
             dependencies {
                 implementation(project(":common"))
                 implementation(compose.desktop.currentOs)
             }
         }
-        val jvmTest by getting
     }
 }
 
@@ -28,9 +24,9 @@ compose.desktop {
     application {
         mainClass = "github.leavesczy.compose_tetris.desktop.DesktopMainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "jvm"
+            packageName = "compose_tetris"
             packageVersion = "1.0.0"
+            targetFormats(TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Dmg, TargetFormat.Deb)
         }
     }
 }
