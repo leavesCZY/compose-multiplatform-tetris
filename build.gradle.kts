@@ -1,19 +1,23 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-        classpath("com.android.tools.build:gradle:7.0.4")
-    }
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    kotlin("jvm") apply false
+    kotlin("multiplatform") apply false
+    kotlin("android") apply false
+    id("com.android.application") apply false
+    id("com.android.library") apply false
+    id("org.jetbrains.compose") apply false
 }
 
-allprojects {
+subprojects {
     repositories {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        tasks.withType<KotlinCompile> {
+            kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        }
     }
 }

@@ -21,7 +21,7 @@ fun main() = application {
         title = "compose_tetris",
         resizable = false,
         focusable = true,
-        alwaysOnTop = true,
+        alwaysOnTop = false,
         state = WindowState(
             size = getPreferredWindowSize(desiredWidth = 1200, desiredHeight = 900),
             position = WindowPosition.Aligned(Alignment.Center)

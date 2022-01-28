@@ -40,6 +40,11 @@ fun MainScreen(modifier: Modifier, tetrisLogic: ITetrisLogic) {
             )
         )
     }
+
+    LaunchedEffect(key1 = Unit) {
+        tetrisLogic.dispatch(action = Action.Welcome)
+    }
+
     ComposeTetrisTheme {
         Scaffold(
             modifier = Modifier

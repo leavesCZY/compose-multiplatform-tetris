@@ -3,7 +3,6 @@ package github.leavesczy.compose_tetris.android
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -65,8 +64,5 @@ fun AndroidMainScreen() {
             modifier = Modifier.systemBarsPadding().padding(top = 10.dp),
             tetrisLogic = tetrisViewModel
         )
-    }
-    LaunchedEffect(key1 = Unit) {
-        dispatchAction(action = Action.Welcome)
     }
 }

@@ -56,6 +56,9 @@ fun DesktopMainScreen() {
     val focusRequester = remember {
         FocusRequester()
     }
+    LaunchedEffect(key1 = Unit) {
+        focusRequester.requestFocus()
+    }
     MainScreen(
         modifier = Modifier.padding(top = 30.dp)
             .focusRequester(focusRequester)
@@ -63,8 +66,4 @@ fun DesktopMainScreen() {
             .onKeyEvent(onKeyEvent = onKeyEvent),
         tetrisLogic = tetrisLogic
     )
-    LaunchedEffect(key1 = Unit) {
-        focusRequester.requestFocus()
-        tetrisLogic.dispatch(action = Action.Welcome)
-    }
 }

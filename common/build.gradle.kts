@@ -2,7 +2,7 @@ import org.jetbrains.compose.compose
 
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose") version "1.0.0"
+    id("org.jetbrains.compose")
     id("com.android.library")
 }
 
@@ -25,8 +25,9 @@ kotlin {
                 implementation("androidx.appcompat:appcompat:1.4.1")
                 api("androidx.activity:activity-compose:1.4.0")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
-                implementation("com.google.accompanist:accompanist-insets:0.24.0-alpha")
-                implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.0-alpha")
+                val accompanistVersion = "0.17.0"
+                implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
+                implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
             }
         }
         named("desktopMain") {

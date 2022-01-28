@@ -62,7 +62,7 @@ private val DesktopSoundPlayer = object : SoundPlayer {
 }
 
 actual fun getScreenSize(): Location {
-    return Location(x = 35, y = 20)
+    return Location(x = 38, y = 20)
 }
 
 actual fun getSoundPlayer(): SoundPlayer {
@@ -89,7 +89,7 @@ actual fun Canvas.drawText(
     textPaint.color = color
     textPaint.strokeWidth = strokeWidth / 2f
     font.size = fontSize * 1.5f
-    val measureWidth = font.measureTextWidth(s = text, p = textPaint)
+    val measureWidth = font.measureText(s = text).width
     nativeCanvas.drawString(
         s = text,
         x = x / 2f - measureWidth / 2f,

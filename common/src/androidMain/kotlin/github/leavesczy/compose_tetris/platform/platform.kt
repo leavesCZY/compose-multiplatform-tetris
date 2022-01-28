@@ -64,7 +64,7 @@ private val AndroidSoundPlayer: SoundPlayer = object : SoundPlayer {
 }
 
 actual fun getScreenSize(): Location {
-    return Location(x = 12, y = 24)
+    return Location(x = 12, y = 25)
 }
 
 actual fun getSoundPlayer(): SoundPlayer {

@@ -42,7 +42,7 @@ fun TetrisScreen(
         initialValue = 1.0f,
         targetValue = 0.0f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+            animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse,
         ),
     )
@@ -134,7 +134,7 @@ fun TetrisScreen(
         ) {
             drawText(
                 tetrisState = tetrisState,
-                width = size.width,
+                width = leftPanelWith,
                 height = leftPanelHeight,
                 alpha = alphaAnimate
             )
@@ -274,13 +274,13 @@ private fun DrawScope.drawText(
     }
     return when (tetrisState.gameStatus) {
         GameStatus.Welcome -> {
-            drawText("TETRIS", 120f)
+            drawText("TETRIS", 130f)
         }
         GameStatus.Paused -> {
-            drawText("PAUSE", 120f)
+            drawText("PAUSE", 130f)
         }
         GameStatus.GameOver -> {
-            drawText("GAME OVER", 90f)
+            drawText("GAME OVER", 100f)
         }
         GameStatus.Running -> {
 
