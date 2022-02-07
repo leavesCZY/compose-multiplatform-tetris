@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
  * @Github: https://github.com/leavesCZY
  * @Desc:
  */
-class DesktopTetrisLogic(delegate: TetrisLogicImpl) : ITetrisLogic by delegate {
+class DesktopTetrisViewModel(delegate: TetrisLogicImpl) : ITetrisLogic by delegate {
 
     init {
         provideScope(GlobalScope)

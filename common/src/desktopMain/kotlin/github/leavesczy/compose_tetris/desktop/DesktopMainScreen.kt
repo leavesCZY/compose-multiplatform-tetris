@@ -21,30 +21,30 @@ import github.leavesczy.compose_tetris.common.ui.MainScreen
  */
 @Composable
 fun DesktopMainScreen() {
-    val tetrisLogic by remember {
-        mutableStateOf(DesktopTetrisLogic(delegate = TetrisLogicImpl()))
+    val tetrisViewModel by remember {
+        mutableStateOf(DesktopTetrisViewModel(delegate = TetrisLogicImpl()))
     }
     val onKeyEvent: (KeyEvent) -> Boolean = remember {
         {
             when (it.key) {
                 Key.DirectionLeft -> {
                     if (it.type == KeyEventType.KeyDown) {
-                        tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Left))
+                        tetrisViewModel.dispatch(action = Action.Transformation(TransformationType.Left))
                     }
                 }
                 Key.DirectionRight -> {
                     if (it.type == KeyEventType.KeyDown) {
-                        tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Right))
+                        tetrisViewModel.dispatch(action = Action.Transformation(TransformationType.Right))
                     }
                 }
                 Key.DirectionUp -> {
                     if (it.type == KeyEventType.KeyUp) {
-                        tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Rotate))
+                        tetrisViewModel.dispatch(action = Action.Transformation(TransformationType.Rotate))
                     }
                 }
                 Key.DirectionDown -> {
                     if (it.type == KeyEventType.KeyUp) {
-                        tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Fall))
+                        tetrisViewModel.dispatch(action = Action.Transformation(TransformationType.Fall))
                     }
                 }
             }
@@ -59,9 +59,9 @@ fun DesktopMainScreen() {
     }
     MainScreen(
         modifier = Modifier.padding(top = 30.dp)
-            .focusRequester(focusRequester)
+            .focusRequester(focusRequester = focusRequester)
             .focusable(enabled = true)
             .onKeyEvent(onKeyEvent = onKeyEvent),
-        tetrisLogic = tetrisLogic
+        tetrisLogic = tetrisViewModel
     )
 }

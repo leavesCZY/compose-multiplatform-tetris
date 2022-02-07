@@ -11,7 +11,7 @@ import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class TetrisViewModel(delegate: TetrisLogicImpl) : ViewModel(), ITetrisLogic by delegate {
+class AndroidTetrisViewModel(delegate: TetrisLogicImpl) : ViewModel(), ITetrisLogic by delegate {
 
     init {
         provideScope(coroutineScope = viewModelScope)

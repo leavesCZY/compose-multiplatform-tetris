@@ -23,7 +23,7 @@ fun main() = application {
         alwaysOnTop = false,
         state = WindowState(
             size = getPreferredWindowSize(desiredWidth = 1200, desiredHeight = 900),
-            position = WindowPosition.Aligned(Alignment.Center)
+            position = WindowPosition.Aligned(alignment = Alignment.Center)
         ),
         onCloseRequest = ::exitApplication
     ) {

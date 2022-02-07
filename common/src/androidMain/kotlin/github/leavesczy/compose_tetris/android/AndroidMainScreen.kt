@@ -33,11 +33,12 @@ fun AndroidMainScreen() {
         darkIcons = true
     )
 
-    val tetrisViewModel = viewModel<TetrisViewModel>(factory = object : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TetrisViewModel(delegate = TetrisLogicImpl()) as T
-        }
-    })
+    val tetrisViewModel =
+        viewModel<AndroidTetrisViewModel>(factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return AndroidTetrisViewModel(delegate = TetrisLogicImpl()) as T
+            }
+        })
 
     fun dispatchAction(action: Action) {
         tetrisViewModel.dispatch(action = action)
