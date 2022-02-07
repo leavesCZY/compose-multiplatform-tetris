@@ -46,7 +46,7 @@ android {
     }
     signingConfigs {
         create("release") {
-            storeFile = File(rootDir, ".\\key.jks")
+            storeFile = File(rootDir, "key.jks")
             keyAlias = getExtString("keyAliasExt")
             storePassword = getExtString("storePasswordExt")
             keyPassword = getExtString("keyPasswordExt")
@@ -70,7 +70,10 @@ android {
             isMinifyEnabled = false
             isShrinkResources = false
             isDebuggable = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -79,26 +82,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = kotlin.run {
-            val args = mutableListOf<String>()
-            args.addAll(freeCompilerArgs)
-            args.addAll(
-                listOf(
-                    "-Xjvm-default=all",
-                    "-Xallow-jvm-ir-dependencies",
-                    "-Xskip-prerelease-check",
-                    "-Xopt-in=kotlin.RequiresOptIn",
-                    "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                    "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
-                    "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
-                    "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi",
-                    "-Xopt-in=com.google.accompanist.insets.ExperimentalAnimatedInsets",
-                    "-Xopt-in=com.google.accompanist.pager.ExperimentalPagerApi",
-                    "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-                )
-            )
-            args
-        }
     }
     packagingOptions {
         resources.excludes.addAll(
@@ -117,5 +100,5 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    implementation("com.google.android.material:material:1.6.0-alpha01")
+    implementation("com.google.android.material:material:1.6.0-alpha02")
 }

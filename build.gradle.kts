@@ -18,6 +18,7 @@ subprojects {
     plugins.withId("org.jetbrains.kotlin.multiplatform") {
         tasks.withType<KotlinCompile> {
             kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+            kotlinOptions.freeCompilerArgs += "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi"
         }
     }
 }

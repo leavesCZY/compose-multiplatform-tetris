@@ -3,7 +3,6 @@ package github.leavesczy.compose_tetris.desktop
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -20,7 +19,6 @@ import github.leavesczy.compose_tetris.common.ui.MainScreen
  * @Github: https://github.com/leavesCZY
  * @Desc:
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DesktopMainScreen() {
     val tetrisLogic by remember {

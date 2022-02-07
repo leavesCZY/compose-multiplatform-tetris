@@ -7,7 +7,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
-import java.awt.Dimension
 import java.awt.Toolkit
 
 /**
@@ -33,10 +32,10 @@ fun main() = application {
 }
 
 private fun getPreferredWindowSize(desiredWidth: Int, desiredHeight: Int): DpSize {
-    val screenSize: Dimension = Toolkit.getDefaultToolkit().screenSize
-    val preferredWidth: Int = (screenSize.width * 0.8f).toInt()
-    val preferredHeight: Int = (screenSize.height * 0.8f).toInt()
-    val width: Int = if (desiredWidth < preferredWidth) desiredWidth else preferredWidth
-    val height: Int = if (desiredHeight < preferredHeight) desiredHeight else preferredHeight
+    val screenSize = Toolkit.getDefaultToolkit().screenSize
+    val preferredWidth = (screenSize.width * 0.8f).toInt()
+    val preferredHeight = (screenSize.height * 0.8f).toInt()
+    val width = if (desiredWidth < preferredWidth) desiredWidth else preferredWidth
+    val height = if (desiredHeight < preferredHeight) desiredHeight else preferredHeight
     return DpSize(width.dp, height.dp)
 }
