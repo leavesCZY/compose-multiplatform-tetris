@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,23 +20,15 @@ fun generateBuildTime(): String {
     return simpleDateFormat.format(Date())
 }
 
-fun getExtString(key: String): String {
-    return project.ext[key] as String
-}
-
-fun getExtInt(key: String): Int {
-    return Integer.parseInt(project.ext[key] as String)
-}
-
 android {
-    compileSdk = getExtInt("compileSdkVersionExt")
-    buildToolsVersion = getExtString("buildToolsVersionExt")
+    compileSdk = 33
+    buildToolsVersion = "33.0.2"
     defaultConfig {
-        applicationId = getExtString("applicationIdExt")
-        minSdk = getExtInt("minSdkVersionExt")
-        targetSdk = getExtInt("targetSdkVersionExt")
-        versionCode = getExtInt("versionCodeExt")
-        versionName = getExtString("versionNameExt")
+        applicationId = "github.leavesczy.compose_tetris"
+        minSdk = 21
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0.0"
         applicationVariants.all {
             outputs.all {
                 if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
@@ -47,9 +41,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = File(rootDir, "key.jks")
-            keyAlias = getExtString("keyAliasExt")
-            storePassword = getExtString("storePasswordExt")
-            keyPassword = getExtString("keyPasswordExt")
+            keyAlias = "leavesCZY"
+            storePassword = "123456"
+            keyPassword = "123456"
             enableV1Signing = true
             enableV2Signing = true
         }
@@ -61,8 +55,7 @@ android {
             isShrinkResources = true
             isDebuggable = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
         getByName("debug") {
@@ -71,8 +64,7 @@ android {
             isShrinkResources = false
             isDebuggable = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -96,9 +88,10 @@ android {
             )
         )
     }
+    namespace = "github.leavesczy.compose_tetris"
 }
 
 dependencies {
     implementation(project(":common"))
-    implementation("com.google.android.material:material:1.6.0-alpha02")
+    implementation("com.google.android.material:material:1.8.0")
 }

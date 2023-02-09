@@ -1,6 +1,8 @@
 package github.leavesczy.compose_tetris.android
 
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -12,8 +14,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import github.leavesczy.compose_tetris.common.logic.Action
 import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
@@ -60,10 +60,11 @@ fun AndroidMainScreen() {
             lifecycle.removeObserver(observer)
         }
     }
-    ProvideWindowInsets {
-        MainScreen(
-            modifier = Modifier.systemBarsPadding().padding(top = 10.dp),
-            tetrisLogic = tetrisViewModel
-        )
-    }
+    MainScreen(
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(top = 10.dp),
+        tetrisLogic = tetrisViewModel
+    )
 }

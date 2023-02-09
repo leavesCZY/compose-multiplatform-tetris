@@ -1,24 +1,14 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm") apply false
-    kotlin("multiplatform") apply false
-    kotlin("android") apply false
-    id("com.android.application") apply false
-    id("com.android.library") apply false
-    id("org.jetbrains.compose") apply false
+    val kotlinVersion = "1.7.20"
+    val composeVersion = "1.3.0"
+    val agpVersion = "7.3.1"
+    kotlin("multiplatform").version(kotlinVersion).apply(false)
+    kotlin("android").version(kotlinVersion).apply(false)
+    id("org.jetbrains.compose").version(composeVersion).apply(false)
+    id("com.android.application").version(agpVersion).apply(false)
+    id("com.android.library").version(agpVersion).apply(false)
 }
 
-subprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    }
-    plugins.withId("org.jetbrains.kotlin.multiplatform") {
-        tasks.withType<KotlinCompile> {
-            kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-            kotlinOptions.freeCompilerArgs += "-Xopt-in=androidx.compose.ui.ExperimentalComposeUiApi"
-        }
-    }
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }

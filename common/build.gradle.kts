@@ -1,5 +1,3 @@
-import org.jetbrains.compose.compose
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -8,11 +6,14 @@ plugins {
 
 kotlin {
     android()
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
+    }
     sourceSets {
         named("commonMain") {
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            dependencies {
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class) dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.ui)
@@ -22,10 +23,10 @@ kotlin {
         }
         named("androidMain") {
             dependencies {
-                implementation("androidx.appcompat:appcompat:1.4.1")
-                api("androidx.activity:activity-compose:1.4.0")
-                implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0")
-                val accompanistVersion = "0.17.0"
+                implementation("androidx.appcompat:appcompat:1.6.0")
+                api("androidx.activity:activity-compose:1.6.1")
+                implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+                val accompanistVersion = "0.28.0"
                 implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
                 implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
             }
@@ -39,19 +40,18 @@ kotlin {
 }
 
 android {
-    compileSdk = Integer.parseInt(project.ext["compileSdkVersionExt"] as String)
-    sourceSets {
-        named("main") {
-            manifest.srcFile("src/androidMain/AndroidManifest.xml")
-            res.srcDirs("src/androidMain/res")
-        }
+    compileSdk = 33
+    sourceSets["main"].apply {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        res.srcDirs("src/androidMain/res")
     }
     defaultConfig {
-        minSdk = Integer.parseInt(project.ext["minSdkVersionExt"] as String)
-        targetSdk = Integer.parseInt(project.ext["targetSdkVersionExt"] as String)
+        minSdk = 21
+        targetSdk = 33
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
+    namespace = "github.leavesczy.compose_tetris.android"
 }
