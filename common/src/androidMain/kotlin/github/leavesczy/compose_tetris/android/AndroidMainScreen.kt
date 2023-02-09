@@ -28,31 +28,24 @@ import github.leavesczy.compose_tetris.common.ui.MainScreen
 @Composable
 fun AndroidMainScreen() {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
-        color = Color.Transparent,
-        darkIcons = true
-    )
-
+    systemUiController.setStatusBarColor(color = Color.Transparent, darkIcons = true)
+    systemUiController.setNavigationBarColor(color = Color(0xF2FFD600), darkIcons = true)
     val tetrisViewModel =
         viewModel<AndroidTetrisViewModel>(factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return AndroidTetrisViewModel(delegate = TetrisLogicImpl()) as T
             }
         })
-
-    fun dispatchAction(action: Action) {
-        tetrisViewModel.dispatch(action = action)
-    }
-
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(key1 = Unit) {
         val observer = object : DefaultLifecycleObserver {
             override fun onResume(owner: LifecycleOwner) {
-                dispatchAction(action = Action.Resume)
+                tetrisViewModel.dispatch(action = Action.Resume)
             }
 
             override fun onPause(owner: LifecycleOwner) {
-                dispatchAction(action = Action.Background)
+                tetrisViewModel.dispatch(action = Action.Background)
             }
         }
         lifecycle.addObserver(observer)
@@ -61,10 +54,7 @@ fun AndroidMainScreen() {
         }
     }
     MainScreen(
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .padding(top = 10.dp),
+        modifier = Modifier.statusBarsPadding().navigationBarsPadding().padding(top = 20.dp),
         tetrisLogic = tetrisViewModel
     )
 }

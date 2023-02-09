@@ -31,6 +31,7 @@ fun main() = application {
     }
 }
 
+@Suppress("SameParameterValue")
 private fun getPreferredWindowSize(desiredWidth: Int, desiredHeight: Int): DpSize {
     val screenSize = Toolkit.getDefaultToolkit().screenSize
     val preferredWidth = (screenSize.width * 0.8f).toInt()

@@ -27,7 +27,6 @@ kotlin {
                 api("androidx.activity:activity-compose:1.6.1")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
                 val accompanistVersion = "0.28.0"
-                implementation("com.google.accompanist:accompanist-insets:$accompanistVersion")
                 implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
             }
         }

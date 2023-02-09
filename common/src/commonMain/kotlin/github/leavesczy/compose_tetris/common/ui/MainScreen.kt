@@ -15,40 +15,33 @@ import github.leavesczy.compose_tetris.common.ui.theme.ComposeTetrisTheme
 @Composable
 fun MainScreen(modifier: Modifier, tetrisLogic: ITetrisLogic) {
     val tetrisState by tetrisLogic.tetrisStateFlow.collectAsState()
-    fun dispatchAction(action: Action) {
-        tetrisLogic.dispatch(action = action)
-    }
-
     val playListener by remember {
         mutableStateOf(
             combinedPlayListener(
                 onStart = {
-                    dispatchAction(action = Action.Start)
+                    tetrisLogic.dispatch(action = Action.Start)
                 },
                 onPause = {
-                    dispatchAction(action = Action.Pause)
+                    tetrisLogic.dispatch(action = Action.Pause)
                 },
                 onReset = {
-                    dispatchAction(action = Action.Reset)
+                    tetrisLogic.dispatch(action = Action.Reset)
                 },
                 onTransformation = {
-                    dispatchAction(action = Action.Transformation(it))
+                    tetrisLogic.dispatch(action = Action.Transformation(it))
                 },
                 onSound = {
-                    dispatchAction(action = Action.Sound)
+                    tetrisLogic.dispatch(action = Action.Sound)
                 },
             )
         )
     }
-
     LaunchedEffect(key1 = Unit) {
         tetrisLogic.dispatch(action = Action.Welcome)
     }
-
     ComposeTetrisTheme {
         Scaffold(
-            modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.background)
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
                 .then(other = modifier)
         ) {
             TetrisBody(tetrisScreen = {
