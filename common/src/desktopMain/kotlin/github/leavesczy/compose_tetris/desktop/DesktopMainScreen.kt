@@ -23,8 +23,8 @@ import github.leavesczy.compose_tetris.common.ui.MainScreen
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DesktopMainScreen() {
-    val tetrisViewModel by remember {
-        mutableStateOf(DesktopTetrisViewModel(delegate = TetrisLogicImpl()))
+    val tetrisViewModel = remember {
+        DesktopTetrisViewModel(delegate = TetrisLogicImpl())
     }
     val onKeyEvent: (KeyEvent) -> Boolean = remember {
         {
@@ -64,6 +64,7 @@ fun DesktopMainScreen() {
     }
     MainScreen(
         modifier = Modifier.padding(top = 30.dp).focusRequester(focusRequester = focusRequester)
-            .focusable(enabled = true).onKeyEvent(onKeyEvent = onKeyEvent), tetrisLogic = tetrisViewModel
+            .focusable(enabled = true).onKeyEvent(onKeyEvent = onKeyEvent),
+        tetrisLogic = tetrisViewModel
     )
 }

@@ -36,7 +36,7 @@ private fun getPreferredWindowSize(desiredWidth: Int, desiredHeight: Int): DpSiz
     val screenSize = Toolkit.getDefaultToolkit().screenSize
     val preferredWidth = (screenSize.width * 0.8f).toInt()
     val preferredHeight = (screenSize.height * 0.8f).toInt()
-    val width = if (desiredWidth < preferredWidth) desiredWidth else preferredWidth
-    val height = if (desiredHeight < preferredHeight) desiredHeight else preferredHeight
+    val width = minOf(desiredWidth, preferredWidth)
+    val height = minOf(desiredHeight, preferredHeight)
     return DpSize(width.dp, height.dp)
 }

@@ -12,8 +12,9 @@ kotlin {
         }
     }
     sourceSets {
+        @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         named("commonMain") {
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class) dependencies {
+            dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.ui)

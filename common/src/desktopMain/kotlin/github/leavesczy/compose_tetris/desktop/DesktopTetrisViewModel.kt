@@ -2,6 +2,7 @@ package github.leavesczy.compose_tetris.desktop
 
 import github.leavesczy.compose_tetris.common.logic.ITetrisLogic
 import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 
 /**
@@ -10,6 +11,7 @@ import kotlinx.coroutines.GlobalScope
  * @Github: https://github.com/leavesCZY
  * @Desc:
  */
+@OptIn(DelicateCoroutinesApi::class)
 class DesktopTetrisViewModel(delegate: TetrisLogicImpl) : ITetrisLogic by delegate {
 
     init {

@@ -56,7 +56,7 @@ private val DesktopSoundPlayer = object : SoundPlayer {
     }
 
     private fun getAudioFile(fileName: String): File {
-        return File(javaClass.getResource("/raw/$fileName").path)
+        return File(javaClass.getResource("/raw/$fileName")!!.path)
     }
 
 }
