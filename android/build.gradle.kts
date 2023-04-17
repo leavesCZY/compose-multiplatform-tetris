@@ -94,4 +94,5 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.activity:activity-compose:1.7.0")
 }
