@@ -39,14 +39,21 @@ fun MainScreen(modifier: Modifier, tetrisLogic: ITetrisLogic) {
     }
     ComposeTetrisTheme {
         Scaffold(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
-                .then(other = modifier)
+            modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.background)
+                .then(other = modifier),
         ) {
-            TetrisBody(tetrisScreen = {
-                TetrisScreen(tetrisState = tetrisState)
-            }, tetrisButton = {
-                TetrisButton(tetrisState = tetrisState, playListener = playListener)
-            })
+            TetrisBody(
+                tetrisScreen = {
+                    TetrisScreen(tetrisState = tetrisState)
+                },
+                tetrisButton = {
+                    TetrisButton(
+                        tetrisState = tetrisState,
+                        playListener = playListener
+                    )
+                }
+            )
         }
     }
 }

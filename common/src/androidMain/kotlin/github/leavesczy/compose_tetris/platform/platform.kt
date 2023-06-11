@@ -37,15 +37,19 @@ private val AndroidSoundPlayer: SoundPlayer = object : SoundPlayer {
             SoundType.Welcome -> {
                 R.raw.welcome
             }
+
             SoundType.Transformation -> {
                 R.raw.transformation
             }
+
             SoundType.Rotate -> {
                 R.raw.rotate
             }
+
             SoundType.Fall -> {
                 R.raw.fall
             }
+
             SoundType.Clean -> {
                 R.raw.clean
             }

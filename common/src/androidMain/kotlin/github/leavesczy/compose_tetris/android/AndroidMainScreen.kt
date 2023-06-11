@@ -54,7 +54,10 @@ fun AndroidMainScreen() {
         }
     }
     MainScreen(
-        modifier = Modifier.statusBarsPadding().navigationBarsPadding().padding(top = 20.dp),
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(top = 20.dp),
         tetrisLogic = tetrisViewModel
     )
 }

@@ -2,10 +2,20 @@ package github.leavesczy.compose_tetris.common.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowLeft
+import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.FastForward
+import androidx.compose.material.icons.filled.RotateRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import github.leavesczy.compose_tetris.common.logic.PlayListener
 import github.leavesczy.compose_tetris.common.logic.TetrisState
-import github.leavesczy.compose_tetris.common.logic.TransformationType.*
+import github.leavesczy.compose_tetris.common.logic.TransformationType.Fall
+import github.leavesczy.compose_tetris.common.logic.TransformationType.FastDown
+import github.leavesczy.compose_tetris.common.logic.TransformationType.Left
+import github.leavesczy.compose_tetris.common.logic.TransformationType.Right
+import github.leavesczy.compose_tetris.common.logic.TransformationType.Rotate
 import github.leavesczy.compose_tetris.common.ui.theme.ButtonDisableColor
 import github.leavesczy.compose_tetris.common.ui.theme.ButtonEnabledColor
 
@@ -151,9 +165,7 @@ private fun ControlButton(
             modifier = Modifier
                 .size(width = btnSize, height = btnSize)
                 .addShadow(color = btnColor)
-                .clickable {
-                    onPress()
-                }
+                .clickable(onClick = onPress)
         )
     }
 }
@@ -165,21 +177,23 @@ private fun PlayButton(
     size: Dp = 70.dp,
     onPress: () -> Unit
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.TopCenter) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.TopCenter
+    ) {
         Box(
             modifier = Modifier
                 .size(size = size)
                 .addShadow(color = ButtonEnabledColor)
-                .clickable {
-                    onPress()
-                },
+                .clickable(onClick = onPress),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                modifier = Modifier.size(size = size / 1.3f),
+                modifier = Modifier
+                    .size(size = size / 1.5f),
                 imageVector = icon,
-                contentDescription = null,
-                tint = Color.White
+                tint = Color.White,
+                contentDescription = null
             )
         }
     }
@@ -187,7 +201,5 @@ private fun PlayButton(
 
 private fun Modifier.addShadow(color: Brush): Modifier {
     return shadow(elevation = 3.dp, shape = CircleShape)
-        .background(
-            brush = color
-        )
+        .background(brush = color)
 }

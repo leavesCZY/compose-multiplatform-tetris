@@ -1,10 +1,14 @@
 package github.leavesczy.compose_tetris.common.logic
 
 import github.leavesczy.compose_tetris.platform.getSoundPlayer
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * @Author: leavesCZY
@@ -58,18 +62,23 @@ class TetrisLogicImpl : ITetrisLogic {
                 Action.Welcome, Action.Reset -> {
                     onWelcome()
                 }
+
                 Action.Start -> {
                     onStartGame()
                 }
+
                 Action.Background, Action.Pause -> {
                     onPauseGame()
                 }
+
                 Action.Resume -> {
 
                 }
+
                 Action.Sound -> {
                     onSound()
                 }
+
                 is Action.Transformation -> {
                     onTransformation(transformation = action)
                 }
@@ -122,15 +131,18 @@ class TetrisLogicImpl : ITetrisLogic {
             GameStatus.Running -> {
                 dispatchState(newState = viewState)
             }
+
             GameStatus.LineClearing -> {
                 playSound(soundType = SoundType.Clean)
                 dispatchState(newState = viewState.copy(gameStatus = GameStatus.Running))
             }
+
             GameStatus.GameOver -> {
                 playSound(soundType = SoundType.Welcome)
                 dispatchState(newState = viewState)
                 onGameOver()
             }
+
             else -> {
                 throw RuntimeException("非法状态")
             }
@@ -225,30 +237,38 @@ class TetrisLogicImpl : ITetrisLogic {
             Action.Welcome, Action.Reset -> {
                 playSound(soundType = SoundType.Welcome)
             }
+
             Action.Start, Action.Pause -> {
                 playSound(soundType = SoundType.Transformation)
             }
+
             Action.Background -> {
 
             }
+
             Action.Resume -> {
 
             }
+
             Action.Sound -> {
                 playSound(soundType = SoundType.Transformation)
             }
+
             is Action.Transformation -> {
                 if (tetrisState.isRunning) {
                     when (action.transformationType) {
                         TransformationType.Left, TransformationType.Right, TransformationType.FastDown -> {
                             playSound(soundType = SoundType.Transformation)
                         }
+
                         TransformationType.Fall -> {
                             playSound(soundType = SoundType.Fall)
                         }
+
                         TransformationType.Down -> {
 
                         }
+
                         TransformationType.Rotate -> {
                             playSound(soundType = SoundType.Rotate)
                         }

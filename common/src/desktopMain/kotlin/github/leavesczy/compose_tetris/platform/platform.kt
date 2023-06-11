@@ -40,15 +40,19 @@ private val DesktopSoundPlayer = object : SoundPlayer {
             SoundType.Welcome -> {
                 getAudioFile("welcome.mp3")
             }
+
             SoundType.Transformation -> {
                 getAudioFile("transformation.mp3")
             }
+
             SoundType.Rotate -> {
                 getAudioFile("rotate.mp3")
             }
+
             SoundType.Fall -> {
                 getAudioFile("fall.mp3")
             }
+
             SoundType.Clean -> {
                 getAudioFile("clean.mp3")
             }

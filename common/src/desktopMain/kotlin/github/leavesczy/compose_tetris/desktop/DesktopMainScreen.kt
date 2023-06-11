@@ -63,8 +63,11 @@ fun DesktopMainScreen() {
         focusRequester.requestFocus()
     }
     MainScreen(
-        modifier = Modifier.padding(top = 30.dp).focusRequester(focusRequester = focusRequester)
-            .focusable(enabled = true).onKeyEvent(onKeyEvent = onKeyEvent),
+        modifier = Modifier
+            .padding(top = 30.dp)
+            .focusRequester(focusRequester = focusRequester)
+            .focusable(enabled = true)
+            .onKeyEvent(onKeyEvent = onKeyEvent),
         tetrisLogic = tetrisViewModel
     )
 }

@@ -157,6 +157,7 @@ data class TetrisState(
                 GameStatus.Welcome, GameStatus.Paused, GameStatus.GameOver -> {
                     true
                 }
+
                 GameStatus.Running, GameStatus.LineClearing, GameStatus.ScreenClearing -> {
                     false
                 }
@@ -250,18 +251,23 @@ fun TetrisState.onTransformation(transformationType: TransformationType): Tetris
         TransformationType.Left -> {
             onLeft()
         }
+
         TransformationType.Right -> {
             onRight()
         }
+
         TransformationType.Down -> {
             onDown()
         }
+
         TransformationType.FastDown -> {
             onFastDown()
         }
+
         TransformationType.Fall -> {
             onFall()
         }
+
         TransformationType.Rotate -> {
             onRotate()
         }
@@ -326,6 +332,7 @@ private fun TetrisState.adjustOffset(): TetrisState {
         offsetX == -1 -> {
             copy(tetris = tetris.copy(offset = Location(x = offsetX + 1, y = offsetY)))
         }
+
         width - offsetX == 3 -> {
             if (tetris.shape.find { it.x == 3 } == null) {
                 this
@@ -340,6 +347,7 @@ private fun TetrisState.adjustOffset(): TetrisState {
                 )
             }
         }
+
         width - offsetX == 2 -> {
             var move = 0
             val location = tetris.shape
@@ -362,6 +370,7 @@ private fun TetrisState.adjustOffset(): TetrisState {
                 this
             }
         }
+
         else -> {
             this
         }

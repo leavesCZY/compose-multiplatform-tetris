@@ -5,12 +5,15 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val LightColorScheme = lightColorScheme(
-    background = BackgroundColorLight, onBackground = OnBackgroundColorLight
+    background = BackgroundColorLight,
+    onBackground = OnBackgroundColorLight
 )
 
 @Composable
 fun ComposeTetrisTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = LightColorScheme, typography = LightTypography, content = content
+        colorScheme = LightColorScheme,
+        typography = LightTypography,
+        content = content
     )
 }

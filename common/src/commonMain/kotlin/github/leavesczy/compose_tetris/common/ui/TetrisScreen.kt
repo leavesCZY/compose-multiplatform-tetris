@@ -1,6 +1,11 @@
 package github.leavesczy.compose_tetris.common.ui
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,9 +35,7 @@ import github.leavesczy.compose_tetris.platform.drawText
  * @Github：https://github.com/leavesCZY
  */
 @Composable
-fun TetrisScreen(
-    tetrisState: TetrisState
-) {
+fun TetrisScreen(tetrisState: TetrisState) {
     val screenMatrix = tetrisState.screenMatrix
     val matrixWidth = tetrisState.width
     val matrixHeight = tetrisState.height
@@ -58,7 +61,7 @@ fun TetrisScreen(
         drawBorder(
             width = size.width,
             height = size.height,
-            borderWidth = borderWidth,
+            borderWidth = borderWidth
         )
 
         val brickMargin = brickMarginDp.toPx()
@@ -276,18 +279,23 @@ private fun DrawScope.drawText(
         GameStatus.Welcome -> {
             drawText("TETRIS", 130f)
         }
+
         GameStatus.Paused -> {
             drawText("PAUSE", 130f)
         }
+
         GameStatus.GameOver -> {
             drawText("GAME OVER", 100f)
         }
+
         GameStatus.Running -> {
 
         }
+
         GameStatus.ScreenClearing -> {
 
         }
+
         GameStatus.LineClearing -> {
 
         }
