@@ -1,7 +1,7 @@
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
     id("com.android.library")
+    id("org.jetbrains.compose")
+    kotlin("multiplatform")
 }
 
 kotlin {
@@ -39,10 +39,6 @@ kotlin {
 android {
     namespace = "github.leavesczy.compose_tetris.android"
     compileSdk = 33
-    sourceSets["main"].apply {
-        manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        res.srcDirs("src/androidMain/res")
-    }
     defaultConfig {
         minSdk = 21
         targetSdk = 33
@@ -50,5 +46,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    sourceSets["main"].apply {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        res.srcDirs("src/androidMain/res")
     }
 }
