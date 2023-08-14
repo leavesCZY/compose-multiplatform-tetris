@@ -7,9 +7,7 @@ plugins {
 
 kotlin {
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "17"
-        }
+        jvmToolchain(17)
         withJava()
     }
     sourceSets {
@@ -29,9 +27,16 @@ compose.desktop {
     application {
         mainClass = "github.leavesczy.compose_tetris.desktop.DesktopMainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Dmg, TargetFormat.Deb)
+            targetFormats(TargetFormat.Exe)
             packageName = "compose_tetris"
             packageVersion = "1.0.0"
+            description = "Compose Tetris"
+            val iconsRoot = project.file("../common/src/desktopMain/resources/images")
+            windows {
+                iconFile.set(iconsRoot.resolve("icon_compose_tetris.ico"))
+                menuGroup = "Compose Tetris"
+                upgradeUuid = "18159995-d967-4CD2-8885-77BFA97CFA9F"
+            }
         }
     }
 }

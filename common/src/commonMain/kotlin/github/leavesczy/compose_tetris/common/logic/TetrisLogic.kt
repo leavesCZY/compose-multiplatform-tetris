@@ -51,7 +51,6 @@ class TetrisLogicImpl : ITetrisLogic {
 
     private val soundPlayer = getSoundPlayer()
 
-
     override fun provideScope(coroutineScope: CoroutineScope) {
         this.coroutineScope = coroutineScope
     }

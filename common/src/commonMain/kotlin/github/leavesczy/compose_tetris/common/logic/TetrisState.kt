@@ -9,8 +9,8 @@ import kotlin.random.Random
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-
 private val BRICK_WIDTH = getScreenSize().x
+
 private val BRICK_HEIGHT = getScreenSize().y
 
 data class Location(val x: Int, val y: Int)
@@ -210,13 +210,13 @@ data class TetrisState(
 }
 
 sealed class Action {
-    object Welcome : Action()
-    object Start : Action()
-    object Pause : Action()
-    object Reset : Action()
-    object Sound : Action()
-    object Background : Action()
-    object Resume : Action()
+    data object Welcome : Action()
+    data object Start : Action()
+    data object Pause : Action()
+    data object Reset : Action()
+    data object Sound : Action()
+    data object Background : Action()
+    data object Resume : Action()
     data class Transformation(val transformationType: TransformationType) : Action()
 }
 
@@ -330,7 +330,7 @@ private fun TetrisState.adjustOffset(): TetrisState {
     val offsetY = tetris.offset.y
     return when {
         offsetX == -1 -> {
-            copy(tetris = tetris.copy(offset = Location(x = offsetX + 1, y = offsetY)))
+            copy(tetris = tetris.copy(offset = Location(x = 0, y = offsetY)))
         }
 
         width - offsetX == 3 -> {

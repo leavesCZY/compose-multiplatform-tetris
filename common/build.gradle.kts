@@ -5,11 +5,9 @@ plugins {
 }
 
 kotlin {
-    android()
+    androidTarget()
     jvm("desktop") {
-        compilations.all {
-            kotlinOptions.jvmTarget = "17"
-        }
+        jvmToolchain(17)
     }
     sourceSets {
         named("commonMain") {
@@ -38,17 +36,12 @@ kotlin {
 
 android {
     namespace = "github.leavesczy.compose_tetris.android"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    sourceSets["main"].apply {
-        manifest.srcFile("src/androidMain/AndroidManifest.xml")
-        res.srcDirs("src/androidMain/res")
     }
 }
