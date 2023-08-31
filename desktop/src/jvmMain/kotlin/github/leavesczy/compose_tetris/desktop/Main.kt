@@ -1,6 +1,7 @@
 package github.leavesczy.compose_tetris.desktop
 
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -19,10 +20,9 @@ fun main() = application {
     Window(
         title = "compose_tetris",
         resizable = false,
-        focusable = true,
-        alwaysOnTop = false,
+        icon = painterResource("/images/icon_compose_tetris.ico"),
         state = WindowState(
-            size = getPreferredWindowSize(desiredWidth = 1200, desiredHeight = 900),
+            size = getPreferredWindowSize(desiredWidth = 1200f, desiredHeight = 900f),
             position = WindowPosition.Aligned(alignment = Alignment.Center)
         ),
         onCloseRequest = ::exitApplication
@@ -32,10 +32,12 @@ fun main() = application {
 }
 
 @Suppress("SameParameterValue")
-private fun getPreferredWindowSize(desiredWidth: Int, desiredHeight: Int): DpSize {
+private fun getPreferredWindowSize(desiredWidth: Float, desiredHeight: Float): DpSize {
     val screenSize = Toolkit.getDefaultToolkit().screenSize
-    val preferredWidth = (screenSize.width * 0.8f).toInt()
-    val preferredHeight = (screenSize.height * 0.8f).toInt()
+    val screenWidth = screenSize.width
+    val screenHeight = screenSize.height
+    val preferredWidth = screenWidth * 0.8f
+    val preferredHeight = screenHeight * 0.8f
     val width = minOf(desiredWidth, preferredWidth)
     val height = minOf(desiredHeight, preferredHeight)
     return DpSize(width.dp, height.dp)

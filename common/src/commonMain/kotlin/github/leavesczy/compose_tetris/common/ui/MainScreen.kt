@@ -1,22 +1,30 @@
 package github.leavesczy.compose_tetris.common.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import github.leavesczy.compose_tetris.common.logic.Action
-import github.leavesczy.compose_tetris.common.logic.ITetrisLogic
-import github.leavesczy.compose_tetris.common.logic.combinedPlayListener
+import github.leavesczy.compose_tetris.common.logic.PlayListener
+import github.leavesczy.compose_tetris.common.logic.TetrisLogic
 import github.leavesczy.compose_tetris.common.ui.theme.ComposeTetrisTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier, tetrisLogic: ITetrisLogic) {
-    val tetrisState by tetrisLogic.tetrisStateFlow.collectAsState()
+fun MainScreen(modifier: Modifier, tetrisLogic: TetrisLogic) {
     val playListener = remember {
-        combinedPlayListener(
+        PlayListener(
             onStart = {
                 tetrisLogic.dispatch(action = Action.Start)
             },
@@ -43,17 +51,32 @@ fun MainScreen(modifier: Modifier, tetrisLogic: ITetrisLogic) {
                 .background(color = MaterialTheme.colorScheme.background)
                 .then(other = modifier),
         ) {
-            TetrisBody(
-                tetrisScreen = {
-                    TetrisScreen(tetrisState = tetrisState)
-                },
-                tetrisButton = {
-                    TetrisButton(
-                        tetrisState = tetrisState,
-                        playListener = playListener
-                    )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(weight = 1f)
+                        .padding(horizontal = 30.dp)
+                        .align(alignment = Alignment.CenterHorizontally),
+                ) {
+                    TetrisScreen(tetrisViewState = tetrisLogic.tetrisViewState)
                 }
-            )
+                Spacer(
+                    modifier = Modifier
+                        .height(height = 6.dp)
+                )
+                TetrisButton(
+                    tetrisViewState = tetrisLogic.tetrisViewState,
+                    playListener = playListener
+                )
+                Spacer(
+                    modifier = Modifier
+                        .height(height = 30.dp)
+                )
+            }
         }
     }
 }

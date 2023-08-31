@@ -25,11 +25,11 @@ jobs:
       - name: grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: build apk with gradle
+      - name: assembleRelease
         run: ./gradlew android:assembleRelease
 
-      - name: build exe with gradle
-        run: ./gradlew desktop:packageReleaseExe
+      - name: packageReleaseMsi
+        run: ./gradlew desktop:packageReleaseMsi
 
       - name: get current time
         uses: josStorer/get-current-time@v2
@@ -41,7 +41,7 @@ jobs:
       - name: create a release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "android/build/outputs/apk/release/*.apk,desktop/build/compose/binaries/main-release/exe/*.exe"
+          artifacts: "android/build/outputs/apk/release/*.apk,desktop/build/compose/binaries/main-release/msi/*.msi"
           body: "create by workflows"
           allowUpdates: true
           artifactErrorsFailBuild: true

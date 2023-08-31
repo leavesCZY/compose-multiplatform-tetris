@@ -2,8 +2,14 @@ package github.leavesczy.compose_tetris.desktop
 
 import github.leavesczy.compose_tetris.common.logic.SoundPlayer
 import github.leavesczy.compose_tetris.common.logic.SoundType
-import javazoom.jl.player.Player
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.BufferedInputStream
 import java.io.InputStream
+import javax.sound.sampled.AudioSystem
+import javax.sound.sampled.Clip
+import javax.sound.sampled.LineEvent
+import javax.sound.sampled.LineListener
 
 /**
  * @Author: leavesCZY
@@ -14,46 +20,71 @@ import java.io.InputStream
 class DesktopSoundPlayer : SoundPlayer {
 
     override fun play(soundType: SoundType) {
-        try {
-            val audioFile = getAudioResourceStream(soundType)
-            val player = Player(audioFile)
-            player.play()
-            player.close()
-        } catch (e: Throwable) {
-            e.printStackTrace()
+        DesktopCoroutineScope.launch(context = Dispatchers.IO) {
+            try {
+                val audioResourceInputStream = getAudioResourceStream(soundType = soundType)
+                val audioBufferedInputStream = BufferedInputStream(audioResourceInputStream)
+                val audioInputStream = AudioSystem.getAudioInputStream(audioBufferedInputStream)
+                val clip = AudioSystem.getClip()
+                clip?.apply {
+                    open(audioInputStream)
+                    microsecondPosition = 0
+                    loop(0)
+                    addLineListener(ReleaseLineListener(this))
+                    start()
+                }
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
         }
     }
 
-    override fun release() {
 
+    private class ReleaseLineListener(private val clip: Clip) : LineListener {
+        override fun update(event: LineEvent) {
+            if (event.type == LineEvent.Type.STOP) {
+                DesktopCoroutineScope.launch(context = Dispatchers.IO) {
+                    try {
+                        clip.stop()
+                        clip.close()
+                    } catch (e: Throwable) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
     }
 
     private fun getAudioResourceStream(soundType: SoundType): InputStream {
         return when (soundType) {
             SoundType.Welcome -> {
-                getAudioResourceStream("welcome.mp3")
+                getAudioResourceStream("welcome.wav")
             }
 
             SoundType.Transformation -> {
-                getAudioResourceStream("transformation.mp3")
+                getAudioResourceStream("transformation.wav")
             }
 
             SoundType.Rotate -> {
-                getAudioResourceStream("rotate.mp3")
+                getAudioResourceStream("rotate.wav")
             }
 
             SoundType.Fall -> {
-                getAudioResourceStream("fall.mp3")
+                getAudioResourceStream("fall.wav")
             }
 
             SoundType.Clean -> {
-                getAudioResourceStream("clean.mp3")
+                getAudioResourceStream("clean.wav")
             }
         }
     }
 
     private fun getAudioResourceStream(fileName: String): InputStream {
         return javaClass.getResourceAsStream("/raw/$fileName")!!
+    }
+
+    override fun release() {
+
     }
 
 }

@@ -2,8 +2,8 @@ package github.leavesczy.compose_tetris.android
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import github.leavesczy.compose_tetris.common.logic.ITetrisLogic
-import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
+import github.leavesczy.compose_tetris.common.logic.Action
+import github.leavesczy.compose_tetris.common.logic.TetrisLogic
 
 /**
  * @Author: leavesCZY
@@ -11,10 +11,20 @@ import github.leavesczy.compose_tetris.common.logic.TetrisLogicImpl
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class AndroidTetrisViewModel(delegate: TetrisLogicImpl) : ViewModel(), ITetrisLogic by delegate {
+class AndroidTetrisViewModel : ViewModel() {
 
-    init {
-        provideScope(coroutineScope = viewModelScope)
+    val tetrisLogic = TetrisLogic(
+        coroutineScope = viewModelScope,
+        soundPlayer = AndroidSoundPlayer()
+    )
+
+    fun dispatch(action: Action) {
+        tetrisLogic.dispatch(action = action)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        tetrisLogic.release()
     }
 
 }

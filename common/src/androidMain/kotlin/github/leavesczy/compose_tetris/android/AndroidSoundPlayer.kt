@@ -50,7 +50,7 @@ class AndroidSoundPlayer : SoundPlayer {
     }
 
     override fun play(soundType: SoundType) {
-        soundPool.play(requireNotNull(soundMap[soundType]), 1f, 1f, 0, 0, 1f)
+        soundPool.play(soundMap[soundType]!!, 1f, 1f, 0, 0, 1f)
     }
 
     override fun release() {

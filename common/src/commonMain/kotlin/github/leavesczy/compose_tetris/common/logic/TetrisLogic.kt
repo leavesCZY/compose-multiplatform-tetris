@@ -1,13 +1,12 @@
 package github.leavesczy.compose_tetris.common.logic
 
-import github.leavesczy.compose_tetris.platform.getSoundPlayer
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -16,17 +15,10 @@ import kotlinx.coroutines.launch
  * @Github: https://github.com/leavesCZY
  * @Desc:
  */
-interface ITetrisLogic {
-
-    val tetrisStateFlow: StateFlow<TetrisState>
-
-    fun provideScope(coroutineScope: CoroutineScope)
-
-    fun dispatch(action: Action)
-
-}
-
-class TetrisLogicImpl : ITetrisLogic {
+class TetrisLogic(
+    private val coroutineScope: CoroutineScope,
+    private val soundPlayer: SoundPlayer
+) {
 
     companion object {
 
@@ -36,26 +28,14 @@ class TetrisLogicImpl : ITetrisLogic {
 
     }
 
-    private lateinit var coroutineScope: CoroutineScope
-
-    private val _tetrisStateFlow = MutableStateFlow(TetrisState())
-
-    override val tetrisStateFlow = _tetrisStateFlow.asStateFlow()
-
-    private val tetrisState: TetrisState
-        get() = _tetrisStateFlow.value
+    var tetrisViewState by mutableStateOf(value = TetrisViewState())
+        private set
 
     private var downJob: Job? = null
 
     private var clearScreenJob: Job? = null
 
-    private val soundPlayer = getSoundPlayer()
-
-    override fun provideScope(coroutineScope: CoroutineScope) {
-        this.coroutineScope = coroutineScope
-    }
-
-    override fun dispatch(action: Action) {
+    fun dispatch(action: Action) {
         coroutineScope.launch(context = Dispatchers.IO) {
             when (action) {
                 Action.Welcome, Action.Reset -> {
@@ -94,38 +74,38 @@ class TetrisLogicImpl : ITetrisLogic {
         startClearScreen(nextStatus = GameStatus.GameOver)
     }
 
-    private suspend fun onStartGame() {
-        if (!tetrisState.canStartGame) {
+    private fun onStartGame() {
+        if (!tetrisViewState.canStartGame) {
             return
         }
-        if (tetrisState.isPaused) {
-            dispatchState(newState = tetrisState.copy(gameStatus = GameStatus.Running))
+        if (tetrisViewState.isPaused) {
+            dispatchState(newState = tetrisViewState.copy(gameStatus = GameStatus.Running))
         } else {
             dispatchState(
-                newState = TetrisState().copy(
+                newState = TetrisViewState().copy(
                     gameStatus = GameStatus.Running,
-                    soundEnable = tetrisState.soundEnable
+                    soundEnable = tetrisViewState.soundEnable
                 )
             )
         }
     }
 
-    private suspend fun onPauseGame() {
-        if (tetrisState.isRunning) {
-            dispatchState(newState = tetrisState.copy(gameStatus = GameStatus.Paused))
+    private fun onPauseGame() {
+        if (tetrisViewState.isRunning) {
+            dispatchState(newState = tetrisViewState.copy(gameStatus = GameStatus.Paused))
         }
     }
 
-    private suspend fun onSound() {
-        dispatchState(newState = tetrisState.copy(soundEnable = !tetrisState.soundEnable))
+    private fun onSound() {
+        dispatchState(newState = tetrisViewState.copy(soundEnable = !tetrisViewState.soundEnable))
     }
 
     private suspend fun onTransformation(transformation: Action.Transformation) {
-        if (!tetrisState.isRunning) {
+        if (!tetrisViewState.isRunning) {
             return
         }
         val viewState =
-            tetrisState.onTransformation(transformationType = transformation.transformationType)
+            tetrisViewState.onTransformation(transformationType = transformation.transformationType)
         when (viewState.gameStatus) {
             GameStatus.Running -> {
                 dispatchState(newState = viewState)
@@ -152,9 +132,9 @@ class TetrisLogicImpl : ITetrisLogic {
         cancelDownJob()
         cancelClearScreenJob()
         downJob = coroutineScope.launch {
-            while (tetrisState.isRunning) {
+            while (tetrisViewState.isRunning) {
                 delay(timeMillis = DOWN_SPEED)
-                if (tetrisState.isRunning) {
+                if (tetrisViewState.isRunning) {
                     dispatch(action = Action.Transformation(TransformationType.Down))
                 }
             }
@@ -168,15 +148,15 @@ class TetrisLogicImpl : ITetrisLogic {
         }
         clearScreenJob = coroutineScope.launch {
             val clearScreen = suspend {
-                val width = tetrisState.width
-                val height = tetrisState.height
+                val width = tetrisViewState.width
+                val height = tetrisViewState.height
                 for (y in height - 1 downTo 0) {
-                    val brickArray = tetrisState.brickArray
+                    val brickArray = tetrisViewState.brickArray
                     for (x in 0 until width) {
                         brickArray[y][x] = 1
                     }
                     dispatchState(
-                        tetrisState.copy(
+                        tetrisViewState.copy(
                             tetris = Tetris(),
                             gameStatus = GameStatus.ScreenClearing
                         )
@@ -184,12 +164,12 @@ class TetrisLogicImpl : ITetrisLogic {
                     delay(CLEAR_SCREEN_SPEED)
                 }
                 for (y in 0 until height) {
-                    val brickArray = tetrisState.brickArray
+                    val brickArray = tetrisViewState.brickArray
                     for (x in 0 until width) {
                         brickArray[y][x] = 0
                     }
                     dispatchState(
-                        tetrisState.copy(
+                        tetrisViewState.copy(
                             tetris = Tetris(),
                             gameStatus = GameStatus.ScreenClearing
                         )
@@ -201,9 +181,9 @@ class TetrisLogicImpl : ITetrisLogic {
             clearScreen()
             delay(100)
             dispatchState(
-                TetrisState().copy(
+                TetrisViewState().copy(
                     gameStatus = nextStatus,
-                    soundEnable = tetrisState.soundEnable
+                    soundEnable = tetrisViewState.soundEnable
                 )
             )
         }
@@ -219,8 +199,8 @@ class TetrisLogicImpl : ITetrisLogic {
         clearScreenJob = null
     }
 
-    private suspend fun dispatchState(newState: TetrisState) {
-        _tetrisStateFlow.emit(newState)
+    private fun dispatchState(newState: TetrisViewState) {
+        tetrisViewState = newState
         if (newState.gameStatus == GameStatus.Running) {
             if (downJob?.isActive != true) {
                 startDownJob()
@@ -241,20 +221,12 @@ class TetrisLogicImpl : ITetrisLogic {
                 playSound(soundType = SoundType.Transformation)
             }
 
-            Action.Background -> {
-
-            }
-
-            Action.Resume -> {
-
-            }
-
             Action.Sound -> {
                 playSound(soundType = SoundType.Transformation)
             }
 
             is Action.Transformation -> {
-                if (tetrisState.isRunning) {
+                if (tetrisViewState.isRunning) {
                     when (action.transformationType) {
                         TransformationType.Left, TransformationType.Right, TransformationType.FastDown -> {
                             playSound(soundType = SoundType.Transformation)
@@ -274,15 +246,25 @@ class TetrisLogicImpl : ITetrisLogic {
                     }
                 }
             }
+
+            Action.Background -> {
+
+            }
+
+            Action.Resume -> {
+
+            }
         }
     }
 
     private fun playSound(soundType: SoundType) {
-        if (tetrisState.soundEnable) {
-            coroutineScope.launch(context = Dispatchers.IO) {
-                soundPlayer.play(soundType)
-            }
+        if (tetrisViewState.soundEnable) {
+            soundPlayer.play(soundType)
         }
+    }
+
+    fun release() {
+        soundPlayer.release()
     }
 
 }

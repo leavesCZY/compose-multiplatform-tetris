@@ -6,7 +6,7 @@ package github.leavesczy.compose_tetris.common.logic
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-val mockData = arrayOf(
+internal val mockData = arrayOf(
     arrayOf(//I
         intArrayOf(
             0, 0, 0, 0,

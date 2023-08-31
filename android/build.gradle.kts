@@ -89,16 +89,17 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.activity:activity-compose:1.8.0-alpha07")
 }
 
 fun getTime(pattern: String): String {
-    return SimpleDateFormat(pattern).let {
-        it.timeZone = TimeZone.getTimeZone("Asia/Shanghai")
-        it.format(Calendar.getInstance().time)
-    }
+    val simpleDateFormat = SimpleDateFormat(pattern)
+    simpleDateFormat.timeZone = TimeZone.getTimeZone("Asia/Shanghai")
+    val time = Calendar.getInstance().time
+    return simpleDateFormat.format(time)
 }
 
 fun getApkBuildTime(): String {
-    return getTime("yyyy_MM_dd_HH_mm_ss")
+    return getTime(pattern = "yyyy_MM_dd_HH_mm_ss")
 }

@@ -2,8 +2,8 @@ package github.leavesczy.compose_tetris
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import github.leavesczy.compose_tetris.android.AndroidMainScreen
 
 /**
@@ -15,8 +15,8 @@ import github.leavesczy.compose_tetris.android.AndroidMainScreen
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             AndroidMainScreen()
         }

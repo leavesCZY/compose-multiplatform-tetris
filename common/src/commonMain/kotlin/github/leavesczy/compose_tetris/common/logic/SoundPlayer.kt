@@ -6,18 +6,18 @@ package github.leavesczy.compose_tetris.common.logic
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-enum class SoundType {
-    Welcome,
-    Transformation,
-    Rotate,
-    Fall,
-    Clean,
-}
-
 interface SoundPlayer {
 
     fun play(soundType: SoundType)
 
     fun release()
 
+}
+
+enum class SoundType {
+    Welcome,
+    Transformation,
+    Rotate,
+    Fall,
+    Clean,
 }

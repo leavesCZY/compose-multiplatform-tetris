@@ -6,4 +6,4 @@
 
 - [不止 Android，Compose Multiplatform 初探](https://juejin.cn/post/7062533562460799013)
 
-![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/36daca5583924d9c93b3f0e8e9c4d76e~tplv-k3u1fbpfcp-zoom-1.image)
+![](https://github.com/leavesCZY/compose_tetris/assets/30774063/40d52c56-675a-427c-8b64-244d21306455)

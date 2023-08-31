@@ -23,12 +23,11 @@ kotlin {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-                implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
             }
         }
         named("desktopMain") {
             dependencies {
-                implementation("javazoom:jlayer:1.0.1")
+
             }
         }
     }

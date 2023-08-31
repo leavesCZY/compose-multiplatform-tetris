@@ -98,12 +98,12 @@ enum class GameStatus {
     GameOver
 }
 
-data class TetrisState(
-    val brickArray: Array<IntArray>, //屏幕坐标系
-    val tetris: Tetris, //下落的方块
-    val gameStatus: GameStatus = GameStatus.Welcome, //游戏状态
-    val soundEnable: Boolean = true, //是否开启音效
-    val nextTetris: Tetris = Tetris(), //下一个方块
+data class TetrisViewState(
+    val brickArray: Array<IntArray>,
+    val tetris: Tetris,
+    val gameStatus: GameStatus,
+    val soundEnable: Boolean,
+    val nextTetris: Tetris
 ) {
 
     companion object {
@@ -128,12 +128,15 @@ data class TetrisState(
             }
         }
 
-        operator fun invoke(): TetrisState {
+        operator fun invoke(): TetrisViewState {
             BrickArrayCache.clearBrickArray()
             ScreenMatrixCache.clearBrickArray()
-            return TetrisState(
+            return TetrisViewState(
                 brickArray = BrickArrayCache,
-                tetris = Tetris()
+                tetris = Tetris(),
+                gameStatus = GameStatus.Welcome,
+                soundEnable = true,
+                nextTetris = Tetris()
             )
         }
 
@@ -189,7 +192,7 @@ data class TetrisState(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
-        other as TetrisState
+        other as TetrisViewState
         if (!brickArray.contentDeepEquals(other.brickArray)) return false
         if (tetris != other.tetris) return false
         if (gameStatus != other.gameStatus) return false
@@ -221,7 +224,12 @@ sealed class Action {
 }
 
 enum class TransformationType {
-    Left, Right, Rotate, Down, FastDown, Fall
+    Left,
+    Right,
+    Rotate,
+    Down,
+    FastDown,
+    Fall
 }
 
 data class PlayListener constructor(
@@ -232,21 +240,7 @@ data class PlayListener constructor(
     val onTransformation: (TransformationType) -> Unit
 )
 
-fun combinedPlayListener(
-    onStart: () -> Unit = {},
-    onPause: () -> Unit = {},
-    onReset: () -> Unit = {},
-    onSound: () -> Unit = {},
-    onTransformation: (TransformationType) -> Unit = {}
-) = PlayListener(
-    onStart = onStart,
-    onPause = onPause,
-    onReset = onReset,
-    onSound = onSound,
-    onTransformation = onTransformation
-)
-
-fun TetrisState.onTransformation(transformationType: TransformationType): TetrisState {
+fun TetrisViewState.onTransformation(transformationType: TransformationType): TetrisViewState {
     return when (transformationType) {
         TransformationType.Left -> {
             onLeft()
@@ -274,19 +268,19 @@ fun TetrisState.onTransformation(transformationType: TransformationType): Tetris
     }?.finalize() ?: this.finalize()
 }
 
-private fun TetrisState.onLeft(): TetrisState? {
+private fun TetrisViewState.onLeft(): TetrisViewState? {
     return copy(
         tetris = tetris.copy(offset = Location(tetris.offset.x - 1, tetris.offset.y))
     ).takeIf { it.isValidInMatrix() }
 }
 
-private fun TetrisState.onRight(): TetrisState? {
+private fun TetrisViewState.onRight(): TetrisViewState? {
     return copy(
         tetris = tetris.copy(offset = Location(tetris.offset.x + 1, tetris.offset.y))
     ).takeIf { it.isValidInMatrix() }
 }
 
-private fun TetrisState.onDown(): TetrisState? {
+private fun TetrisViewState.onDown(): TetrisViewState? {
     return copy(
         tetris = tetris.copy(
             offset = Location(tetris.offset.x, tetris.offset.y + 1)
@@ -294,7 +288,7 @@ private fun TetrisState.onDown(): TetrisState? {
     ).takeIf { it.isValidInMatrix() }
 }
 
-private fun TetrisState.onFastDown(): TetrisState? {
+private fun TetrisViewState.onFastDown(): TetrisViewState? {
     return copy(
         tetris = tetris.copy(
             offset = Location(tetris.offset.x, tetris.offset.y + 2)
@@ -302,14 +296,14 @@ private fun TetrisState.onFastDown(): TetrisState? {
     ).takeIf { it.isValidInMatrix() }
 }
 
-private fun TetrisState.onFall(): TetrisState? {
+private fun TetrisViewState.onFall(): TetrisViewState? {
     while (true) {
         val result = onDown() ?: return this
         return result.onFall()
     }
 }
 
-private fun TetrisState.onRotate(): TetrisState? {
+private fun TetrisViewState.onRotate(): TetrisViewState? {
     if (tetris.shapes.size == 1) {
         return null
     }
@@ -325,7 +319,7 @@ private fun TetrisState.onRotate(): TetrisState? {
     ).adjustOffset().takeIf { it.isValidInMatrix() }
 }
 
-private fun TetrisState.adjustOffset(): TetrisState {
+private fun TetrisViewState.adjustOffset(): TetrisViewState {
     val offsetX = tetris.offset.x
     val offsetY = tetris.offset.y
     return when {
@@ -377,7 +371,7 @@ private fun TetrisState.adjustOffset(): TetrisState {
     }
 }
 
-private fun TetrisState.isValidInMatrix(): Boolean {
+private fun TetrisViewState.isValidInMatrix(): Boolean {
     val offsetX = tetris.offset.x
     val offsetY = tetris.offset.y
     for (sh in tetris.shape) {
@@ -399,7 +393,7 @@ private fun TetrisState.isValidInMatrix(): Boolean {
     return true
 }
 
-private fun TetrisState.finalize(): TetrisState {
+private fun TetrisViewState.finalize(): TetrisViewState {
     if (canDown()) {
         return this
     } else {
@@ -434,7 +428,7 @@ private fun TetrisState.finalize(): TetrisState {
     }
 }
 
-private fun TetrisState.canDown(): Boolean {
+private fun TetrisViewState.canDown(): Boolean {
     val offsetX = tetris.offset.x
     val offsetY = tetris.offset.y
     for (sp in tetris.shape) {
@@ -456,7 +450,7 @@ private fun TetrisState.canDown(): Boolean {
     return true
 }
 
-private fun TetrisState.clearIfNeed(): TetrisState? {
+private fun TetrisViewState.clearIfNeed(): TetrisViewState? {
     var index = height - 1
     var removed = false
     while (true) {
@@ -478,5 +472,9 @@ private fun TetrisState.clearIfNeed(): TetrisState? {
             index--
         }
     }
-    return if (removed) this else null
+    return if (removed) {
+        this
+    } else {
+        null
+    }
 }
