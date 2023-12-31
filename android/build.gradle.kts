@@ -1,12 +1,13 @@
 @file:Suppress("UnstableApiUsage")
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.TimeZone
 
 plugins {
-    id("org.jetbrains.compose")
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 repositories {
@@ -88,9 +89,9 @@ android {
 
 dependencies {
     implementation(project(":common"))
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-    implementation("androidx.activity:activity-compose:1.8.0-alpha07")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.google.material)
 }
 
 fun getTime(pattern: String): String {

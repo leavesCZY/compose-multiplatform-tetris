@@ -7,9 +7,9 @@ allprojects {
 }
 
 plugins {
-    id("com.android.application").apply(false)
-    id("com.android.library").apply(false)
-    id("org.jetbrains.compose").apply(false)
-    kotlin("android").apply(false)
-    kotlin("multiplatform").apply(false)
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.jetbrains.kotlin.multiplatform) apply false
+    alias(libs.plugins.jetbrains.compose) apply false
 }

@@ -20,7 +20,7 @@ fun main() = application {
     Window(
         title = "compose_tetris",
         resizable = false,
-        icon = painterResource("/images/icon_compose_tetris.ico"),
+        icon = painterResource("/icon_compose_tetris.ico"),
         state = WindowState(
             size = getPreferredWindowSize(desiredWidth = 1200f, desiredHeight = 900f),
             position = WindowPosition.Aligned(alignment = Alignment.Center)

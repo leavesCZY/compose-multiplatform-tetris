@@ -1,5 +1,6 @@
 package github.leavesczy.compose_tetris.common.logic
 
+import androidx.compose.runtime.Stable
 import github.leavesczy.compose_tetris.platform.getScreenSize
 import kotlin.random.Random
 
@@ -13,8 +14,10 @@ private val BRICK_WIDTH = getScreenSize().x
 
 private val BRICK_HEIGHT = getScreenSize().y
 
+@Stable
 data class Location(val x: Int, val y: Int)
 
+@Stable
 data class Tetris constructor(
     val shapes: List<List<Location>>, //此方块所有可能的旋转结果
     val type: Int, //用于标记当前处于哪种旋转状态
@@ -89,6 +92,7 @@ data class Tetris constructor(
 
 }
 
+@Stable
 enum class GameStatus {
     Welcome,
     Running,
@@ -98,6 +102,7 @@ enum class GameStatus {
     GameOver
 }
 
+@Stable
 data class TetrisViewState(
     val brickArray: Array<IntArray>,
     val tetris: Tetris,
@@ -212,6 +217,7 @@ data class TetrisViewState(
 
 }
 
+@Stable
 sealed class Action {
     data object Welcome : Action()
     data object Start : Action()
@@ -223,6 +229,7 @@ sealed class Action {
     data class Transformation(val transformationType: TransformationType) : Action()
 }
 
+@Stable
 enum class TransformationType {
     Left,
     Right,
@@ -231,14 +238,6 @@ enum class TransformationType {
     FastDown,
     Fall
 }
-
-data class PlayListener constructor(
-    val onStart: () -> Unit,
-    val onPause: () -> Unit,
-    val onReset: () -> Unit,
-    val onSound: () -> Unit,
-    val onTransformation: (TransformationType) -> Unit
-)
 
 fun TetrisViewState.onTransformation(transformationType: TransformationType): TetrisViewState {
     return when (transformationType) {

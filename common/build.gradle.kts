@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.compose")
-    kotlin("multiplatform")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.multiplatform)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 kotlin {
@@ -21,8 +21,8 @@ kotlin {
         }
         named("androidMain") {
             dependencies {
-                implementation("androidx.appcompat:appcompat:1.6.1")
-                implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.lifecycle.viewmodel.compose)
             }
         }
         named("desktopMain") {

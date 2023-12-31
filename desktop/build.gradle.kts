@@ -1,8 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    id("org.jetbrains.compose")
-    kotlin("multiplatform")
+    alias(libs.plugins.jetbrains.kotlin.multiplatform)
+    alias(libs.plugins.jetbrains.compose)
 }
 
 kotlin {
@@ -31,7 +31,7 @@ compose.desktop {
             packageName = "compose_tetris"
             packageVersion = "1.0.0"
             description = "Compose Tetris"
-            val iconsRoot = project.file("../common/src/desktopMain/resources/images")
+            val iconsRoot = project.file("../desktop/src/jvmMain/resources")
             windows {
                 iconFile.set(iconsRoot.resolve("icon_compose_tetris.ico"))
                 menuGroup = "Compose Tetris"

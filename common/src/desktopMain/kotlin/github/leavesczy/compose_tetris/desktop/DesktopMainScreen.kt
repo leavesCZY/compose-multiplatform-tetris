@@ -48,6 +48,9 @@ fun DesktopMainScreen() {
             .onKeyEvent(onKeyEvent = {
                 dispatchKeyEvent(tetrisLogic = tetrisLogic, keyEvent = it)
             }),
+        tetrisButton = {
+            DesktopTetrisButton(tetrisLogic = tetrisLogic)
+        },
         tetrisLogic = tetrisLogic
     )
 }
@@ -60,35 +63,19 @@ private fun dispatchKeyEvent(tetrisLogic: TetrisLogic, keyEvent: KeyEvent): Bool
             }
 
             Key.DirectionLeft, Key.A, Key.NumPad4 -> {
-                tetrisLogic.dispatch(
-                    action = Action.Transformation(
-                        TransformationType.Left
-                    )
-                )
+                tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Left))
             }
 
             Key.DirectionRight, Key.D, Key.NumPad6 -> {
-                tetrisLogic.dispatch(
-                    action = Action.Transformation(
-                        TransformationType.Right
-                    )
-                )
+                tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Right))
             }
 
             Key.DirectionUp, Key.W, Key.NumPad8 -> {
-                tetrisLogic.dispatch(
-                    action = Action.Transformation(
-                        TransformationType.Rotate
-                    )
-                )
+                tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Rotate))
             }
 
             Key.DirectionDown, Key.S, Key.NumPad5 -> {
-                tetrisLogic.dispatch(
-                    action = Action.Transformation(
-                        TransformationType.Fall
-                    )
-                )
+                tetrisLogic.dispatch(action = Action.Transformation(TransformationType.Fall))
             }
         }
     }

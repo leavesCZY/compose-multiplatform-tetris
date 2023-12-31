@@ -12,36 +12,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import github.leavesczy.compose_tetris.common.logic.Action
-import github.leavesczy.compose_tetris.common.logic.PlayListener
 import github.leavesczy.compose_tetris.common.logic.TetrisLogic
 import github.leavesczy.compose_tetris.common.ui.theme.ComposeTetrisTheme
 
 @Composable
-fun MainScreen(modifier: Modifier, tetrisLogic: TetrisLogic) {
-    val playListener = remember {
-        PlayListener(
-            onStart = {
-                tetrisLogic.dispatch(action = Action.Start)
-            },
-            onPause = {
-                tetrisLogic.dispatch(action = Action.Pause)
-            },
-            onReset = {
-                tetrisLogic.dispatch(action = Action.Reset)
-            },
-            onTransformation = {
-                tetrisLogic.dispatch(action = Action.Transformation(it))
-            },
-            onSound = {
-                tetrisLogic.dispatch(action = Action.Sound)
-            },
-        )
-    }
+fun MainScreen(
+    modifier: Modifier,
+    tetrisButton: @Composable () -> Unit,
+    tetrisLogic: TetrisLogic
+) {
     LaunchedEffect(key1 = Unit) {
         tetrisLogic.dispatch(action = Action.Welcome)
     }
@@ -68,10 +51,7 @@ fun MainScreen(modifier: Modifier, tetrisLogic: TetrisLogic) {
                     modifier = Modifier
                         .height(height = 6.dp)
                 )
-                TetrisButton(
-                    tetrisViewState = tetrisLogic.tetrisViewState,
-                    playListener = playListener
-                )
+                tetrisButton()
                 Spacer(
                     modifier = Modifier
                         .height(height = 30.dp)

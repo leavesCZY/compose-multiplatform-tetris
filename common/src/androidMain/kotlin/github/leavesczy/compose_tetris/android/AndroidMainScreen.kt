@@ -44,6 +44,9 @@ fun AndroidMainScreen() {
             .statusBarsPadding()
             .navigationBarsPadding()
             .padding(top = 20.dp),
+        tetrisButton = {
+            AndroidTetrisButton(tetrisLogic = tetrisViewModel.tetrisLogic)
+        },
         tetrisLogic = tetrisViewModel.tetrisLogic
     )
 }
