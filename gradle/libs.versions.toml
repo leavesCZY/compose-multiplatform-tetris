@@ -1,11 +1,11 @@
 [versions]
-android-plugin = "8.2.0"
-jetbrains-kotlin-plugin = "1.9.21"
-jetbrains-compose-plugin = "1.5.11"
+android-plugin = "8.2.2"
+jetbrains-kotlin-plugin = "1.9.22"
+jetbrains-compose-plugin = "1.5.12"
 
 androidx-appcompat = "1.6.1"
 androidx-activity-compose = "1.8.2"
-androidx-lifecycle-viewmodel-compose = "2.6.2"
+androidx-lifecycle-viewmodel-compose = "2.7.0"
 
 google-material = "1.11.0"
 

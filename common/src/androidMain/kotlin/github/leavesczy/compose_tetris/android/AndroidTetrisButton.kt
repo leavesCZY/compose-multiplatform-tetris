@@ -21,7 +21,7 @@ import github.leavesczy.compose_tetris.common.logic.TetrisLogic
 import github.leavesczy.compose_tetris.common.logic.TransformationType
 import github.leavesczy.compose_tetris.common.ui.ControlButton
 import github.leavesczy.compose_tetris.common.ui.PlayButton
-import github.leavesczy.compose_tetris.common.ui.theme.ButtonDisenabledColor
+import github.leavesczy.compose_tetris.common.ui.theme.ButtonDisabledColor
 import github.leavesczy.compose_tetris.common.ui.theme.ButtonNormalColor
 
 /**
@@ -70,7 +70,7 @@ fun AndroidTetrisButton(tetrisLogic: TetrisLogic) {
                 color = if (tetrisLogic.tetrisViewState.soundEnable) {
                     ButtonNormalColor
                 } else {
-                    ButtonDisenabledColor
+                    ButtonDisabledColor
                 },
                 onClick = {
                     tetrisLogic.dispatch(action = Action.Sound)
