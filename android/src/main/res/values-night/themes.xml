@@ -2,7 +2,9 @@
 
     <style name="Theme.ComposeTetris" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceStatusBarContrast" tools:ignore="NewApi">false</item>
+        <item name="android:enforceNavigationBarContrast" tools:ignore="NewApi">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>

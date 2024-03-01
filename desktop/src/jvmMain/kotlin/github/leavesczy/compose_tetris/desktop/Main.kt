@@ -36,7 +36,7 @@ private fun getPreferredWindowSize(desiredWidth: Float, desiredHeight: Float): D
     val screenSize = Toolkit.getDefaultToolkit().screenSize
     val screenWidth = screenSize.width
     val screenHeight = screenSize.height
-    val preferredWidth = screenWidth * 0.8f
+    val preferredWidth = screenWidth * 0.75f
     val preferredHeight = screenHeight * 0.8f
     val width = minOf(desiredWidth, preferredWidth)
     val height = minOf(desiredHeight, preferredHeight)

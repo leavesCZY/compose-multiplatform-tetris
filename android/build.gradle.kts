@@ -37,7 +37,8 @@ android {
     }
     signingConfigs {
         create("release") {
-            storeFile = File(rootDir, "key.jks")
+            storeFile =
+                File(project.rootProject.rootDir.absolutePath + File.separator + "doc" + File.separator + "key.jks")
             keyAlias = "leavesCZY"
             storePassword = "123456"
             keyPassword = "123456"

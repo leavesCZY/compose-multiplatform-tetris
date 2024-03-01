@@ -7,6 +7,6 @@ package github.leavesczy.compose_tetris
  */
 object WorkflowsTrigger {
 
-    val trigger = 10
+    val trigger = 11
 
 }
