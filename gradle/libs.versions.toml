@@ -1,7 +1,7 @@
 [versions]
 android-plugin = "8.3.0"
 jetbrains-kotlin-plugin = "1.9.22"
-jetbrains-compose-plugin = "1.6.0"
+jetbrains-compose-plugin = "1.6.1"
 
 androidx-appcompat = "1.6.1"
 androidx-activity-compose = "1.8.2"

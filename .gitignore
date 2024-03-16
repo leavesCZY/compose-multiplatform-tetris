@@ -1,11 +1,8 @@
 /.idea/
+/.gradle/
 *build/
 **/.gradle/
 **/build/
-/.gradle/
-/?*.hprof
-/local.properties
-/android/local.properties
 /android/.idea/
-*.log
 /android/release/
+/local.properties
