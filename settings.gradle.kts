@@ -1,12 +1,21 @@
+rootProject.name = "compose_tetris"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
-        gradlePluginPortal()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         google()
+        gradlePluginPortal()
         mavenCentral()
     }
 }
 
-rootProject.name = "compose_tetris"
-include(":common")
-include(":android")
-include(":desktop")
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+}
+
+include(":composeApp")
