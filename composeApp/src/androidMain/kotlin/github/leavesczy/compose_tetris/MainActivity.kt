@@ -3,8 +3,19 @@ package github.leavesczy.compose_tetris
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import github.leavesczy.compose_tetris.android.AndroidMainScreen
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
+import github.leavesczy.compose_tetris.logic.Action
+import github.leavesczy.compose_tetris.logic.TetrisLogic
+import github.leavesczy.compose_tetris.ui.TetrisPage
 
 /**
  * @Author: leavesCZY
@@ -13,11 +24,47 @@ import github.leavesczy.compose_tetris.android.AndroidMainScreen
  */
 class MainActivity : AppCompatActivity() {
 
+    private val tetrisLogic by lazy(mode = LazyThreadSafetyMode.NONE) {
+        TetrisLogic(
+            coroutineScope = lifecycleScope,
+            soundPlayer = AndroidSoundPlayer(application = application)
+        )
+    }
+
+    @OptIn(ExperimentalLayoutApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        setSystemBarUi()
         super.onCreate(savedInstanceState)
         setContent {
-            AndroidMainScreen()
+            TetrisPage(
+                modifier = Modifier
+                    .windowInsetsPadding(insets = WindowInsets.statusBarsIgnoringVisibility)
+                    .navigationBarsPadding(),
+                tetrisLogic = tetrisLogic
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tetrisLogic.dispatch(action = Action.Resume)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tetrisLogic.dispatch(action = Action.Background)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        tetrisLogic.release()
+    }
+
+    private fun setSystemBarUi() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.statusBars())
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
         }
     }
 

@@ -1,7 +1,7 @@
-package github.leavesczy.compose_tetris.platform
+package github.leavesczy.compose_tetris
 
-import github.leavesczy.compose_tetris.common.logic.GameStatus
-import github.leavesczy.compose_tetris.common.logic.Location
+import github.leavesczy.compose_tetris.logic.GameStatus
+import github.leavesczy.compose_tetris.logic.Location
 
 /**
  * @Author: leavesCZY

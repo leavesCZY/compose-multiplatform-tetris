@@ -1,7 +1,7 @@
-package github.leavesczy.compose_tetris.common.logic
+package github.leavesczy.compose_tetris.logic
 
 import androidx.compose.runtime.Stable
-import github.leavesczy.compose_tetris.platform.getScreenSize
+import github.leavesczy.compose_tetris.getScreenSize
 import kotlin.random.Random
 
 /**

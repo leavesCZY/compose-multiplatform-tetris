@@ -1,4 +1,4 @@
-package github.leavesczy.compose_tetris.common.logic
+package github.leavesczy.compose_tetris.logic
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @Author: leavesCZY
@@ -122,7 +123,7 @@ class TetrisLogic(
             }
 
             else -> {
-                throw RuntimeException("非法状态")
+                throw RuntimeException("error game status")
             }
         }
     }
@@ -210,7 +211,10 @@ class TetrisLogic(
         }
     }
 
-    private fun playSound(action: Action) {
+    private suspend fun playSound(action: Action) {
+        if (!tetrisViewState.soundEnable) {
+            return
+        }
         when (action) {
             Action.Welcome, Action.Reset -> {
                 playSound(soundType = SoundType.Welcome)
@@ -256,9 +260,12 @@ class TetrisLogic(
         }
     }
 
-    private fun playSound(soundType: SoundType) {
+    private suspend fun playSound(soundType: SoundType) {
         if (tetrisViewState.soundEnable) {
-            soundPlayer.play(soundType)
+            withContext(context = Dispatchers.IO) {
+                delay(timeMillis = 100L)
+                soundPlayer.play(soundType)
+            }
         }
     }
 

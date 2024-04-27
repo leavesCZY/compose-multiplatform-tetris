@@ -1,27 +1,28 @@
-package github.leavesczy.compose_tetris.android
+package github.leavesczy.compose_tetris
 
+import android.app.Application
 import android.media.AudioManager
 import android.media.SoundPool
-import github.leavesczy.compose_tetris.R
-import github.leavesczy.compose_tetris.common.logic.SoundPlayer
-import github.leavesczy.compose_tetris.common.logic.SoundType
+import github.leavesczy.compose_tetris.logic.SoundPlayer
+import github.leavesczy.compose_tetris.logic.SoundType
 
 /**
  * @Author: leavesCZY
  * @Date: 2022/1/20 15:03
  * @Desc:
  */
-class AndroidSoundPlayer : SoundPlayer {
+class AndroidSoundPlayer(application: Application) : SoundPlayer {
 
-    private val soundPool =
-        SoundPool.Builder().setMaxStreams(4).setMaxStreams(AudioManager.STREAM_MUSIC).build()
+    private val soundPool = SoundPool.Builder()
+        .setMaxStreams(4)
+        .setMaxStreams(AudioManager.STREAM_MUSIC)
+        .build()
 
     private val soundMap = mutableMapOf<SoundType, Int>()
 
     init {
         for (value in SoundType.entries) {
-            soundMap[value] =
-                soundPool.load(ContextProvider.context, getAudioId(soundType = value), 1)
+            soundMap[value] = soundPool.load(application, getAudioId(soundType = value), 1)
         }
     }
 

@@ -1,8 +1,9 @@
-package github.leavesczy.compose_tetris.desktop
+package github.leavesczy.compose_tetris
 
-import github.leavesczy.compose_tetris.common.logic.SoundPlayer
-import github.leavesczy.compose_tetris.common.logic.SoundType
-import kotlinx.coroutines.Dispatchers
+import github.leavesczy.compose_tetris.logic.SoundPlayer
+import github.leavesczy.compose_tetris.logic.SoundType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
 import java.io.InputStream
@@ -16,10 +17,10 @@ import javax.sound.sampled.LineListener
  * @Date: 2022/1/20 15:09
  * @Desc:
  */
-class DesktopSoundPlayer : SoundPlayer {
+class DesktopSoundPlayer(private val coroutineScope: CoroutineScope) : SoundPlayer {
 
     override fun play(soundType: SoundType) {
-        DesktopCoroutineScope.launch(context = Dispatchers.IO) {
+        coroutineScope.launch {
             val audioResourceInputStream = getAudioResourceStream(soundType = soundType)
             val audioBufferedInputStream = BufferedInputStream(audioResourceInputStream)
             val audioInputStream = AudioSystem.getAudioInputStream(audioBufferedInputStream)
@@ -28,16 +29,24 @@ class DesktopSoundPlayer : SoundPlayer {
                 open(audioInputStream)
                 microsecondPosition = 0
                 loop(0)
-                addLineListener(ReleaseLineListener(this))
+                addLineListener(
+                    ReleaseLineListener(
+                        clip = this,
+                        coroutineScope = coroutineScope
+                    )
+                )
                 start()
             }
         }
     }
 
-    private class ReleaseLineListener(private val clip: Clip) : LineListener {
+    private class ReleaseLineListener(
+        private val clip: Clip,
+        private val coroutineScope: CoroutineScope
+    ) : LineListener {
         override fun update(event: LineEvent) {
             if (event.type == LineEvent.Type.STOP) {
-                DesktopCoroutineScope.launch(context = Dispatchers.IO) {
+                coroutineScope.launch {
                     clip.stop()
                     clip.close()
                 }
@@ -74,7 +83,7 @@ class DesktopSoundPlayer : SoundPlayer {
     }
 
     override fun release() {
-
+        coroutineScope.cancel()
     }
 
 }

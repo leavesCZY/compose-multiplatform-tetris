@@ -1,6 +1,6 @@
-package github.leavesczy.compose_tetris.common.ui
+package github.leavesczy.compose_tetris.ui
 
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -10,10 +10,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -38,11 +36,11 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import github.leavesczy.compose_tetris.common.logic.Action
-import github.leavesczy.compose_tetris.common.logic.GameStatus
-import github.leavesczy.compose_tetris.common.logic.TetrisLogic
-import github.leavesczy.compose_tetris.common.logic.TetrisViewState
-import github.leavesczy.compose_tetris.platform.getFontSize
+import github.leavesczy.compose_tetris.getFontSize
+import github.leavesczy.compose_tetris.logic.Action
+import github.leavesczy.compose_tetris.logic.GameStatus
+import github.leavesczy.compose_tetris.logic.TetrisLogic
+import github.leavesczy.compose_tetris.logic.TetrisViewState
 
 /**
  * @Author: leavesCZY
@@ -50,9 +48,8 @@ import github.leavesczy.compose_tetris.platform.getFontSize
  * @Desc:
  */
 @Composable
-fun TetrisScreen(
+fun TetrisPage(
     modifier: Modifier,
-    tetrisButton: @Composable () -> Unit,
     tetrisLogic: TetrisLogic
 ) {
     LaunchedEffect(key1 = Unit) {
@@ -62,6 +59,7 @@ fun TetrisScreen(
         Scaffold(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.background)
+                .padding(top = 15.dp)
                 .then(other = modifier),
         ) {
             Column(
@@ -71,28 +69,27 @@ fun TetrisScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(weight = 1f)
+                        .weight(weight = 11f)
                         .padding(horizontal = 30.dp)
                         .align(alignment = Alignment.CenterHorizontally),
                 ) {
-                    TetrisScreen(tetrisViewState = tetrisLogic.tetrisViewState)
+                    TetrisPage(tetrisViewState = tetrisLogic.tetrisViewState)
                 }
-                Spacer(
+                Box(
                     modifier = Modifier
-                        .height(height = 6.dp)
-                )
-                tetrisButton()
-                Spacer(
-                    modifier = Modifier
-                        .height(height = 30.dp)
-                )
+                        .fillMaxWidth()
+                        .weight(weight = 4f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    TetrisButton(tetrisLogic = tetrisLogic)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun TetrisScreen(tetrisViewState: TetrisViewState) {
+private fun TetrisPage(tetrisViewState: TetrisViewState) {
     val screenMatrix = tetrisViewState.screenMatrix
     val matrixWidth = tetrisViewState.width
     val matrixHeight = tetrisViewState.height
@@ -102,7 +99,7 @@ private fun TetrisScreen(tetrisViewState: TetrisViewState) {
         initialValue = 1.0f,
         targetValue = 0.0f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = FastOutSlowInEasing),
+            animation = tween(durationMillis = 1200, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse,
         )
     )
@@ -188,26 +185,25 @@ private fun TetrisScreen(tetrisViewState: TetrisViewState) {
             left = borderWidth,
             top = borderWidth
         ) {
-            val text: String
-            val fontSize = getFontSize(gameStatus = tetrisViewState.gameStatus)
-            when (tetrisViewState.gameStatus) {
+            val text = when (tetrisViewState.gameStatus) {
                 GameStatus.Welcome -> {
-                    text = "TETRIS"
+                    "TETRIS"
                 }
 
                 GameStatus.Paused -> {
-                    text = "PAUSE"
+                    "PAUSE"
                 }
 
                 GameStatus.GameOver -> {
-                    text = "GAME OVER"
+                    "GAME OVER"
                 }
 
                 GameStatus.Running, GameStatus.LineClearing, GameStatus.ScreenClearing -> {
-                    text = ""
+                    ""
                 }
             }
             if (text.isNotBlank()) {
+                val fontSize = getFontSize(gameStatus = tetrisViewState.gameStatus)
                 val textLayoutResult = textMeasurer.measure(
                     text = text,
                     style = TextStyle(
@@ -215,8 +211,8 @@ private fun TetrisScreen(tetrisViewState: TetrisViewState) {
                         fontSize = fontSize.sp,
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = alphaAnimate),
-                            offset = Offset(x = 14.0f, y = 16.0f),
-                            blurRadius = 6f
+                            offset = Offset(x = 12.0f, y = 14.0f),
+                            blurRadius = 2f
                         ),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.SemiBold,

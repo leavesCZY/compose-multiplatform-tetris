@@ -23,19 +23,13 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
-            implementation(libs.google.material)
-            implementation(compose.materialIconsExtended)
         }
         commonMain.dependencies {
-            implementation(compose.ui)
-            implementation(compose.runtime)
-            implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(compose.materialIconsExtended)
         }
     }
 }
@@ -114,14 +108,16 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Msi)
-            packageName = "github.leavesczy.compose_tetris"
+            packageName = "compose_tetris"
             packageVersion = "1.0.0"
-            description = "Compose Tetris"
+            description = "compose_tetris"
             windows {
+                menuGroup = "compose_tetris"
+                upgradeUuid = "18159995-d967-4CD2-8885-77BFA97CFA9F"
+                dirChooser = true
+                shortcut = true
                 val iconsRoot = project.file("../composeApp/src/desktopMain/resources")
                 iconFile.set(iconsRoot.resolve("compose_tetris.ico"))
-                menuGroup = "Compose Tetris"
-                upgradeUuid = "18159995-d967-4CD2-8885-77BFA97CFA9F"
             }
         }
         buildTypes.release {
