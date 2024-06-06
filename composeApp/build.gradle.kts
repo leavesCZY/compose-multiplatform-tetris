@@ -1,20 +1,19 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.TimeZone
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.multiplatform)
     alias(libs.plugins.jetbrains.compose)
+    alias(libs.plugins.jetbrains.compose.compiler)
 }
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_18)
         }
     }
     jvm("desktop")
@@ -47,8 +46,7 @@ android {
         applicationVariants.all {
             outputs.all {
                 if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
-                    outputFileName =
-                        "compose_tetris_${name}_${versionName}_${versionCode}_${getApkBuildTime()}.apk"
+                    outputFileName = "compose-multiplatform-tetris-android.apk"
                 }
             }
         }
@@ -87,8 +85,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     packaging {
         resources.excludes += setOf(
@@ -103,41 +101,78 @@ android {
     }
 }
 
+enum class OS(val id: String) {
+    Linux("linux"),
+    Windows("windows"),
+    MacOS("macos")
+}
+
+val currentOS: OS by lazy {
+    val os = System.getProperty("os.name")
+    when {
+        os.equals("Mac OS X", ignoreCase = true) -> OS.MacOS
+        os.startsWith("Win", ignoreCase = true) -> OS.Windows
+        os.startsWith("Linux", ignoreCase = true) -> OS.Linux
+        else -> error("Unknown OS name: $os")
+    }
+}
+
 compose.desktop {
     application {
         mainClass = "MainKt"
+        val mPackageName = "compose-multiplatform-tetris"
         nativeDistributions {
-            targetFormats(TargetFormat.Msi)
-            packageName = "compose_tetris"
+            includeAllModules = false
+            modules = arrayListOf("java.desktop")
+            when (currentOS) {
+                OS.Windows -> {
+                    targetFormats(TargetFormat.AppImage, TargetFormat.Exe, TargetFormat.Msi)
+                }
+
+                OS.MacOS -> {
+                    targetFormats(TargetFormat.Dmg, TargetFormat.Pkg)
+                }
+
+                OS.Linux -> {
+                    targetFormats(TargetFormat.Deb, TargetFormat.Rpm)
+                }
+            }
+            packageName = mPackageName
             packageVersion = "1.0.0"
-            description = "compose_tetris"
+            description = mPackageName
+            copyright = "© 2024 leavesCZY. All rights reserved."
+            vendor = "leavesCZY"
+            val resourcesDir = project.file("../composeApp/src/desktopMain/resources")
             windows {
-                menuGroup = "compose_tetris"
-                upgradeUuid = "18159995-d967-4CD2-8885-77BFA97CFA9F"
+                menuGroup = packageName
                 dirChooser = true
+                perUserInstall = true
                 shortcut = true
-                val iconsRoot = project.file("../composeApp/src/desktopMain/resources")
-                iconFile.set(iconsRoot.resolve("compose_tetris.ico"))
+                menu = true
+                upgradeUuid = "4932C697-C420-4993-8A48-AEDA854A8895"
+                iconFile.set(resourcesDir.resolve("windows_launch_icon.ico"))
+                installationPath = packageName
+            }
+            macOS {
+                bundleID = mPackageName
+                setDockNameSameAsPackageName = true
+                appStore = true
+                iconFile.set(resourcesDir.resolve("macos_launch_icon.icns"))
+            }
+            linux {
+                shortcut = true
+                menuGroup = packageName
+                iconFile.set(resourcesDir.resolve("linux_launch_icon.png"))
             }
         }
         buildTypes.release {
             proguard {
-                configurationFiles.from("compose-desktop.pro")
                 isEnabled.set(true)
                 obfuscate.set(true)
                 optimize.set(true)
+                joinOutputJars.set(true)
+                configurationFiles.from("proguard-rules.pro")
             }
         }
     }
-}
-
-fun getTime(pattern: String): String {
-    val simpleDateFormat = SimpleDateFormat(pattern)
-    simpleDateFormat.timeZone = TimeZone.getTimeZone("Asia/Shanghai")
-    val time = Calendar.getInstance().time
-    return simpleDateFormat.format(time)
-}
-
-fun getApkBuildTime(): String {
-    return getTime(pattern = "yyyy_MM_dd_HH_mm_ss")
 }
