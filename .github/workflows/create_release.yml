@@ -20,71 +20,16 @@ jobs:
           format: YYYY.MM.DD
           utcOffset: "+08:00"
 
-  create-windows-package:
-    runs-on: windows-latest
-    name: create windows package
-    needs: current-time
-
-    steps:
-      - name: setup jdk
-        uses: actions/setup-java@v4
-        with:
-          java-version: "18"
-          distribution: "oracle"
-          architecture: x64
-
-      - name: checkout
-        uses: actions/checkout@v4
-
-      - name: grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: assembleRelease
-        run: ./gradlew assembleRelease
-
-      - name: packageReleaseExe
-        run: ./gradlew packageReleaseExe
-
-      - name: packageReleaseMsi
-        run: ./gradlew packageReleaseMsi
-
-      - name: packageReleaseAppImage
-        run: ./gradlew packageReleaseAppImage
-
-      - name: rename File
-        run: |
-          mv ./composeApp/build/compose/binaries/main-release/msi/compose-multiplatform-tetris-1.0.0.msi ./composeApp/build/compose/binaries/main-release/msi/compose-multiplatform-tetris-windows-x64.msi
-          mv ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-1.0.0.exe ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-windows-x64.exe
-
-      - name: zip appImage
-        uses: thedoctor0/zip-release@0.7.6
-        with:
-          type: "zip"
-          filename: "compose-multiplatform-tetris-windows-x64.zip"
-          directory: "./composeApp/build/compose/binaries/main-release/app"
-
-      - name: create a release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "**/compose-multiplatform-tetris-android.apk,**/compose-multiplatform-tetris-windows-x64.exe,**/compose-multiplatform-tetris-windows-x64.msi,**/compose-multiplatform-tetris-windows-x64.zip"
-          body: "create by workflows"
-          allowUpdates: true
-          artifactErrorsFailBuild: true
-          generateReleaseNotes: false
-          tag: ${{needs.current-time.outputs.currentTime}}
-          name: ${{needs.current-time.outputs.currentTime}}
-          token: ${{secrets.ACTION_TOKEN}}
-
-  create-macos-package:
+  create-release-distribution:
     strategy:
       matrix:
-        os: [ macos-13, macos-14 ]
+        os: [ windows-latest , ubuntu-latest , macos-13 , macos-14 ]
     runs-on: ${{ matrix.os }}
-    name: create macos package
+    name: create release distribution
     needs: current-time
 
     steps:
-      - if: matrix.os == 'macos-13'
+      - if: matrix.os != 'macos-14'
         name: setup jdk
         uses: actions/setup-java@v4
         with:
@@ -106,68 +51,52 @@ jobs:
       - name: grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: packageReleaseDmg
-        run: ./gradlew packageReleaseDmg
+      - if: matrix.os == 'windows-latest'
+        name: assembleRelease
+        run: ./gradlew assembleRelease
+
+      - name: packageReleaseDistributionForCurrentOS
+        run: ./gradlew packageReleaseDistributionForCurrentOS
+
+      - if: matrix.os == 'windows-latest'
+        name: rename File
+        run: |
+          mv ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-1.0.0.exe ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-windows-x64.exe
+          mv ./composeApp/build/compose/binaries/main-release/msi/compose-multiplatform-tetris-1.0.0.msi ./composeApp/build/compose/binaries/main-release/msi/compose-multiplatform-tetris-windows-x64.msi
+
+      - if: matrix.os == 'windows-latest'
+        name: zip AppImage
+        uses: thedoctor0/zip-release@0.7.6
+        with:
+          type: "zip"
+          filename: "compose-multiplatform-tetris-windows-x64.zip"
+          directory: "./composeApp/build/compose/binaries/main-release/app"
+
+      - if: matrix.os == 'ubuntu-latest'
+        name: rename File
+        run: |
+          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
+          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
 
       - if: matrix.os == 'macos-13'
         name: rename File
         run: |
           mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-macos-x64.dmg
+          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-1.0.0.pkg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-macos-x64.pkg
 
       - if: matrix.os == 'macos-14'
         name: rename File
         run: |
           mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-macos-arm64.dmg
+          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-1.0.0.pkg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-macos-arm64.pkg
 
       - name: create a release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "**/*.dmg"
+          artifacts: "**/*.apk,**/*.exe,**/*.msi,**/compose-multiplatform-tetris-windows-x64.zip,**/*.deb,**/*.rpm,**/*.dmg,**/*.pkg"
           body: "create by workflows"
           allowUpdates: true
-          artifactErrorsFailBuild: true
-          generateReleaseNotes: false
-          tag: ${{needs.current-time.outputs.currentTime}}
-          name: ${{needs.current-time.outputs.currentTime}}
-          token: ${{secrets.ACTION_TOKEN}}
-
-  create-linux-package:
-    runs-on: ubuntu-latest
-    name: create linux package
-    needs: current-time
-
-    steps:
-      - name: setup jdk
-        uses: actions/setup-java@v4
-        with:
-          java-version: "18"
-          distribution: "oracle"
-          architecture: x64
-
-      - name: checkout
-        uses: actions/checkout@v4
-
-      - name: grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: packageReleaseDeb
-        run: ./gradlew packageReleaseDeb
-
-      - name: packageReleaseRpm
-        run: ./gradlew packageReleaseRpm
-
-      - name: rename File
-        run: |
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
-
-      - name: create a release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "**/*.deb,**/*.rpm"
-          body: "create by workflows"
-          allowUpdates: true
-          artifactErrorsFailBuild: true
+          artifactErrorsFailBuild: false
           generateReleaseNotes: false
           tag: ${{needs.current-time.outputs.currentTime}}
           name: ${{needs.current-time.outputs.currentTime}}
