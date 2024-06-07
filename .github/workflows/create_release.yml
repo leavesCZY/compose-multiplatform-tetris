@@ -62,7 +62,6 @@ jobs:
         name: rename File
         run: |
           mv ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-1.0.0.exe ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-windows-x64.exe
-          mv ./composeApp/build/compose/binaries/main-release/msi/compose-multiplatform-tetris-1.0.0.msi ./composeApp/build/compose/binaries/main-release/msi/compose-multiplatform-tetris-windows-x64.msi
 
       - if: matrix.os == 'windows-latest'
         name: zip AppImage
@@ -76,24 +75,21 @@ jobs:
         name: rename File
         run: |
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
 
       - if: matrix.os == 'macos-13'
         name: rename File
         run: |
-          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-macos-x64.dmg
-          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-1.0.0.pkg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-macos-x64.pkg
+          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-x64.dmg
 
       - if: matrix.os == 'macos-14'
         name: rename File
         run: |
-          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-macos-arm64.dmg
-          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-1.0.0.pkg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/pkg/compose-multiplatform-tetris-macos-arm64.pkg
+          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-arm64.dmg
 
       - name: create a release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "**/*.apk,**/*.exe,**/*.msi,**/compose-multiplatform-tetris-windows-x64.zip,**/*.deb,**/*.rpm,**/*.dmg,**/*.pkg"
+          artifacts: "**/compose-multiplatform-tetris-android.apk,**/compose-multiplatform-tetris-windows-x64.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/*.deb,**/*.dmg"
           body: "create by workflows"
           allowUpdates: true
           artifactErrorsFailBuild: false

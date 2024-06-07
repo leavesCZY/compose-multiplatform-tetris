@@ -126,15 +126,15 @@ compose.desktop {
             modules = arrayListOf("java.desktop")
             when (currentOS) {
                 OS.Windows -> {
-                    targetFormats(TargetFormat.AppImage, TargetFormat.Exe, TargetFormat.Msi)
+                    targetFormats(TargetFormat.AppImage, TargetFormat.Exe)
                 }
 
                 OS.MacOS -> {
-                    targetFormats(TargetFormat.Dmg, TargetFormat.Pkg)
+                    targetFormats(TargetFormat.Dmg)
                 }
 
                 OS.Linux -> {
-                    targetFormats(TargetFormat.Deb, TargetFormat.Rpm)
+                    targetFormats(TargetFormat.Deb)
                 }
             }
             packageName = mPackageName
