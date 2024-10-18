@@ -74,8 +74,8 @@ jobs:
       - if: matrix.os == 'ubuntu-latest'
         name: rename File
         run: |
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-x86_64.rpm
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
+          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris_1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
+          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb    /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
 
       - if: matrix.os == 'macos-13'
         name: rename File
@@ -90,10 +90,10 @@ jobs:
       - name: create a release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "**/compose-multiplatform-tetris-android.apk,**/compose-multiplatform-tetris-windows-x64.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/*.deb,**/*.dmg"
           allowUpdates: true
           artifactErrorsFailBuild: false
           generateReleaseNotes: true
+          artifacts: "**/compose-multiplatform-tetris-android.apk,**/exe/*.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/deb/*.deb,**/rpm/*.rpm,**/dmg/*.dmg"
           body: "create by workflows"
           tag: ${{needs.current-time.outputs.currentTime}}
           name: ${{needs.current-time.outputs.currentTime}}
