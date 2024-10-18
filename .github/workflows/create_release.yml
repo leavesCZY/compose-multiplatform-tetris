@@ -74,7 +74,7 @@ jobs:
       - if: matrix.os == 'ubuntu-latest'
         name: rename File
         run: |
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris_1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
+          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb    /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
 
       - if: matrix.os == 'macos-13'
