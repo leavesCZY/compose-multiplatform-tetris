@@ -7,13 +7,15 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import org.jetbrains.compose.resources.painterResource
+import compose_multiplatform_tetris.composeapp.generated.resources.Res
+import compose_multiplatform_tetris.composeapp.generated.resources.desktop_launch_icon
 import github.leavesczy.compose_tetris.DesktopSoundPlayer
 import github.leavesczy.compose_tetris.logic.Action
 import github.leavesczy.compose_tetris.logic.TetrisLogic
@@ -37,7 +39,7 @@ fun main() = application {
     Window(
         title = "compose_tetris",
         resizable = false,
-        icon = painterResource("/windows_launch_icon.ico"),
+        icon = painterResource(Res.drawable.desktop_launch_icon),
         state = rememberWindowState(
             size = preferredWindowSize(),
             position = WindowPosition.Aligned(alignment = Alignment.Center)

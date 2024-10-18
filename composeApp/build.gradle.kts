@@ -26,6 +26,7 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
+            implementation(compose.components.resources)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -35,12 +36,12 @@ kotlin {
 
 android {
     namespace = "github.leavesczy.compose_tetris"
-    compileSdk = 34
-    buildToolsVersion = "34.0.0"
+    compileSdk = 35
+    buildToolsVersion = "35.0.0"
     defaultConfig {
         applicationId = "github.leavesczy.compose_tetris"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
         applicationVariants.all {
@@ -134,7 +135,7 @@ compose.desktop {
                 }
 
                 OS.Linux -> {
-                    targetFormats(TargetFormat.Deb)
+                    targetFormats(TargetFormat.Deb, TargetFormat.Rpm)
                 }
             }
             packageName = mPackageName

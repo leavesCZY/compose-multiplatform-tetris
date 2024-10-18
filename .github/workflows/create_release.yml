@@ -33,17 +33,17 @@ jobs:
         name: setup jdk
         uses: actions/setup-java@v4
         with:
+          distribution: "zulu"
           java-version: "18"
-          distribution: "oracle"
           architecture: x64
 
       - if: matrix.os == 'macos-14'
         name: setup jdk
         uses: actions/setup-java@v4
         with:
+          distribution: "zulu"
           java-version: "18"
-          distribution: "oracle"
-          architecture: aarch64
+          architecture: x64
 
       - name: checkout
         uses: actions/checkout@v4
@@ -68,12 +68,13 @@ jobs:
         uses: thedoctor0/zip-release@0.7.6
         with:
           type: "zip"
-          filename: "compose-multiplatform-tetris-windows-x64.zip"
           directory: "./composeApp/build/compose/binaries/main-release/app"
+          filename: "compose-multiplatform-tetris-windows-x64.zip"
 
       - if: matrix.os == 'ubuntu-latest'
         name: rename File
         run: |
+          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-x86_64.rpm
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
 
       - if: matrix.os == 'macos-13'
@@ -90,10 +91,10 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "**/compose-multiplatform-tetris-android.apk,**/compose-multiplatform-tetris-windows-x64.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/*.deb,**/*.dmg"
-          body: "create by workflows"
           allowUpdates: true
           artifactErrorsFailBuild: false
-          generateReleaseNotes: false
+          generateReleaseNotes: true
+          body: "create by workflows"
           tag: ${{needs.current-time.outputs.currentTime}}
           name: ${{needs.current-time.outputs.currentTime}}
           token: ${{secrets.ACTION_TOKEN}}
