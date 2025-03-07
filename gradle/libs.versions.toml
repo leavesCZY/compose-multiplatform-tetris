@@ -1,10 +1,10 @@
 [versions]
-android-plugin = "8.7.3"
-jetbrains-kotlin-plugin = "2.1.0"
-jetbrains-compose-plugin = "1.7.1"
+android-plugin = "8.9.0"
+jetbrains-kotlin-plugin = "2.1.10"
+jetbrains-compose-plugin = "1.7.3"
 
 androidx-appcompat = "1.7.0"
-androidx-activity = "1.9.3"
+androidx-activity = "1.10.1"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-plugin" }

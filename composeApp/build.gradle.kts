@@ -9,11 +9,6 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_18)
-        }
-    }
     jvm("desktop")
     sourceSets {
         val desktopMain by getting
@@ -30,12 +25,17 @@ kotlin {
             implementation(compose.desktop.currentOs)
         }
     }
+    androidTarget {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_18)
+        }
+    }
 }
 
 android {
     namespace = "github.leavesczy.compose_tetris"
     compileSdk = 35
-    buildToolsVersion = "35.0.0"
+    buildToolsVersion = "35.0.1"
     defaultConfig {
         applicationId = "github.leavesczy.compose_tetris"
         minSdk = 21
@@ -45,7 +45,7 @@ android {
         applicationVariants.all {
             outputs.all {
                 if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
-                    outputFileName = "compose-multiplatform-tetris-android.apk"
+                    outputFileName = "compose-multiplatform-tetris.apk"
                 }
             }
         }
