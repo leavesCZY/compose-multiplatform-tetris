@@ -45,7 +45,7 @@ android {
         applicationVariants.all {
             outputs.all {
                 if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
-                    outputFileName = "compose-multiplatform-tetris.apk"
+                    outputFileName = "compose-multiplatform-tetris-android.apk"
                 }
             }
         }
