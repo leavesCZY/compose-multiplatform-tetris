@@ -1,14 +1,20 @@
 package github.leavesczy.compose_tetris.ui
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -32,6 +38,8 @@ import github.leavesczy.compose_tetris.logic.Action
 import github.leavesczy.compose_tetris.logic.GameStatus
 import github.leavesczy.compose_tetris.logic.TetrisLogic
 import github.leavesczy.compose_tetris.logic.TetrisViewState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * @Author: leavesCZY
@@ -39,7 +47,7 @@ import github.leavesczy.compose_tetris.logic.TetrisViewState
  * @Desc:
  */
 @Composable
-fun TetrisPage(
+internal fun TetrisPage(
     modifier: Modifier,
     tetrisLogic: TetrisLogic
 ) {
@@ -49,56 +57,79 @@ fun TetrisPage(
     TetrisTheme {
         Scaffold(
             modifier = Modifier
+                .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.background)
-                .padding(top = 15.dp)
                 .then(other = modifier),
-        ) {
+            contentWindowInsets = WindowInsets(
+                left = 0.dp,
+                top = 0.dp,
+                right = 0.dp,
+                bottom = 0.dp
+            ),
+            containerColor = Color.Transparent
+        ) { innerPadding ->
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding)
+                    .padding(top = 10.dp)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
+                TetrisPage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(weight = 11f)
-                        .padding(horizontal = 30.dp)
-                        .align(alignment = Alignment.CenterHorizontally),
-                ) {
-                    TetrisPage(tetrisViewState = tetrisLogic.tetrisViewState)
-                }
-                Box(
+                        .padding(horizontal = 30.dp),
+                    tetrisViewState = tetrisLogic.tetrisViewState
+                )
+                TetrisButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(weight = 4f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    TetrisButton(tetrisLogic = tetrisLogic)
-                }
+                        .weight(weight = 5f),
+                    tetrisLogic = tetrisLogic
+                )
             }
         }
     }
 }
 
 @Composable
-private fun TetrisPage(tetrisViewState: TetrisViewState) {
+private fun TetrisPage(
+    modifier: Modifier,
+    tetrisViewState: TetrisViewState
+) {
     val screenMatrix = tetrisViewState.screenMatrix
     val matrixWidth = tetrisViewState.width
     val matrixHeight = tetrisViewState.height
     val brickMarginDp = 2.dp
     val screenInnerMarginDp = 8.dp
-    val alphaAnimate by rememberInfiniteTransition().animateFloat(
-        initialValue = 1.0f,
-        targetValue = 0.0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1200, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse,
-        )
-    )
+    val alphaAnimate = remember {
+        Animatable(initialValue = 1f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        withContext(context = Dispatchers.Default) {
+            var targetValue = 0f
+            while (true) {
+                alphaAnimate.animateTo(
+                    targetValue = targetValue,
+                    animationSpec = tween(
+                        durationMillis = 1500,
+                        easing = LinearEasing
+                    )
+                )
+                targetValue = if (targetValue == 0f) {
+                    1f
+                } else {
+                    0f
+                }
+            }
+        }
+    }
     val backgroundColor = MaterialTheme.colorScheme.background
     val onBackgroundColor = MaterialTheme.colorScheme.onBackground
     val textMeasurer = rememberTextMeasurer()
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = onBackgroundColor)
     ) {
@@ -198,13 +229,7 @@ private fun TetrisPage(tetrisViewState: TetrisViewState) {
                 val textLayoutResult = textMeasurer.measure(
                     text = text,
                     style = TextStyle(
-                        color = backgroundColor.copy(alpha = alphaAnimate),
                         fontSize = fontSize.sp,
-                        shadow = Shadow(
-                            color = Color.Black.copy(alpha = alphaAnimate),
-                            offset = Offset(x = 12.0f, y = 14.0f),
-                            blurRadius = 2f
-                        ),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.SemiBold,
                         fontFamily = FontFamily.SansSerif
@@ -212,6 +237,13 @@ private fun TetrisPage(tetrisViewState: TetrisViewState) {
                 )
                 drawText(
                     textLayoutResult = textLayoutResult,
+                    color = backgroundColor,
+                    alpha = alphaAnimate.value,
+                    shadow = Shadow(
+                        color = Color.Black.copy(alpha = alphaAnimate.value),
+                        offset = Offset(x = 14.0f, y = 14.0f),
+                        blurRadius = 8f
+                    ),
                     topLeft = Offset(
                         x = (leftPanelWith - textLayoutResult.size.width) / 2,
                         y = (leftPanelHeight - textLayoutResult.size.height) / 2

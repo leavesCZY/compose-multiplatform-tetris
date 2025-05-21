@@ -1,5 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application)
@@ -35,7 +36,7 @@ kotlin {
 android {
     namespace = "github.leavesczy.compose_tetris"
     compileSdk = 35
-    buildToolsVersion = "35.0.1"
+    buildToolsVersion = "36.0.0"
     defaultConfig {
         applicationId = "github.leavesczy.compose_tetris"
         minSdk = 21
@@ -53,7 +54,7 @@ android {
     signingConfigs {
         create("release") {
             storeFile =
-                File(project.rootProject.rootDir.absolutePath + File.separator + "doc" + File.separator + "key.jks")
+                File(project.rootProject.rootDir.absolutePath + File.separator + "key.jks")
             keyAlias = "leavesCZY"
             storePassword = "123456"
             keyPassword = "123456"
@@ -87,23 +88,38 @@ android {
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
     }
+    tasks.withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            optIn.addAll(
+                setOf(
+                    "androidx.compose.foundation.layout.ExperimentalLayoutApi"
+                )
+            )
+        }
+    }
     packaging {
         resources.excludes += setOf(
-            "META-INF/*.properties",
-            "META-INF/*.version",
-            "META-INF/{AL2.0,LGPL2.1}",
-            "META-INF/*.md",
+            "**/*.md",
+            "**/*.version",
+            "**/*.properties",
+            "**/LICENSE.txt",
+            "**/DebugProbesKt.bin",
+            "**/app-metadata.properties",
+            "**/kotlin-tooling-metadata.json",
+            "**/version-control-info.textproto",
+            "**/androidsupportmultidexversion.txt",
             "META-INF/CHANGES",
-            "DebugProbesKt.bin",
-            "kotlin-tooling-metadata.json"
+            "META-INF/{AL2.0,LGPL2.1}",
+            "META-INF/**/*.kotlin_module",
+            "META-INF/version-control-info.textproto",
         )
     }
 }
 
-enum class OS(val id: String) {
-    Linux("linux"),
-    Windows("windows"),
-    MacOS("macos")
+enum class OS {
+    Linux,
+    Windows,
+    MacOS
 }
 
 val currentOS: OS by lazy {

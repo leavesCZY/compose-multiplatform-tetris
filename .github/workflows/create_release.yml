@@ -91,10 +91,10 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
+          generateReleaseNotes: false
           artifactErrorsFailBuild: false
-          generateReleaseNotes: true
-          artifacts: "**/compose-multiplatform-tetris-android.apk,**/exe/*.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/deb/*.deb,**/rpm/*.rpm,**/dmg/*.dmg"
           body: "create by workflows"
+          artifacts: "**/compose-multiplatform-tetris-android.apk,**/exe/*.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/deb/*.deb,**/rpm/*.rpm,**/dmg/*.dmg"
           tag: ${{needs.current-time.outputs.currentTime}}
           name: ${{needs.current-time.outputs.currentTime}}
           token: ${{secrets.ACTION_TOKEN}}

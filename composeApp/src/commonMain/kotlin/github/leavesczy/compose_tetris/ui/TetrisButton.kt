@@ -5,7 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
@@ -38,13 +47,15 @@ import github.leavesczy.compose_tetris.logic.TransformationType
  * @Desc:
  */
 @Composable
-fun TetrisButton(tetrisLogic: TetrisLogic) {
+fun TetrisButton(
+    modifier: Modifier,
+    tetrisLogic: TetrisLogic
+) {
     BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        val controlButtonSize = maxHeight / 10
+        val controlButtonSize = maxHeight / 8
         val playButtonSize = maxHeight / 4
         val buttonSpace = maxHeight / 4
         Column(
@@ -171,7 +182,7 @@ private fun ControlButton(
     ) {
         Text(
             modifier = Modifier
-                .padding(all = 1.dp),
+                .padding(all = 3.dp),
             text = text,
             color = Color.Black,
             style = MaterialTheme.typography.bodySmall
@@ -209,7 +220,7 @@ private fun SoundButton(
     ) {
         Text(
             modifier = Modifier
-                .padding(all = 1.dp),
+                .padding(all = 3.dp),
             text = "Sound",
             color = Color.Black,
             style = MaterialTheme.typography.bodySmall
