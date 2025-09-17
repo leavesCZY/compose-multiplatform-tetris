@@ -11,6 +11,17 @@ plugins {
 
 kotlin {
     jvm("desktop")
+    jvmToolchain(21)
+    androidTarget {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
+    }
+    tasks.withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.value(JvmTarget.JVM_21)
+        }
+    }
     sourceSets {
         val desktopMain by getting
         androidMain.dependencies {
@@ -26,21 +37,16 @@ kotlin {
             implementation(compose.desktop.currentOs)
         }
     }
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_18)
-        }
-    }
 }
 
 android {
     namespace = "github.leavesczy.compose_tetris"
-    compileSdk = 35
+    compileSdk = 36
     buildToolsVersion = "36.0.0"
     defaultConfig {
         applicationId = "github.leavesczy.compose_tetris"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
         applicationVariants.all {
@@ -85,11 +91,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
+            jvmTarget.value(JvmTarget.JVM_21)
             optIn.addAll(
                 setOf(
                     "androidx.compose.foundation.layout.ExperimentalLayoutApi"

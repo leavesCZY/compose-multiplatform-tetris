@@ -1,1 +1,4 @@
 -ignorewarnings
+-optimizationpasses 10
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile

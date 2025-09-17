@@ -29,24 +29,24 @@ jobs:
     needs: current-time
 
     steps:
-      - if: matrix.os != 'macos-14'
-        name: setup jdk
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "18"
-          architecture: x64
-
       - if: matrix.os == 'macos-14'
         name: setup jdk
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "zulu"
-          java-version: "18"
+          java-version: "21"
+          architecture: x64
+
+      - if: matrix.os != 'macos-14'
+        name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          distribution: "zulu"
+          java-version: "21"
           architecture: x64
 
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: grant execute permission for gradlew
         run: chmod +x gradlew
@@ -59,7 +59,7 @@ jobs:
         run: ./gradlew packageReleaseDistributionForCurrentOS
 
       - if: matrix.os == 'windows-latest'
-        name: rename File
+        name: rename file
         run: |
           mv ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-1.0.0.exe ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-windows-x64.exe
 
@@ -72,18 +72,18 @@ jobs:
           filename: "compose-multiplatform-tetris-windows-x64.zip"
 
       - if: matrix.os == 'ubuntu-latest'
-        name: rename File
+        name: rename file
         run: |
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb    /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
 
       - if: matrix.os == 'macos-13'
-        name: rename File
+        name: rename file
         run: |
           mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-x64.dmg
 
       - if: matrix.os == 'macos-14'
-        name: rename File
+        name: rename file
         run: |
           mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-arm64.dmg
 

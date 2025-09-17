@@ -6,4 +6,4 @@ compose multiplatform 实现一个 Android + windows + macOS + linux 俄罗斯�
 
 - [不止 Android，Compose Multiplatform 初探](https://juejin.cn/post/7062533562460799013)
 
-![](https://github.com/leavesCZY/compose_tetris/assets/30774063/cfe1f660-66ac-41b9-8020-22d6322bbf26)
+![](https://github.com/user-attachments/assets/5ae81114-a8d2-4fcf-b050-81491e54d95d)
