@@ -18,5 +18,5 @@ enum class SoundType {
     Transformation,
     Rotate,
     Fall,
-    Clean,
+    Clean;
 }

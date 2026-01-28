@@ -5,11 +5,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -47,7 +43,7 @@ import kotlinx.coroutines.withContext
  * @Desc:
  */
 @Composable
-internal fun TetrisPage(
+fun TetrisPage(
     modifier: Modifier,
     tetrisLogic: TetrisLogic
 ) {
@@ -60,12 +56,7 @@ internal fun TetrisPage(
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.background)
                 .then(other = modifier),
-            contentWindowInsets = WindowInsets(
-                left = 0.dp,
-                top = 0.dp,
-                right = 0.dp,
-                bottom = 0.dp
-            ),
+            contentWindowInsets = WindowInsets(),
             containerColor = Color.Transparent
         ) { innerPadding ->
             Column(
@@ -77,15 +68,15 @@ internal fun TetrisPage(
             ) {
                 TetrisPage(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .weight(weight = 11f)
+                        .fillMaxWidth()
                         .padding(horizontal = 30.dp),
                     tetrisViewState = tetrisLogic.tetrisViewState
                 )
                 TetrisButton(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(weight = 5f),
+                        .weight(weight = 5f)
+                        .fillMaxWidth(),
                     tetrisLogic = tetrisLogic
                 )
             }
@@ -270,42 +261,54 @@ private fun DrawScope.drawBorder(
     height: Float,
     borderWidth: Float
 ) {
-    val leftBottom = Offset(0f, height)
-    val rightTop = Offset(width, 0f)
-    val rightBottom = Offset(width, height)
+    val leftBottom = Offset(x = 0f, y = height)
+    val rightTop = Offset(x = width, y = 0f)
+    val rightBottom = Offset(x = width, y = height)
     val path = Path().apply {
-        lineTo(borderWidth, borderWidth)
-        lineTo(rightTop.x - borderWidth, borderWidth)
-        lineTo(rightTop.x, rightTop.y)
+        lineTo(x = borderWidth, y = borderWidth)
+        lineTo(x = rightTop.x - borderWidth, y = borderWidth)
+        lineTo(x = rightTop.x, y = rightTop.y)
         close()
     }
-    drawPath(path, Color.Black.copy(alpha = 0.7f))
+    drawPath(
+        path = path,
+        color = Color.Black.copy(alpha = 0.7f)
+    )
     path.apply {
         reset()
-        lineTo(borderWidth, borderWidth)
-        lineTo(borderWidth, leftBottom.y - borderWidth)
-        lineTo(leftBottom.x, leftBottom.y)
+        lineTo(x = borderWidth, y = borderWidth)
+        lineTo(x = borderWidth, y = leftBottom.y - borderWidth)
+        lineTo(x = leftBottom.x, y = leftBottom.y)
         close()
     }
-    drawPath(path, Color.Black.copy(alpha = 0.5f))
+    drawPath(
+        path = path,
+        color = Color.Black.copy(alpha = 0.5f)
+    )
     path.apply {
         reset()
-        moveTo(leftBottom.x, leftBottom.y)
-        relativeLineTo(borderWidth, -borderWidth)
-        lineTo(rightBottom.x - borderWidth, rightBottom.y - borderWidth)
-        lineTo(rightBottom.x, rightBottom.y)
+        moveTo(x = leftBottom.x, y = leftBottom.y)
+        relativeLineTo(dx = borderWidth, dy = -borderWidth)
+        lineTo(x = rightBottom.x - borderWidth, y = rightBottom.y - borderWidth)
+        lineTo(x = rightBottom.x, y = rightBottom.y)
         close()
     }
-    drawPath(path, Color.Black.copy(alpha = 0.7f))
+    drawPath(
+        path = path,
+        color = Color.Black.copy(alpha = 0.7f)
+    )
     path.apply {
         reset()
-        moveTo(rightTop.x, rightTop.y)
-        relativeLineTo(-borderWidth, borderWidth)
-        lineTo(rightBottom.x - borderWidth, rightBottom.y - borderWidth)
-        lineTo(rightBottom.x, rightBottom.y)
+        moveTo(x = rightTop.x, y = rightTop.y)
+        relativeLineTo(dx = -borderWidth, dy = borderWidth)
+        lineTo(x = rightBottom.x - borderWidth, y = rightBottom.y - borderWidth)
+        lineTo(x = rightBottom.x, y = rightBottom.y)
         close()
     }
-    drawPath(path, Color.Black.copy(alpha = 0.5f))
+    drawPath(
+        path = path,
+        color = Color.Black.copy(alpha = 0.5f)
+    )
 }
 
 private fun DrawScope.drawRightPanel(
@@ -341,7 +344,13 @@ private fun DrawScope.drawRightPanel(
 }
 
 private fun DrawScope.drawBrick(bgColor: Color, brickSize: Float, brickColor: Color) {
-    drawRect(color = brickColor, size = Size(width = brickSize, height = brickSize))
+    drawRect(
+        color = brickColor,
+        size = Size(
+            width = brickSize,
+            height = brickSize
+        )
+    )
     val strokeWidth = brickSize / 9f
     translate(left = strokeWidth, top = strokeWidth) {
         drawRect(

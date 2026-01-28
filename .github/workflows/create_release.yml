@@ -23,30 +23,20 @@ jobs:
   create-release-distribution:
     strategy:
       matrix:
-        os: [ windows-latest , ubuntu-latest , macos-13 , macos-14 ]
+        os: [ windows-latest , ubuntu-latest , macos-15-intel , macos-latest ]
     runs-on: ${{ matrix.os }}
     name: create release distribution
     needs: current-time
 
     steps:
-      - if: matrix.os == 'macos-14'
-        name: setup jdk
+      - name: setup jdk
         uses: actions/setup-java@v5
         with:
-          distribution: "zulu"
           java-version: "21"
-          architecture: x64
-
-      - if: matrix.os != 'macos-14'
-        name: setup jdk
-        uses: actions/setup-java@v5
-        with:
           distribution: "zulu"
-          java-version: "21"
-          architecture: x64
 
       - name: checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: grant execute permission for gradlew
         run: chmod +x gradlew
@@ -77,12 +67,12 @@ jobs:
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
           mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb    /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
 
-      - if: matrix.os == 'macos-13'
+      - if: matrix.os == 'macos-15-intel'
         name: rename file
         run: |
           mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-x64.dmg
 
-      - if: matrix.os == 'macos-14'
+      - if: matrix.os == 'macos-latest'
         name: rename file
         run: |
           mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-arm64.dmg
@@ -90,11 +80,11 @@ jobs:
       - name: create a release
         uses: ncipollo/release-action@v1
         with:
-          allowUpdates: true
-          generateReleaseNotes: false
-          artifactErrorsFailBuild: false
-          body: "create by workflows"
           artifacts: "**/compose-multiplatform-tetris-android.apk,**/exe/*.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/deb/*.deb,**/rpm/*.rpm,**/dmg/*.dmg"
-          tag: ${{needs.current-time.outputs.currentTime}}
-          name: ${{needs.current-time.outputs.currentTime}}
+          body: "create by workflows"
+          allowUpdates: true
+          artifactErrorsFailBuild: false
+          generateReleaseNotes: false
           token: ${{secrets.ACTION_TOKEN}}
+          name: ${{needs.current-time.outputs.currentTime}}
+          tag: ${{needs.current-time.outputs.currentTime}}

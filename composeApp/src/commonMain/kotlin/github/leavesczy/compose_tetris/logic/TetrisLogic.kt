@@ -3,12 +3,7 @@ package github.leavesczy.compose_tetris.logic
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /**
  * @Author: leavesCZY
@@ -66,11 +61,11 @@ class TetrisLogic(
         }
     }
 
-    private suspend fun onWelcome() {
+    private fun onWelcome() {
         startClearScreen(nextStatus = GameStatus.Welcome)
     }
 
-    private suspend fun onGameOver() {
+    private fun onGameOver() {
         startClearScreen(nextStatus = GameStatus.GameOver)
     }
 
@@ -141,7 +136,7 @@ class TetrisLogic(
         }
     }
 
-    private suspend fun startClearScreen(nextStatus: GameStatus) {
+    private fun startClearScreen(nextStatus: GameStatus) {
         cancelDownJob()
         if (clearScreenJob?.isActive == true) {
             return
@@ -156,12 +151,12 @@ class TetrisLogic(
                         brickArray[y][x] = 1
                     }
                     dispatchState(
-                        tetrisViewState.copy(
+                        newState = tetrisViewState.copy(
                             tetris = Tetris(),
                             gameStatus = GameStatus.ScreenClearing
                         )
                     )
-                    delay(CLEAR_SCREEN_SPEED)
+                    delay(timeMillis = CLEAR_SCREEN_SPEED)
                 }
                 for (y in 0 until height) {
                     val brickArray = tetrisViewState.brickArray
@@ -169,19 +164,19 @@ class TetrisLogic(
                         brickArray[y][x] = 0
                     }
                     dispatchState(
-                        tetrisViewState.copy(
+                        newState = tetrisViewState.copy(
                             tetris = Tetris(),
                             gameStatus = GameStatus.ScreenClearing
                         )
                     )
-                    delay(CLEAR_SCREEN_SPEED)
+                    delay(timeMillis = CLEAR_SCREEN_SPEED)
                 }
             }
             clearScreen()
             clearScreen()
-            delay(100)
+            delay(timeMillis = 100L)
             dispatchState(
-                TetrisViewState().copy(
+                newState = TetrisViewState().copy(
                     gameStatus = nextStatus,
                     soundEnable = tetrisViewState.soundEnable
                 )
@@ -231,7 +226,9 @@ class TetrisLogic(
             is Action.Transformation -> {
                 if (tetrisViewState.isRunning) {
                     when (action.transformationType) {
-                        TransformationType.Left, TransformationType.Right, TransformationType.FastDown -> {
+                        TransformationType.Left,
+                        TransformationType.Right,
+                        TransformationType.FastDown -> {
                             playSound(soundType = SoundType.Transformation)
                         }
 
@@ -250,10 +247,7 @@ class TetrisLogic(
                 }
             }
 
-            Action.Background -> {
-
-            }
-
+            Action.Background,
             Action.Resume -> {
 
             }

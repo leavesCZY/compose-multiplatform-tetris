@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.sp
  * @Desc:
  */
 private val BackgroundColorLight = Color(color = 0xF2FFD600)
-private val OnBackgroundColorLight = Color(color = 0xff9ead86)
-internal val BrickColorAlpha = Color.Black.copy(alpha = 0.2f)
-internal val BrickColorFill = Color.Black.copy(alpha = 0.9f)
+private val OnBackgroundColorLight = Color(color = 0xFF9EAD86)
+internal val BrickColorAlpha = Color(color = 0x33000000)
+internal val BrickColorFill = Color(color = 0xE6000000)
 internal val ButtonNormalColor = Brush.linearGradient(
     colors = listOf(
         Color(color = 0xFFF81E0E),

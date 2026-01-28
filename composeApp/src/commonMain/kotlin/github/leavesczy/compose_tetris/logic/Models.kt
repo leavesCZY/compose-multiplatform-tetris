@@ -32,53 +32,53 @@ data class Tetris(
         private val allShapes = listOf(
             //I
             listOf(
-                listOf(Location(0, 3), Location(1, 3), Location(2, 3), Location(3, 3)),
-                listOf(Location(1, 0), Location(1, 1), Location(1, 2), Location(1, 3)),
+                listOf(Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3), Location(x = 3, y = 3)),
+                listOf(Location(x = 1, y = 0), Location(x = 1, y = 1), Location(x = 1, y = 2), Location(x = 1, y = 3)),
             ),
             //S
             listOf(
-                listOf(Location(0, 3), Location(1, 2), Location(1, 3), Location(2, 2)),
-                listOf(Location(0, 1), Location(0, 2), Location(1, 2), Location(1, 3)),
+                listOf(Location(x = 0, y = 3), Location(x = 1, y = 2), Location(x = 1, y = 3), Location(x = 2, y = 2)),
+                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 1, y = 3)),
             ),
             //Z
             listOf(
-                listOf(Location(0, 2), Location(1, 2), Location(1, 3), Location(2, 3)),
-                listOf(Location(0, 2), Location(0, 3), Location(1, 1), Location(1, 2)),
+                listOf(Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 1, y = 3), Location(x = 2, y = 3)),
+                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 1), Location(x = 1, y = 2)),
             ),
             //L
             listOf(
-                listOf(Location(0, 1), Location(0, 2), Location(0, 3), Location(1, 3)),
-                listOf(Location(0, 2), Location(0, 3), Location(1, 2), Location(2, 2)),
-                listOf(Location(0, 1), Location(1, 1), Location(1, 2), Location(1, 3)),
-                listOf(Location(0, 3), Location(1, 3), Location(2, 3), Location(2, 2)),
+                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 3)),
+                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 2), Location(x = 2, y = 2)),
+                listOf(Location(x = 0, y = 1), Location(x = 1, y = 1), Location(x = 1, y = 2), Location(x = 1, y = 3)),
+                listOf(Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3), Location(x = 2, y = 2)),
             ),
             //O
             listOf(
-                listOf(Location(0, 2), Location(0, 3), Location(1, 2), Location(1, 3)),
+                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 2), Location(x = 1, y = 3)),
             ),
             //J
             listOf(
-                listOf(Location(0, 3), Location(1, 1), Location(1, 2), Location(1, 3)),
-                listOf(Location(0, 2), Location(0, 3), Location(1, 3), Location(2, 3)),
-                listOf(Location(0, 1), Location(0, 2), Location(0, 3), Location(1, 1)),
-                listOf(Location(0, 2), Location(1, 2), Location(2, 2), Location(2, 3)),
+                listOf(Location(x = 0, y = 3), Location(x = 1, y = 1), Location(x = 1, y = 2), Location(x = 1, y = 3)),
+                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3)),
+                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 1)),
+                listOf(Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 2, y = 2), Location(x = 2, y = 3)),
             ),
             //T
             listOf(
-                listOf(Location(0, 2), Location(1, 2), Location(2, 2), Location(1, 3)),
-                listOf(Location(1, 1), Location(0, 2), Location(1, 2), Location(1, 3)),
-                listOf(Location(1, 2), Location(0, 3), Location(1, 3), Location(2, 3)),
-                listOf(Location(0, 1), Location(0, 2), Location(0, 3), Location(1, 2)),
+                listOf(Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 2, y = 2), Location(x = 1, y = 3)),
+                listOf(Location(x = 1, y = 1), Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 1, y = 3)),
+                listOf(Location(x = 1, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3)),
+                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 2)),
             ),
         )
 
         operator fun invoke(): Tetris {
             val shapes = allShapes.random()
-            val type = Random.nextInt(0, shapes.size)
+            val type = Random.nextInt(from = 0, until = shapes.size)
             return Tetris(
                 shapes = shapes,
                 type = type,
-                offset = Location(Random.nextInt(0, BRICK_WIDTH - 3), -4)
+                offset = Location(x = Random.nextInt(from = 0, until = BRICK_WIDTH - 3), y = -4)
             )
         }
 
@@ -107,16 +107,12 @@ data class TetrisViewState(
 
     companion object {
 
-        private val BrickArrayCache = Array(BRICK_HEIGHT) {
-            IntArray(BRICK_WIDTH) {
-                0
-            }
+        private val BrickArrayCache = Array(size = BRICK_HEIGHT) {
+            IntArray(size = BRICK_WIDTH)
         }
 
-        private val ScreenMatrixCache = Array(BRICK_HEIGHT) {
-            IntArray(BRICK_WIDTH) {
-                0
-            }
+        private val ScreenMatrixCache = Array(size = BRICK_HEIGHT) {
+            IntArray(size = BRICK_WIDTH)
         }
 
         private fun Array<IntArray>.clearBrickArray() {
@@ -176,11 +172,11 @@ data class TetrisViewState(
             }
             for (location in tetris.shape) {
                 val realX = location.x + tetris.offset.x
-                if (realX < 0 || realX >= width) {
+                if (realX !in 0..<width) {
                     continue
                 }
                 val realY = location.y + tetris.offset.y
-                if (realY < 0 || realY >= height) {
+                if (realY !in 0..<height) {
                     continue
                 }
                 ScreenMatrixCache[realY][realX] = 1
@@ -192,20 +188,32 @@ data class TetrisViewState(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
         other as TetrisViewState
+        if (soundEnable != other.soundEnable) return false
         if (!brickArray.contentDeepEquals(other.brickArray)) return false
         if (tetris != other.tetris) return false
         if (gameStatus != other.gameStatus) return false
-        if (soundEnable != other.soundEnable) return false
         if (nextTetris != other.nextTetris) return false
+        if (width != other.width) return false
+        if (height != other.height) return false
+        if (isRunning != other.isRunning) return false
+        if (isPaused != other.isPaused) return false
+        if (canStartGame != other.canStartGame) return false
+        if (!screenMatrix.contentDeepEquals(other.screenMatrix)) return false
         return true
     }
 
     override fun hashCode(): Int {
-        var result = brickArray.contentDeepHashCode()
+        var result = soundEnable.hashCode()
+        result = 31 * result + brickArray.contentDeepHashCode()
         result = 31 * result + tetris.hashCode()
         result = 31 * result + gameStatus.hashCode()
-        result = 31 * result + soundEnable.hashCode()
         result = 31 * result + nextTetris.hashCode()
+        result = 31 * result + width
+        result = 31 * result + height
+        result = 31 * result + isRunning.hashCode()
+        result = 31 * result + isPaused.hashCode()
+        result = 31 * result + canStartGame.hashCode()
+        result = 31 * result + screenMatrix.contentDeepHashCode()
         return result
     }
 
@@ -214,21 +222,30 @@ data class TetrisViewState(
 @Stable
 sealed class Action {
 
+    @Stable
     data object Welcome : Action()
 
+    @Stable
     data object Start : Action()
 
+    @Stable
     data object Pause : Action()
 
+    @Stable
     data object Reset : Action()
 
+    @Stable
     data object Sound : Action()
 
+    @Stable
     data object Background : Action()
 
+    @Stable
     data object Resume : Action()
 
+    @Stable
     data class Transformation(val transformationType: TransformationType) : Action()
+
 }
 
 @Stable
@@ -271,30 +288,38 @@ fun TetrisViewState.onTransformation(transformationType: TransformationType): Te
 
 private fun TetrisViewState.onLeft(): TetrisViewState? {
     return copy(
-        tetris = tetris.copy(offset = Location(tetris.offset.x - 1, tetris.offset.y))
-    ).takeIf { it.isValidInMatrix() }
+        tetris = tetris.copy(offset = Location(x = tetris.offset.x - 1, y = tetris.offset.y))
+    ).takeIf {
+        it.isValidInMatrix()
+    }
 }
 
 private fun TetrisViewState.onRight(): TetrisViewState? {
     return copy(
-        tetris = tetris.copy(offset = Location(tetris.offset.x + 1, tetris.offset.y))
-    ).takeIf { it.isValidInMatrix() }
+        tetris = tetris.copy(offset = Location(x = tetris.offset.x + 1, y = tetris.offset.y))
+    ).takeIf {
+        it.isValidInMatrix()
+    }
 }
 
 private fun TetrisViewState.onDown(): TetrisViewState? {
     return copy(
         tetris = tetris.copy(
-            offset = Location(tetris.offset.x, tetris.offset.y + 1)
+            offset = Location(x = tetris.offset.x, y = tetris.offset.y + 1)
         )
-    ).takeIf { it.isValidInMatrix() }
+    ).takeIf {
+        it.isValidInMatrix()
+    }
 }
 
 private fun TetrisViewState.onFastDown(): TetrisViewState? {
     return copy(
         tetris = tetris.copy(
-            offset = Location(tetris.offset.x, tetris.offset.y + 2)
+            offset = Location(x = tetris.offset.x, y = tetris.offset.y + 2)
         )
-    ).takeIf { it.isValidInMatrix() }
+    ).takeIf {
+        it.isValidInMatrix()
+    }
 }
 
 private fun TetrisViewState.onFall(): TetrisViewState? {
@@ -317,7 +342,9 @@ private fun TetrisViewState.onRotate(): TetrisViewState? {
         tetris = tetris.copy(
             type = nextType,
         )
-    ).adjustOffset().takeIf { it.isValidInMatrix() }
+    ).adjustOffset().takeIf {
+        it.isValidInMatrix()
+    }
 }
 
 private fun TetrisViewState.adjustOffset(): TetrisViewState {
@@ -363,7 +390,7 @@ private fun TetrisViewState.isValidInMatrix(): Boolean {
     val offsetY = tetris.offset.y
     for (sh in tetris.shape) {
         val realX = sh.x + offsetX
-        if (realX < 0 || realX >= width) {
+        if (realX !in 0..<width) {
             return false
         }
         val realY = sh.y + offsetY
@@ -420,7 +447,7 @@ private fun TetrisViewState.canDown(): Boolean {
     val offsetY = tetris.offset.y
     for (sp in tetris.shape) {
         val realX = sp.x + offsetX
-        if (realX < 0 || realX >= width) {
+        if (realX !in 0..<width) {
             return false
         }
         val realY = sp.y + offsetY
@@ -441,7 +468,7 @@ private fun TetrisViewState.clearIfNeed(): TetrisViewState? {
     var index = height - 1
     var removed = false
     while (true) {
-        if (index < 0 || index >= height) {
+        if (index !in 0..<height) {
             break
         }
         val lastLine = brickArray[index]

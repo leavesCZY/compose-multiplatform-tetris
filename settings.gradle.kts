@@ -18,4 +18,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "compose-multiplatform-tetris"
+include(":androidApp")
 include(":composeApp")
