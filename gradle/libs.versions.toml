@@ -1,10 +1,10 @@
 [versions]
 agp = "8.12.3"
-jetbrains-kotlin = "2.3.0"
-jetbrains-compose-multiplatform = "1.10.0"
+jetbrains-kotlin = "2.3.10"
+jetbrains-compose-multiplatform = "1.10.1"
 
 androidx-appcompat = "1.7.1"
-androidx-activity-compose = "1.12.2"
+androidx-activity-compose = "1.12.3"
 
 compose-material3 = "1.9.0"
 compose-material-icons-extended = "1.7.3"

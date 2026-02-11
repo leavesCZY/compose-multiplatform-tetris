@@ -1,4 +1,4 @@
-name: create release
+name: Build & Release
 
 on:
   push:
@@ -6,85 +6,102 @@ on:
     paths:
       - "**/workflows-trigger.properties"
 
-jobs:
+permissions:
+  contents: write
 
-  current-time:
+jobs:
+  get-time:
     runs-on: ubuntu-latest
-    name: get current time
     outputs:
-      currentTime: ${{steps.currentTime.outputs.formattedTime}}
+      release_tag: ${{ steps.time.outputs.formattedTime }}
     steps:
-      - id: currentTime
+      - id: time
         uses: josStorer/get-current-time@v2
         with:
           format: YYYY.MM.DD
           utcOffset: "+08:00"
 
-  create-release-distribution:
+  build-and-package:
+    needs: get-time
     strategy:
       matrix:
-        os: [ windows-latest , ubuntu-latest , macos-15-intel , macos-latest ]
+        include:
+          - os: windows-latest
+            platform: windows-x64
+          - os: ubuntu-latest
+            platform: linux-x64
+          - os: macos-15-intel
+            platform: mac-x64
+          - os: macos-latest
+            platform: mac-arm64
     runs-on: ${{ matrix.os }}
-    name: create release distribution
-    needs: current-time
+    name: Build ${{ matrix.platform }}
 
     steps:
-      - name: setup jdk
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup JDK 21
         uses: actions/setup-java@v5
         with:
           java-version: "21"
           distribution: "zulu"
 
-      - name: checkout
-        uses: actions/checkout@v6
-
-      - name: grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - if: matrix.os == 'windows-latest'
-        name: assembleRelease
-        run: ./gradlew assembleRelease
-
-      - name: packageReleaseDistributionForCurrentOS
+      - name: Package Release Distribution
         run: ./gradlew packageReleaseDistributionForCurrentOS
 
-      - if: matrix.os == 'windows-latest'
-        name: rename file
-        run: |
-          mv ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-1.0.0.exe ./composeApp/build/compose/binaries/main-release/exe/compose-multiplatform-tetris-windows-x64.exe
-
-      - if: matrix.os == 'windows-latest'
-        name: zip AppImage
-        uses: thedoctor0/zip-release@0.7.6
-        with:
-          type: "zip"
-          directory: "./composeApp/build/compose/binaries/main-release/app"
-          filename: "compose-multiplatform-tetris-windows-x64.zip"
-
       - if: matrix.os == 'ubuntu-latest'
-        name: rename file
-        run: |
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-1.0.0-1.x86_64.rpm /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/rpm/compose-multiplatform-tetris-linux-x86_64.rpm
-          mv /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris_1.0.0_amd64.deb    /home/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/deb/compose-multiplatform-tetris-linux-amd64.deb
+        name: Assemble Android Release
+        run: ./gradlew assembleRelease
 
-      - if: matrix.os == 'macos-15-intel'
-        name: rename file
+      - name: Rename and Prepare Artifacts
+        shell: bash
         run: |
-          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-x64.dmg
+          OUT_DIR="composeApp/build/compose/binaries/main-release"
+          mkdir -p ./ready-to-upload
+          
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            mv $OUT_DIR/exe/*.exe ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.exe
+            7z a -tzip ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.zip ./$OUT_DIR/app/*
+          
+          elif [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+            mv $OUT_DIR/rpm/*.rpm ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.rpm
+            mv $OUT_DIR/deb/*.deb ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.deb
+            mv composeApp/build/outputs/apk/release/*.apk ./ready-to-upload/compose-multiplatform-tetris-android.apk
+          
+          else
+            mv $OUT_DIR/dmg/*.dmg ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.dmg
+          fi
 
-      - if: matrix.os == 'macos-latest'
-        name: rename file
-        run: |
-          mv /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-1.0.0.dmg /Users/runner/work/compose-multiplatform-tetris/compose-multiplatform-tetris/composeApp/build/compose/binaries/main-release/dmg/compose-multiplatform-tetris-mac-arm64.dmg
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: artifacts-${{ matrix.platform }}
+          path: ./ready-to-upload/*
+          retention-days: 1
 
-      - name: create a release
+  release:
+    needs: [ get-time, build-and-package ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: ./release-artifacts
+          pattern: artifacts-*
+          merge-multiple: true
+
+      - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "**/compose-multiplatform-tetris-android.apk,**/exe/*.exe,**/compose-multiplatform-tetris-windows-x64.zip,**/deb/*.deb,**/rpm/*.rpm,**/dmg/*.dmg"
-          body: "create by workflows"
           allowUpdates: true
-          artifactErrorsFailBuild: false
           generateReleaseNotes: false
-          token: ${{secrets.ACTION_TOKEN}}
-          name: ${{needs.current-time.outputs.currentTime}}
-          tag: ${{needs.current-time.outputs.currentTime}}
+          artifactErrorsFailBuild: true
+          body: "Auto-generated multi-platform release."
+          artifacts: "./release-artifacts/*"
+          tag: ${{ needs.get-time.outputs.release_tag }}
+          name: ${{ needs.get-time.outputs.release_tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}
