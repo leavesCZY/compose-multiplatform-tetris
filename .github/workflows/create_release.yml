@@ -70,7 +70,7 @@ jobs:
           elif [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
             mv $OUT_DIR/rpm/*.rpm ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.rpm
             mv $OUT_DIR/deb/*.deb ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.deb
-            mv composeApp/build/outputs/apk/release/*.apk ./ready-to-upload/compose-multiplatform-tetris-android.apk
+            mv androidApp/build/outputs/apk/release/*.apk ./ready-to-upload/compose-multiplatform-tetris-android.apk
           
           else
             mv $OUT_DIR/dmg/*.dmg ./ready-to-upload/compose-multiplatform-tetris-${{ matrix.platform }}.dmg
