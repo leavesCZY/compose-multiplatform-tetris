@@ -1,11 +1,20 @@
-package github.leavesczy.compose_tetris.ui
+package github.leavesczy.compose_tetris.platform.ui
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
@@ -28,9 +37,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import github.leavesczy.compose_tetris.logic.Action
-import github.leavesczy.compose_tetris.logic.TetrisLogic
-import github.leavesczy.compose_tetris.logic.TransformationType
+import github.leavesczy.compose_tetris.platform.logic.Action
+import github.leavesczy.compose_tetris.platform.logic.TetrisLogic
+import github.leavesczy.compose_tetris.platform.logic.TransformationType
 
 /**
  * @Author: leavesCZY

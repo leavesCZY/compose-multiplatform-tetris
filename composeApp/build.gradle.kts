@@ -18,7 +18,7 @@ kotlin {
         }
     }
     android {
-        namespace = "github.leavesczy.compose_tetris"
+        namespace = "github.leavesczy.compose_tetris.platform"
         compileSdk = 36
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)

@@ -1,4 +1,4 @@
-package github.leavesczy.compose_tetris.logic
+package github.leavesczy.compose_tetris.platform.logic
 
 /**
  * @Author: leavesCZY

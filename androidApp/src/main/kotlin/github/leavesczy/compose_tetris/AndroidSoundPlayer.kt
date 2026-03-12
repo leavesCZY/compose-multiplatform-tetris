@@ -3,8 +3,8 @@ package github.leavesczy.compose_tetris
 import android.app.Application
 import android.media.AudioManager
 import android.media.SoundPool
-import github.leavesczy.compose_tetris.logic.SoundPlayer
-import github.leavesczy.compose_tetris.logic.SoundType
+import github.leavesczy.compose_tetris.platform.logic.SoundPlayer
+import github.leavesczy.compose_tetris.platform.logic.SoundType
 
 /**
  * @Author: leavesCZY

@@ -1,7 +1,7 @@
-package github.leavesczy.compose_tetris
+package github.leavesczy.compose_tetris.platform
 
-import github.leavesczy.compose_tetris.logic.SoundPlayer
-import github.leavesczy.compose_tetris.logic.SoundType
+import github.leavesczy.compose_tetris.platform.logic.SoundPlayer
+import github.leavesczy.compose_tetris.platform.logic.SoundType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch

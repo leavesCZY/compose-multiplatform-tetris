@@ -1,7 +1,7 @@
-package github.leavesczy.compose_tetris.logic
+package github.leavesczy.compose_tetris.platform.logic
 
 import androidx.compose.runtime.Stable
-import github.leavesczy.compose_tetris.getScreenSize
+import github.leavesczy.compose_tetris.platform.getScreenSize
 import kotlin.random.Random
 
 /**
@@ -32,43 +32,138 @@ data class Tetris(
         private val allShapes = listOf(
             //I
             listOf(
-                listOf(Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3), Location(x = 3, y = 3)),
-                listOf(Location(x = 1, y = 0), Location(x = 1, y = 1), Location(x = 1, y = 2), Location(x = 1, y = 3)),
+                listOf(
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 3),
+                    Location(x = 2, y = 3),
+                    Location(x = 3, y = 3)
+                ),
+                listOf(
+                    Location(x = 1, y = 0),
+                    Location(x = 1, y = 1),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3)
+                ),
             ),
             //S
             listOf(
-                listOf(Location(x = 0, y = 3), Location(x = 1, y = 2), Location(x = 1, y = 3), Location(x = 2, y = 2)),
-                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 1, y = 3)),
+                listOf(
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3),
+                    Location(x = 2, y = 2)
+                ),
+                listOf(
+                    Location(x = 0, y = 1),
+                    Location(x = 0, y = 2),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3)
+                ),
             ),
             //Z
             listOf(
-                listOf(Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 1, y = 3), Location(x = 2, y = 3)),
-                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 1), Location(x = 1, y = 2)),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3),
+                    Location(x = 2, y = 3)
+                ),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 1),
+                    Location(x = 1, y = 2)
+                ),
             ),
             //L
             listOf(
-                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 3)),
-                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 2), Location(x = 2, y = 2)),
-                listOf(Location(x = 0, y = 1), Location(x = 1, y = 1), Location(x = 1, y = 2), Location(x = 1, y = 3)),
-                listOf(Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3), Location(x = 2, y = 2)),
+                listOf(
+                    Location(x = 0, y = 1),
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 3)
+                ),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 2),
+                    Location(x = 2, y = 2)
+                ),
+                listOf(
+                    Location(x = 0, y = 1),
+                    Location(x = 1, y = 1),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3)
+                ),
+                listOf(
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 3),
+                    Location(x = 2, y = 3),
+                    Location(x = 2, y = 2)
+                ),
             ),
             //O
             listOf(
-                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 2), Location(x = 1, y = 3)),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3)
+                ),
             ),
             //J
             listOf(
-                listOf(Location(x = 0, y = 3), Location(x = 1, y = 1), Location(x = 1, y = 2), Location(x = 1, y = 3)),
-                listOf(Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3)),
-                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 1)),
-                listOf(Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 2, y = 2), Location(x = 2, y = 3)),
+                listOf(
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 1),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3)
+                ),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 3),
+                    Location(x = 2, y = 3)
+                ),
+                listOf(
+                    Location(x = 0, y = 1),
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 1)
+                ),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 1, y = 2),
+                    Location(x = 2, y = 2),
+                    Location(x = 2, y = 3)
+                ),
             ),
             //T
             listOf(
-                listOf(Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 2, y = 2), Location(x = 1, y = 3)),
-                listOf(Location(x = 1, y = 1), Location(x = 0, y = 2), Location(x = 1, y = 2), Location(x = 1, y = 3)),
-                listOf(Location(x = 1, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 3), Location(x = 2, y = 3)),
-                listOf(Location(x = 0, y = 1), Location(x = 0, y = 2), Location(x = 0, y = 3), Location(x = 1, y = 2)),
+                listOf(
+                    Location(x = 0, y = 2),
+                    Location(x = 1, y = 2),
+                    Location(x = 2, y = 2),
+                    Location(x = 1, y = 3)
+                ),
+                listOf(
+                    Location(x = 1, y = 1),
+                    Location(x = 0, y = 2),
+                    Location(x = 1, y = 2),
+                    Location(x = 1, y = 3)
+                ),
+                listOf(
+                    Location(x = 1, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 3),
+                    Location(x = 2, y = 3)
+                ),
+                listOf(
+                    Location(x = 0, y = 1),
+                    Location(x = 0, y = 2),
+                    Location(x = 0, y = 3),
+                    Location(x = 1, y = 2)
+                ),
             ),
         )
 

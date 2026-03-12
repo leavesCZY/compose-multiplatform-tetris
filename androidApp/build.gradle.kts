@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.compose.compiler)
 }
 
@@ -17,13 +16,10 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
-        applicationVariants.all {
-            outputs.all {
-                if (this is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
-                    outputFileName = "compose-multiplatform-tetris-android.apk"
-                }
-            }
-        }
+    }
+    val basePluginExtension = project.extensions.getByType(BasePluginExtension::class.java)
+    basePluginExtension.apply {
+        archivesName.set("compose-multiplatform-tetris-android")
     }
     buildFeatures.apply {
         compose = true
@@ -47,7 +43,8 @@ android {
             isShrinkResources = false
             isDebuggable = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
         release {
@@ -56,7 +53,8 @@ android {
             isShrinkResources = true
             isDebuggable = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -79,16 +77,15 @@ android {
             "**/*.md",
             "**/*.version",
             "**/*.properties",
+            "**/*.kotlin_module",
+            "**/CHANGES",
             "**/LICENSE.txt",
+            "**/{AL2.0,LGPL2.1}",
             "**/DebugProbesKt.bin",
             "**/app-metadata.properties",
             "**/kotlin-tooling-metadata.json",
             "**/version-control-info.textproto",
             "**/androidsupportmultidexversion.txt",
-            "META-INF/CHANGES",
-            "META-INF/{AL2.0,LGPL2.1}",
-            "META-INF/**/*.kotlin_module",
-            "META-INF/version-control-info.textproto",
         )
     }
 }

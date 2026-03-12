@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import github.leavesczy.compose_tetris.logic.Action
-import github.leavesczy.compose_tetris.logic.TetrisLogic
-import github.leavesczy.compose_tetris.ui.TetrisPage
+import github.leavesczy.compose_tetris.platform.logic.Action
+import github.leavesczy.compose_tetris.platform.logic.TetrisLogic
+import github.leavesczy.compose_tetris.platform.ui.TetrisPage
 
 /**
  * @Author: leavesCZY
