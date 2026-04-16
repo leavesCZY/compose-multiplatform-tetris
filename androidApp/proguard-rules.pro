@@ -1,4 +1,7 @@
--ignorewarnings
--optimizationpasses 10
+-optimizationpasses 20
+-processkotlinnullchecks remove
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
+-obfuscationdictionary dictionary.txt
+-packageobfuscationdictionary dictionary.txt
+-classobfuscationdictionary dictionary.txt

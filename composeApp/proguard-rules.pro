@@ -1,4 +1,7 @@
 -ignorewarnings
--optimizationpasses 10
+-optimizationpasses 20
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
+-obfuscationdictionary ../androidApp/dictionary.txt
+-packageobfuscationdictionary ../androidApp/dictionary.txt
+-classobfuscationdictionary ../androidApp/dictionary.txt

@@ -1,4 +1,4 @@
-package github.leavesczy.compose_tetris.platform.ui
+package github.leavesczy.compose_tetris.base.ui
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -37,19 +37,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import github.leavesczy.compose_tetris.platform.logic.Action
-import github.leavesczy.compose_tetris.platform.logic.TetrisLogic
-import github.leavesczy.compose_tetris.platform.logic.TransformationType
+import github.leavesczy.compose_tetris.base.logic.Action
+import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
+import github.leavesczy.compose_tetris.base.logic.TransformationType
 
 /**
  * @Author: leavesCZY
- * @Date: 2021/5/28 17:10
+ * @Date: 2026/4/16 20:04
  * @Desc:
  */
 @Composable
 fun TetrisButton(
     modifier: Modifier,
-    tetrisLogic: TetrisLogic
+    tetrisViewModel: TetrisViewModel
 ) {
     BoxWithConstraints(
         modifier = modifier,
@@ -79,28 +79,28 @@ fun TetrisButton(
                     text = "Start",
                     size = controlButtonSize,
                     onClick = {
-                        tetrisLogic.dispatch(action = Action.Start)
+                        tetrisViewModel.dispatch(action = Action.Start)
                     }
                 )
                 ControlButton(
                     text = "Pause",
                     size = controlButtonSize,
                     onClick = {
-                        tetrisLogic.dispatch(action = Action.Pause)
+                        tetrisViewModel.dispatch(action = Action.Pause)
                     }
                 )
                 ControlButton(
                     text = "Reset",
                     size = controlButtonSize,
                     onClick = {
-                        tetrisLogic.dispatch(action = Action.Reset)
+                        tetrisViewModel.dispatch(action = Action.Reset)
                     }
                 )
                 SoundButton(
                     size = controlButtonSize,
-                    enabled = tetrisLogic.tetrisViewState.soundEnable,
+                    enabled = tetrisViewModel.tetrisViewState.soundEnable,
                     onClick = {
-                        tetrisLogic.dispatch(action = Action.Sound)
+                        tetrisViewModel.dispatch(action = Action.Sound)
                     }
                 )
             }
@@ -118,19 +118,19 @@ fun TetrisButton(
                     icon = Icons.AutoMirrored.Filled.ArrowLeft,
                     size = playButtonSize
                 ) {
-                    tetrisLogic.dispatch(action = Action.Transformation(transformationType = TransformationType.Left))
+                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Left))
                 }
                 PlayButton(
                     icon = Icons.AutoMirrored.Filled.ArrowRight,
                     size = playButtonSize
                 ) {
-                    tetrisLogic.dispatch(action = Action.Transformation(transformationType = TransformationType.Right))
+                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Right))
                 }
                 PlayButton(
                     icon = Icons.AutoMirrored.Filled.RotateRight,
                     size = playButtonSize
                 ) {
-                    tetrisLogic.dispatch(action = Action.Transformation(transformationType = TransformationType.Rotate))
+                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Rotate))
                 }
             }
             Spacer(
@@ -148,7 +148,7 @@ fun TetrisButton(
                     icon = Icons.Filled.ArrowDropDown,
                     size = playButtonSize
                 ) {
-                    tetrisLogic.dispatch(action = Action.Transformation(transformationType = TransformationType.FastDown))
+                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.FastDown))
                 }
                 PlayButton(
                     modifier = Modifier
@@ -156,7 +156,7 @@ fun TetrisButton(
                     icon = Icons.Filled.FastForward,
                     size = playButtonSize
                 ) {
-                    tetrisLogic.dispatch(action = Action.Transformation(transformationType = TransformationType.Fall))
+                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Fall))
                 }
             }
             Spacer(

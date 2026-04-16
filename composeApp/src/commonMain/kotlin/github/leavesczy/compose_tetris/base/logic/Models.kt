@@ -1,12 +1,12 @@
-package github.leavesczy.compose_tetris.platform.logic
+package github.leavesczy.compose_tetris.base.logic
 
 import androidx.compose.runtime.Stable
-import github.leavesczy.compose_tetris.platform.getScreenSize
+import github.leavesczy.compose_tetris.getScreenSize
 import kotlin.random.Random
 
 /**
  * @Author: leavesCZY
- * @Date: 2021/5/28 23:43
+ * @Date: 2026/4/16 20:04
  * @Desc:
  */
 private val BRICK_WIDTH = getScreenSize().x

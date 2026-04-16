@@ -8,25 +8,31 @@ plugins {
 
 android {
     namespace = "github.leavesczy.compose_tetris"
-    compileSdk = 36
-    buildToolsVersion = "36.1.0"
+    buildToolsVersion = "37.0.0"
+    compileSdk {
+        version = release(version = 36)
+    }
     defaultConfig {
         applicationId = "github.leavesczy.compose_tetris"
-        minSdk = 23
-        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
+        minSdk {
+            version = release(version = 23)
+        }
+        targetSdk {
+            version = release(version = 36)
+        }
+    }
+    buildFeatures.apply {
+        compose = true
     }
     val basePluginExtension = project.extensions.getByType(BasePluginExtension::class.java)
     basePluginExtension.apply {
         archivesName.set("compose-multiplatform-tetris-android")
     }
-    buildFeatures.apply {
-        compose = true
-    }
     signingConfigs {
         create("release") {
-            storeFile = File(project.rootProject.rootDir.absolutePath + File.separator + "key.jks")
+            storeFile = File(rootProject.rootDir.absolutePath, "key.jks")
             keyAlias = "leavesCZY"
             storePassword = "123456"
             keyPassword = "123456"
@@ -93,6 +99,7 @@ android {
 dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.compose.material3)
     implementation(projects.composeApp)
 }

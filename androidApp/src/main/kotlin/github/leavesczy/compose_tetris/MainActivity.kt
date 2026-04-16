@@ -2,6 +2,7 @@ package github.leavesczy.compose_tetris
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -9,23 +10,38 @@ import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
-import github.leavesczy.compose_tetris.platform.logic.Action
-import github.leavesczy.compose_tetris.platform.logic.TetrisLogic
-import github.leavesczy.compose_tetris.platform.ui.TetrisPage
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import github.leavesczy.compose_tetris.base.logic.Action
+import github.leavesczy.compose_tetris.base.logic.SoundPlayer
+import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
+import github.leavesczy.compose_tetris.base.ui.TetrisPage
+import kotlin.reflect.KClass
 
 /**
  * @Author: leavesCZY
- * @Date: 2021/6/3 22:06
+ * @Date: 2026/4/16 20:02
  * @Desc:
  */
 class MainActivity : AppCompatActivity() {
 
-    private val tetrisLogic by lazy(mode = LazyThreadSafetyMode.NONE) {
-        TetrisLogic(
-            coroutineScope = lifecycleScope,
-            soundPlayer = AndroidSoundPlayer(application = application)
-        )
+    private class TetrisViewModelFactory(
+        private val soundPlayer: SoundPlayer
+    ) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
+            if (modelClass.java.isAssignableFrom(TetrisViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return TetrisViewModel(soundPlayer = soundPlayer) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+
+    }
+
+    private val tetrisViewModel by viewModels<TetrisViewModel> {
+        TetrisViewModelFactory(soundPlayer = AndroidSoundPlayer(application = application))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,24 +52,19 @@ class MainActivity : AppCompatActivity() {
                 modifier = Modifier
                     .windowInsetsPadding(insets = WindowInsets.statusBarsIgnoringVisibility)
                     .navigationBarsPadding(),
-                tetrisLogic = tetrisLogic
+                tetrisViewModel = tetrisViewModel
             )
         }
     }
 
     override fun onResume() {
         super.onResume()
-        tetrisLogic.dispatch(action = Action.Resume)
+        tetrisViewModel.dispatch(action = Action.Resume)
     }
 
     override fun onPause() {
         super.onPause()
-        tetrisLogic.dispatch(action = Action.Background)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        tetrisLogic.release()
+        tetrisViewModel.dispatch(action = Action.Background)
     }
 
 }

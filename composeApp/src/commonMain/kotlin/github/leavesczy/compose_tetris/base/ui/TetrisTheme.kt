@@ -1,4 +1,4 @@
-package github.leavesczy.compose_tetris.platform.ui
+package github.leavesczy.compose_tetris.base.ui
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 
 /**
  * @Author: leavesCZY
- * @Date: 2024/4/19 22:34
+ * @Date: 2026/4/16 20:03
  * @Desc:
  */
 private val BackgroundColorLight = Color(color = 0xF2FFD600)

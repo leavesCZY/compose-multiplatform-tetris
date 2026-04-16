@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -15,6 +13,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention").version(version = "1.0.0")
 }
 
 rootProject.name = "compose-multiplatform-tetris"

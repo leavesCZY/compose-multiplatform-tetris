@@ -1,3 +1,5 @@
+package github.leavesczy.compose_tetris
+
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -13,26 +15,24 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import compose_multiplatform_tetris.composeapp.generated.resources.Res
-import compose_multiplatform_tetris.composeapp.generated.resources.desktop_launch_icon
-import github.leavesczy.compose_tetris.platform.DesktopSoundPlayer
-import github.leavesczy.compose_tetris.platform.logic.Action
-import github.leavesczy.compose_tetris.platform.logic.TetrisLogic
-import github.leavesczy.compose_tetris.platform.logic.TransformationType
-import github.leavesczy.compose_tetris.platform.ui.TetrisPage
+import github.leavesczy.compose_tetris.base.logic.Action
+import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
+import github.leavesczy.compose_tetris.base.logic.TransformationType
+import github.leavesczy.compose_tetris.base.ui.TetrisPage
+import github.leavesczy.compose_tetris.resources.Res
+import github.leavesczy.compose_tetris.resources.desktop_launch_icon
 import org.jetbrains.compose.resources.painterResource
 import java.awt.Toolkit
 
 /**
  * @Author: leavesCZY
- * @Date: 2022/1/20 15:23
+ * @Date: 2026/4/16 20:03
  * @Desc:
  */
 fun main() = application {
     val coroutineScope = rememberCoroutineScope()
-    val tetrisLogic = remember {
-        TetrisLogic(
-            coroutineScope = coroutineScope,
+    val tetrisViewModel = remember {
+        TetrisViewModel(
             soundPlayer = DesktopSoundPlayer(coroutineScope = coroutineScope)
         )
     }
@@ -45,13 +45,13 @@ fun main() = application {
             position = WindowPosition.Aligned(alignment = Alignment.Center)
         ),
         onKeyEvent = {
-            tetrisLogic.dispatchKeyEvent(keyEvent = it)
+            tetrisViewModel.dispatchKeyEvent(keyEvent = it)
         },
         onCloseRequest = ::exitApplication
     ) {
         TetrisPage(
             modifier = Modifier,
-            tetrisLogic = tetrisLogic
+            tetrisViewModel = tetrisViewModel
         )
     }
 }
@@ -67,7 +67,7 @@ private fun preferredWindowSize(): DpSize {
     return DpSize(width.dp, height.dp)
 }
 
-private fun TetrisLogic.dispatchKeyEvent(keyEvent: KeyEvent): Boolean {
+private fun TetrisViewModel.dispatchKeyEvent(keyEvent: KeyEvent): Boolean {
     if (keyEvent.type == KeyEventType.KeyDown) {
         when (keyEvent.key) {
             Key.Enter -> {

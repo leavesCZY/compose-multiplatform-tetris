@@ -1,4 +1,4 @@
-package github.leavesczy.compose_tetris.platform.ui
+package github.leavesczy.compose_tetris.base.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -33,26 +33,28 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import github.leavesczy.compose_tetris.platform.getFontSize
-import github.leavesczy.compose_tetris.platform.logic.Action
-import github.leavesczy.compose_tetris.platform.logic.GameStatus
-import github.leavesczy.compose_tetris.platform.logic.TetrisLogic
-import github.leavesczy.compose_tetris.platform.logic.TetrisViewState
+import github.leavesczy.compose_tetris.base.logic.Action
+import github.leavesczy.compose_tetris.base.logic.GameStatus
+import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
+import github.leavesczy.compose_tetris.base.logic.TetrisViewState
+import github.leavesczy.compose_tetris.getFontSize
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 /**
  * @Author: leavesCZY
- * @Date: 2021/5/28 17:19
+ * @Date: 2026/4/16 20:03
  * @Desc:
  */
 @Composable
 fun TetrisPage(
     modifier: Modifier,
-    tetrisLogic: TetrisLogic
+    tetrisViewModel: TetrisViewModel
 ) {
     LaunchedEffect(key1 = Unit) {
-        tetrisLogic.dispatch(action = Action.Welcome)
+        delay(timeMillis = 200L)
+        tetrisViewModel.dispatch(action = Action.Welcome)
     }
     TetrisTheme {
         Scaffold(
@@ -75,13 +77,13 @@ fun TetrisPage(
                         .weight(weight = 11f)
                         .fillMaxWidth()
                         .padding(horizontal = 30.dp),
-                    tetrisViewState = tetrisLogic.tetrisViewState
+                    tetrisViewState = tetrisViewModel.tetrisViewState
                 )
                 TetrisButton(
                     modifier = Modifier
                         .weight(weight = 5f)
                         .fillMaxWidth(),
-                    tetrisLogic = tetrisLogic
+                    tetrisViewModel = tetrisViewModel
                 )
             }
         }
