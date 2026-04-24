@@ -32,7 +32,7 @@ android {
     }
     signingConfigs {
         create("release") {
-            storeFile = File(rootProject.rootDir.absolutePath, "key.jks")
+            storeFile = File(rootProject.rootDir, "key.jks")
             keyAlias = "leavesCZY"
             storePassword = "123456"
             keyPassword = "123456"
