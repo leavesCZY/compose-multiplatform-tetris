@@ -73,7 +73,7 @@ android {
             jvmTarget.value(JvmTarget.JVM_21)
             optIn.addAll(
                 setOf(
-                    "androidx.compose.foundation.layout.ExperimentalLayoutApi"
+                    "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi"
                 )
             )
         }
@@ -100,6 +100,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.compose.material3)
+    implementation(libs.jetbrains.compose.material3)
+    implementation(libs.jetbrains.compose.material3.window.size)
     implementation(projects.composeApp)
 }

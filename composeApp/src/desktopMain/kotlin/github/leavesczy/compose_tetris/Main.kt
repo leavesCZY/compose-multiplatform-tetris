@@ -1,5 +1,6 @@
 package github.leavesczy.compose_tetris
 
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -21,7 +22,9 @@ import github.leavesczy.compose_tetris.base.logic.TransformationType
 import github.leavesczy.compose_tetris.base.ui.TetrisPage
 import github.leavesczy.compose_tetris.resources.Res
 import github.leavesczy.compose_tetris.resources.desktop_launch_icon
+import github.leavesczy.compose_tetris.resources.sound
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import java.awt.Toolkit
 
 /**
@@ -32,12 +35,10 @@ import java.awt.Toolkit
 fun main() = application {
     val coroutineScope = rememberCoroutineScope()
     val tetrisViewModel = remember {
-        TetrisViewModel(
-            soundPlayer = DesktopSoundPlayer(coroutineScope = coroutineScope)
-        )
+        TetrisViewModel(soundPlayer = DesktopSoundPlayer(coroutineScope = coroutineScope))
     }
     Window(
-        title = "compose-multiplatform-tetris",
+        title = stringResource(resource = Res.string.sound),
         resizable = false,
         icon = painterResource(Res.drawable.desktop_launch_icon),
         state = rememberWindowState(
@@ -49,8 +50,10 @@ fun main() = application {
         },
         onCloseRequest = ::exitApplication
     ) {
+        val windowSizeClass = calculateWindowSizeClass()
         TetrisPage(
             modifier = Modifier,
+            windowSizeClass = windowSizeClass,
             tetrisViewModel = tetrisViewModel
         )
     }

@@ -13,6 +13,8 @@ interface SoundPlayer {
 
     fun play(soundType: SoundType)
 
+    fun pause()
+
     fun release()
 
     fun getMediaFileUri(soundType: SoundType): String {

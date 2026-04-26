@@ -14,13 +14,16 @@ private val BRICK_WIDTH = getScreenSize().x
 private val BRICK_HEIGHT = getScreenSize().y
 
 @Stable
-data class Location(val x: Int, val y: Int)
+data class Location(
+    val x: Int,
+    val y: Int
+)
 
 @Stable
 data class Tetris(
-    val shapes: List<List<Location>>, //此方块所有可能的旋转结果
-    val type: Int, //用于标记当前处于哪种旋转状态
-    val offset: Location, //方块相对屏幕左上角的偏移量
+    val shapes: List<List<Location>>,
+    val type: Int,
+    val offset: Location
 ) {
 
     //此方块当前的形状

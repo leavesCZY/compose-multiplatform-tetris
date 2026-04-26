@@ -1,19 +1,12 @@
 package github.leavesczy.compose_tetris.base.ui
 
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -25,11 +18,12 @@ import androidx.compose.material.icons.filled.FastForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -40,6 +34,12 @@ import androidx.compose.ui.unit.dp
 import github.leavesczy.compose_tetris.base.logic.Action
 import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
 import github.leavesczy.compose_tetris.base.logic.TransformationType
+import github.leavesczy.compose_tetris.resources.Res
+import github.leavesczy.compose_tetris.resources.pause
+import github.leavesczy.compose_tetris.resources.reset
+import github.leavesczy.compose_tetris.resources.sound
+import github.leavesczy.compose_tetris.resources.start
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * @Author: leavesCZY
@@ -49,209 +49,286 @@ import github.leavesczy.compose_tetris.base.logic.TransformationType
 @Composable
 fun TetrisButton(
     modifier: Modifier,
+    windowSizeClass: WindowSizeClass,
     tetrisViewModel: TetrisViewModel
 ) {
-    BoxWithConstraints(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            TetrisButtonCompact(
+                modifier = modifier,
+                tetrisViewModel = tetrisViewModel
+            )
+        }
+
+        WindowWidthSizeClass.Medium,
+        WindowWidthSizeClass.Expanded -> {
+            TetrisButtonCompactDesktop(
+                modifier = modifier,
+                tetrisViewModel = tetrisViewModel
+            )
+        }
+    }
+}
+
+@Composable
+private fun TetrisButtonCompact(
+    modifier: Modifier,
+    tetrisViewModel: TetrisViewModel
+) {
+    val controlButtonSize = 32.dp
+    val playButtonSize = 80.dp
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            space = 20.dp,
+            alignment = Alignment.Top
+        )
     ) {
-        val controlButtonSize = maxHeight / 8
-        val playButtonSize = maxHeight / 4
-        val buttonSpace = maxHeight / 4
-        Column(
+        Row(
             modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround
+                .fillMaxWidth(fraction = 0.85f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxWidth()
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(fraction = 0.9f),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ControlButton(
-                    text = "Start",
-                    size = controlButtonSize,
-                    onClick = {
-                        tetrisViewModel.dispatch(action = Action.Start)
-                    }
-                )
-                ControlButton(
-                    text = "Pause",
-                    size = controlButtonSize,
-                    onClick = {
-                        tetrisViewModel.dispatch(action = Action.Pause)
-                    }
-                )
-                ControlButton(
-                    text = "Reset",
-                    size = controlButtonSize,
-                    onClick = {
-                        tetrisViewModel.dispatch(action = Action.Reset)
-                    }
-                )
-                SoundButton(
-                    size = controlButtonSize,
-                    enabled = tetrisViewModel.tetrisViewState.soundEnable,
-                    onClick = {
-                        tetrisViewModel.dispatch(action = Action.Sound)
-                    }
-                )
-            }
-            Spacer(
-                modifier = Modifier
-                    .weight(weight = 2f)
-                    .fillMaxWidth()
-            )
-            Row(
+            ControlButton(
                 modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(space = buttonSpace),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                PlayButton(
-                    icon = Icons.AutoMirrored.Filled.ArrowLeft,
-                    size = playButtonSize
-                ) {
-                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Left))
+                text = stringResource(resource = Res.string.start),
+                size = controlButtonSize,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Start)
                 }
-                PlayButton(
-                    icon = Icons.AutoMirrored.Filled.ArrowRight,
-                    size = playButtonSize
-                ) {
-                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Right))
-                }
-                PlayButton(
-                    icon = Icons.AutoMirrored.Filled.RotateRight,
-                    size = playButtonSize
-                ) {
-                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Rotate))
-                }
-            }
-            Spacer(
-                modifier = Modifier
-                    .weight(weight = 2f)
-                    .fillMaxWidth()
             )
-            Row(
+            ControlButton(
                 modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(space = buttonSpace),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                PlayButton(
-                    modifier = Modifier,
-                    icon = Icons.Filled.ArrowDropDown,
-                    size = playButtonSize
-                ) {
-                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.FastDown))
+                text = stringResource(resource = Res.string.pause),
+                size = controlButtonSize,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Pause)
                 }
-                PlayButton(
-                    modifier = Modifier
-                        .rotate(degrees = 90f),
-                    icon = Icons.Filled.FastForward,
-                    size = playButtonSize
-                ) {
-                    tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Fall))
-                }
-            }
-            Spacer(
-                modifier = Modifier
-                    .weight(weight = 2f)
-                    .fillMaxWidth()
             )
+            ControlButton(
+                modifier = Modifier,
+                text = stringResource(resource = Res.string.reset),
+                size = controlButtonSize,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Reset)
+                }
+            )
+            ControlButton(
+                modifier = Modifier,
+                text = stringResource(resource = Res.string.sound),
+                size = controlButtonSize,
+                isEnabled = tetrisViewModel.tetrisViewState.soundEnable,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Sound)
+                }
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.98f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.AutoMirrored.Filled.ArrowLeft,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Left))
+            }
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.AutoMirrored.Filled.RotateRight,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Rotate))
+            }
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.AutoMirrored.Filled.ArrowRight,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Right))
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.95f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.Filled.ArrowDropDown,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.FastDown))
+            }
+            PlayButton(
+                modifier = Modifier
+                    .rotate(degrees = 90f),
+                icon = Icons.Filled.FastForward,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Fall))
+            }
+        }
+    }
+}
+
+@Composable
+private fun TetrisButtonCompactDesktop(
+    modifier: Modifier,
+    tetrisViewModel: TetrisViewModel
+) {
+    val controlButtonSize = 30.dp
+    val playButtonSize = 70.dp
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            space = 20.dp,
+            alignment = Alignment.Top
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.75f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ControlButton(
+                modifier = Modifier,
+                text = stringResource(resource = Res.string.start),
+                size = controlButtonSize,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Start)
+                }
+            )
+            ControlButton(
+                modifier = Modifier,
+                text = stringResource(resource = Res.string.pause),
+                size = controlButtonSize,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Pause)
+                }
+            )
+            ControlButton(
+                modifier = Modifier,
+                text = stringResource(resource = Res.string.reset),
+                size = controlButtonSize,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Reset)
+                }
+            )
+            ControlButton(
+                modifier = Modifier,
+                text = stringResource(resource = Res.string.sound),
+                size = controlButtonSize,
+                isEnabled = tetrisViewModel.tetrisViewState.soundEnable,
+                onClick = {
+                    tetrisViewModel.dispatch(action = Action.Sound)
+                }
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.80f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.AutoMirrored.Filled.ArrowLeft,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Left))
+            }
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.AutoMirrored.Filled.RotateRight,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Rotate))
+            }
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.AutoMirrored.Filled.ArrowRight,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Right))
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.80f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            PlayButton(
+                modifier = Modifier,
+                icon = Icons.Filled.ArrowDropDown,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.FastDown))
+            }
+            PlayButton(
+                modifier = Modifier
+                    .rotate(degrees = 90f),
+                icon = Icons.Filled.FastForward,
+                size = playButtonSize
+            ) {
+                tetrisViewModel.dispatch(action = Action.Transformation(transformationType = TransformationType.Fall))
+            }
         }
     }
 }
 
 @Composable
 private fun ControlButton(
+    modifier: Modifier,
     text: String,
     size: Dp,
-    color: Brush = ButtonNormalColor,
-    colorOnPressed: Brush = ButtonOnPressedColor,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(all = 3.dp),
-            text = text,
-            color = Color.Black,
-            style = MaterialTheme.typography.bodySmall
-        )
-        val interactionSource = remember { MutableInteractionSource() }
-        val isPressed by interactionSource.collectIsPressedAsState()
-        val buttonColor = if (isPressed) {
-            colorOnPressed
-        } else {
-            color
-        }
-        Box(
-            modifier = Modifier
-                .size(size = size)
-                .addShadow(color = buttonColor)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                    onClick = onClick
-                )
-        )
-    }
-}
-
-@Composable
-private fun SoundButton(
-    modifier: Modifier = Modifier,
-    size: Dp,
-    enabled: Boolean,
+    isEnabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            space = 4.dp,
+            alignment = Alignment.Top
+        )
     ) {
         Text(
-            modifier = Modifier
-                .padding(all = 3.dp),
-            text = "Sound",
+            modifier = Modifier,
+            text = text,
             color = Color.Black,
             style = MaterialTheme.typography.bodySmall
         )
-        val interactionSource = remember { MutableInteractionSource() }
-        val isPressed by interactionSource.collectIsPressedAsState()
-        val buttonColor = if (isPressed) {
-            ButtonOnPressedColor
-        } else {
-            if (enabled) {
-                ButtonNormalColor
-            } else {
-                ButtonDisabledColor
-            }
-        }
         Box(
             modifier = Modifier
                 .size(size = size)
-                .addShadow(color = buttonColor)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                    onClick = onClick
+                .clip(shape = CircleShape)
+                .addShadow(
+                    color = if (isEnabled) {
+                        ButtonNormalColor
+                    } else {
+                        ButtonDisabledColor
+                    }
                 )
+                .clickable(onClick = onClick)
         )
     }
 }
 
 @Composable
 private fun PlayButton(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     icon: ImageVector,
     size: Dp,
     onClick: () -> Unit
@@ -260,27 +337,16 @@ private fun PlayButton(
         modifier = modifier,
         contentAlignment = Alignment.TopCenter
     ) {
-        val interactionSource = remember { MutableInteractionSource() }
-        val isPressed by interactionSource.collectIsPressedAsState()
-        val buttonColor = if (isPressed) {
-            ButtonOnPressedColor
-        } else {
-            ButtonNormalColor
-        }
         Box(
             modifier = Modifier
                 .size(size = size)
-                .addShadow(color = buttonColor)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = LocalIndication.current,
-                    onClick = onClick
-                ),
+                .addShadow(color = ButtonNormalColor)
+                .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 modifier = Modifier
-                    .size(size = size / 1.6f),
+                    .size(size = 40.dp),
                 imageVector = icon,
                 tint = Color.White,
                 contentDescription = null

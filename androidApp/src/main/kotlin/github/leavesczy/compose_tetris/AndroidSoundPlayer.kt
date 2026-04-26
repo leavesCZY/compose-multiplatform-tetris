@@ -30,6 +30,8 @@ class AndroidSoundPlayer(private val application: Application) : SoundPlayer {
 
     private val soundMap = mutableMapOf<SoundType, Int>()
 
+    private var streamId = 0
+
     override suspend fun init() {
         withContext(context = Dispatchers.Main.immediate) {
             for (value in SoundType.entries) {
@@ -49,7 +51,11 @@ class AndroidSoundPlayer(private val application: Application) : SoundPlayer {
 
     override fun play(soundType: SoundType) {
         val soundId = soundMap[soundType] ?: return
-        soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
+        streamId = soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
+    }
+
+    override fun pause() {
+        soundPool.pause(streamId)
     }
 
     override fun release() {

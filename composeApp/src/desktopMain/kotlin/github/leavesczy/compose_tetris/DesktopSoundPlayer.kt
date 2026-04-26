@@ -49,6 +49,10 @@ class DesktopSoundPlayer(private val coroutineScope: CoroutineScope) : SoundPlay
         }
     }
 
+    override fun pause() {
+
+    }
+
     private class ReleaseLineListener(
         private val clip: Clip,
         private val coroutineScope: CoroutineScope

@@ -1,13 +1,11 @@
 package github.leavesczy.compose_tetris
 
 import android.os.Bundle
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
@@ -48,10 +46,11 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         setContent {
+            val activity = LocalActivity.current
+            val windowSizeClass = calculateWindowSizeClass(activity = activity!!)
             TetrisPage(
-                modifier = Modifier
-                    .windowInsetsPadding(insets = WindowInsets.statusBarsIgnoringVisibility)
-                    .navigationBarsPadding(),
+                modifier = Modifier,
+                windowSizeClass = windowSizeClass,
                 tetrisViewModel = tetrisViewModel
             )
         }

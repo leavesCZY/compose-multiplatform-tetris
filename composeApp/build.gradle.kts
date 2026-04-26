@@ -15,6 +15,11 @@ kotlin {
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
             jvmTarget.value(JvmTarget.JVM_21)
+            optIn.addAll(
+                setOf(
+                    "androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi"
+                )
+            )
         }
     }
     android {
@@ -37,10 +42,11 @@ kotlin {
         }
         commonMain {
             dependencies {
-                implementation(libs.compose.material3)
-                implementation(libs.compose.lifecycle.viewmodel)
-                implementation(libs.compose.components.resources)
-                implementation(libs.compose.material.icons.extended)
+                implementation(libs.jetbrains.compose.components.resources)
+                implementation(libs.jetbrains.compose.material3)
+                implementation(libs.jetbrains.compose.material3.window.size)
+                implementation(libs.jetbrains.compose.material.icons.extended)
+                implementation(libs.jetbrains.lifecycle.viewmodel.compose)
             }
         }
         val desktopMain by getting

@@ -5,16 +5,23 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -38,9 +45,14 @@ import github.leavesczy.compose_tetris.base.logic.GameStatus
 import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
 import github.leavesczy.compose_tetris.base.logic.TetrisViewState
 import github.leavesczy.compose_tetris.getFontSize
-import kotlinx.coroutines.Dispatchers
+import github.leavesczy.compose_tetris.resources.Res
+import github.leavesczy.compose_tetris.resources.game_over
+import github.leavesczy.compose_tetris.resources.pause_capital_letter
+import github.leavesczy.compose_tetris.resources.tetris
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * @Author: leavesCZY
@@ -50,6 +62,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun TetrisPage(
     modifier: Modifier,
+    windowSizeClass: WindowSizeClass,
     tetrisViewModel: TetrisViewModel
 ) {
     LaunchedEffect(key1 = Unit) {
@@ -58,32 +71,42 @@ fun TetrisPage(
     }
     TetrisTheme {
         Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
-                .then(other = modifier),
-            contentWindowInsets = WindowInsets(),
+            modifier = modifier
+                .fillMaxSize(),
             containerColor = Color.Transparent
         ) { innerPadding ->
             Column(
                 modifier = Modifier
+                    .background(color = MaterialTheme.colorScheme.background)
                     .padding(paddingValues = innerPadding)
-                    .padding(top = 10.dp)
                     .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
             ) {
+                Spacer(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                )
                 TetrisPage(
                     modifier = Modifier
-                        .weight(weight = 11f)
-                        .fillMaxWidth()
-                        .padding(horizontal = 30.dp),
+                        .weight(weight = 26f)
+                        .padding(horizontal = 30.dp)
+                        .fillMaxWidth(),
                     tetrisViewState = tetrisViewModel.tetrisViewState
+                )
+                Spacer(
+                    modifier = Modifier
+                        .weight(weight = 1f)
                 )
                 TetrisButton(
                     modifier = Modifier
-                        .weight(weight = 5f)
                         .fillMaxWidth(),
+                    windowSizeClass = windowSizeClass,
                     tetrisViewModel = tetrisViewModel
+                )
+                Spacer(
+                    modifier = Modifier
+                        .weight(weight = 1f)
                 )
             }
         }
@@ -100,31 +123,70 @@ private fun TetrisPage(
     val matrixHeight = tetrisViewState.height
     val brickMarginDp = 2.dp
     val screenInnerMarginDp = 8.dp
-    val alphaAnimate = remember {
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
+    val gameStatus by rememberUpdatedState(newValue = tetrisViewState.gameStatus)
+    var hintText by remember {
+        mutableStateOf(value = "")
+    }
+    val textAlphaAnimate = remember {
         Animatable(initialValue = 1f)
     }
+    val textMeasurer = rememberTextMeasurer()
+    val tetrisText = stringResource(resource = Res.string.tetris)
+    val pauseText = stringResource(resource = Res.string.pause_capital_letter)
+    val gameOverText = stringResource(resource = Res.string.game_over)
     LaunchedEffect(key1 = Unit) {
-        withContext(context = Dispatchers.Default) {
-            var targetValue = 0f
-            while (true) {
-                alphaAnimate.animateTo(
-                    targetValue = targetValue,
-                    animationSpec = tween(
-                        durationMillis = 1500,
-                        easing = LinearEasing
-                    )
-                )
-                targetValue = if (targetValue == 0f) {
-                    1f
-                } else {
-                    0f
+        launch {
+            snapshotFlow {
+                gameStatus
+            }.collect {
+                hintText = when (it) {
+                    GameStatus.Welcome -> {
+                        tetrisText
+                    }
+
+                    GameStatus.Paused -> {
+                        pauseText
+                    }
+
+                    GameStatus.GameOver -> {
+                        gameOverText
+                    }
+
+                    GameStatus.Running,
+                    GameStatus.LineClearing,
+                    GameStatus.ScreenClearing -> {
+                        ""
+                    }
+                }
+            }
+        }
+        launch {
+            snapshotFlow {
+                hintText
+            }.collectLatest {
+                if (it.isNotBlank()) {
+                    textAlphaAnimate.snapTo(targetValue = 0.85f)
+                    var targetValue = 0f
+                    while (true) {
+                        textAlphaAnimate.animateTo(
+                            targetValue = targetValue,
+                            animationSpec = tween(
+                                durationMillis = 1600,
+                                easing = LinearEasing
+                            )
+                        )
+                        targetValue = if (targetValue == 0f) {
+                            0.85f
+                        } else {
+                            0f
+                        }
+                    }
                 }
             }
         }
     }
-    val backgroundColor = MaterialTheme.colorScheme.background
-    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
-    val textMeasurer = rememberTextMeasurer()
     Canvas(
         modifier = modifier
             .fillMaxSize()
@@ -204,27 +266,10 @@ private fun TetrisPage(
             left = borderWidth,
             top = borderWidth
         ) {
-            val text = when (tetrisViewState.gameStatus) {
-                GameStatus.Welcome -> {
-                    "TETRIS"
-                }
-
-                GameStatus.Paused -> {
-                    "PAUSE"
-                }
-
-                GameStatus.GameOver -> {
-                    "GAME OVER"
-                }
-
-                GameStatus.Running, GameStatus.LineClearing, GameStatus.ScreenClearing -> {
-                    ""
-                }
-            }
-            if (text.isNotBlank()) {
+            if (hintText.isNotBlank()) {
                 val fontSize = getFontSize(gameStatus = tetrisViewState.gameStatus)
                 val textLayoutResult = textMeasurer.measure(
-                    text = text,
+                    text = hintText,
                     style = TextStyle(
                         fontSize = fontSize.sp,
                         textAlign = TextAlign.Center,
@@ -235,9 +280,9 @@ private fun TetrisPage(
                 drawText(
                     textLayoutResult = textLayoutResult,
                     color = backgroundColor,
-                    alpha = alphaAnimate.value,
+                    alpha = textAlphaAnimate.value,
                     shadow = Shadow(
-                        color = Color.Black.copy(alpha = alphaAnimate.value),
+                        color = Color.Black.copy(alpha = textAlphaAnimate.value),
                         offset = Offset(x = 14.0f, y = 14.0f),
                         blurRadius = 8f
                     ),

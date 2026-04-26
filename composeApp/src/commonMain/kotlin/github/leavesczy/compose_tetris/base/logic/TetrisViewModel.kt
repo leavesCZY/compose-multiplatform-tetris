@@ -59,7 +59,7 @@ class TetrisViewModel(private val soundPlayer: SoundPlayer) : ViewModel() {
                 }
 
                 Action.Sound -> {
-                    onSound()
+                    onClickSound()
                 }
 
                 is Action.Transformation -> {
@@ -95,13 +95,18 @@ class TetrisViewModel(private val soundPlayer: SoundPlayer) : ViewModel() {
     }
 
     private fun onPauseGame() {
-        if (tetrisViewState.isRunning) {
-            dispatchState(newState = tetrisViewState.copy(gameStatus = GameStatus.Paused))
+        val viewState = tetrisViewState
+        if (viewState.isRunning) {
+            dispatchState(newState = viewState.copy(gameStatus = GameStatus.Paused))
         }
     }
 
-    private fun onSound() {
-        dispatchState(newState = tetrisViewState.copy(soundEnable = !tetrisViewState.soundEnable))
+    private fun onClickSound() {
+        val viewState = tetrisViewState
+        dispatchState(newState = viewState.copy(soundEnable = !viewState.soundEnable))
+        if (viewState.soundEnable) {
+            soundPlayer.pause()
+        }
     }
 
     private fun onTransformation(transformation: Action.Transformation) {

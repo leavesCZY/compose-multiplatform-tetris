@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">compose-multiplatform-tetris</string>
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
+    <string name="reset">Reset</string>
+    <string name="sound">Sound</string>
+    <string name="tetris">TETRIS</string>
+    <string name="pause_capital_letter">PAUSE</string>
+    <string name="game_over">GAME OVER</string>
+</resources>
