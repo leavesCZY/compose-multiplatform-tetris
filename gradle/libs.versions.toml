@@ -1,17 +1,17 @@
 [versions]
-android-application = "9.2.0"
+android-application = "9.2.1"
 jetbrains-kotlin = "2.3.21"
-jetbrains-compose-multiplatform = "1.11.0-beta03"
+jetbrains-compose-multiplatform = "1.11.0"
 
 androidx-appcompat = "1.7.1"
 androidx-activity-compose = "1.13.0"
 
-kotlinx-coroutines = "1.11.0-rc01"
+kotlinx-coroutines = "1.11.0"
 
 jetbrains-compose-material-icons-extended = "1.7.3"
 jetbrains-compose-material3 = "1.11.0-alpha07"
 jetbrains-compose-material3-window-size = "1.11.0-alpha07"
-jetbrains-lifecycle-viewmodel-compose = "2.11.0-alpha03"
+jetbrains-lifecycle-viewmodel-compose = "2.11.0-beta01"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-application" }
