@@ -21,8 +21,8 @@ import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
 import github.leavesczy.compose_tetris.base.logic.TransformationType
 import github.leavesczy.compose_tetris.base.ui.TetrisPage
 import github.leavesczy.compose_tetris.resources.Res
+import github.leavesczy.compose_tetris.resources.app_name
 import github.leavesczy.compose_tetris.resources.desktop_launch_icon
-import github.leavesczy.compose_tetris.resources.sound
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import java.awt.Toolkit
@@ -38,9 +38,9 @@ fun main() = application {
         TetrisViewModel(soundPlayer = DesktopSoundPlayer(coroutineScope = coroutineScope))
     }
     Window(
-        title = stringResource(resource = Res.string.sound),
-        resizable = false,
+        title = stringResource(resource = Res.string.app_name),
         icon = painterResource(Res.drawable.desktop_launch_icon),
+        resizable = false,
         state = rememberWindowState(
             size = preferredWindowSize(),
             position = WindowPosition.Aligned(alignment = Alignment.Center)

@@ -10,17 +10,17 @@ android {
     namespace = "github.leavesczy.compose_tetris"
     buildToolsVersion = "37.0.0"
     compileSdk {
-        version = release(version = 36)
+        version = release(version = 37)
     }
     defaultConfig {
         applicationId = "github.leavesczy.compose_tetris"
         versionCode = 1
         versionName = "1.0.0"
+        targetSdk {
+            version = release(version = 37)
+        }
         minSdk {
             version = release(version = 23)
-        }
-        targetSdk {
-            version = release(version = 36)
         }
     }
     buildFeatures.apply {
