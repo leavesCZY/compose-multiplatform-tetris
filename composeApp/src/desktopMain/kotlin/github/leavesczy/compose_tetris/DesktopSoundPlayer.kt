@@ -5,26 +5,26 @@ import github.leavesczy.compose_tetris.base.logic.SoundType
 import github.leavesczy.compose_tetris.resources.Res
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.InputStream
+import java.util.concurrent.ConcurrentHashMap
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.LineEvent
 import javax.sound.sampled.LineListener
 
-/**
- * @Author: leavesCZY
- * @Date: 2026/4/16 20:03
- * @Desc:
- */
-class DesktopSoundPlayer(private val coroutineScope: CoroutineScope) : SoundPlayer {
+class DesktopSoundPlayer : SoundPlayer {
 
+    private val coroutineScope = CoroutineScope(context = SupervisorJob() + Dispatchers.Default)
     private val soundMap = mutableMapOf<SoundType, ByteArray>()
+    private val activeClips = ConcurrentHashMap.newKeySet<Clip>()
+    private var released = false
 
     override suspend fun init() {
-        withContext(context = Dispatchers.Main.immediate) {
+        withContext(context = Dispatchers.IO) {
             for (value in SoundType.entries) {
                 soundMap[value] = loadMediaByteArray(soundType = value)
             }
@@ -32,37 +32,50 @@ class DesktopSoundPlayer(private val coroutineScope: CoroutineScope) : SoundPlay
     }
 
     override fun play(soundType: SoundType) {
+        if (released) {
+            return
+        }
         coroutineScope.launch {
+            if (released) {
+                return@launch
+            }
             val clip = AudioSystem.getClip() ?: return@launch
             val resourceInputStream = getMediaResourceStream(soundType = soundType)
             val audioInputStream = AudioSystem.getAudioInputStream(resourceInputStream)
             clip.open(audioInputStream)
             clip.microsecondPosition = 0
             clip.loop(0)
-            clip.addLineListener(
-                ReleaseLineListener(
-                    clip = clip,
-                    coroutineScope = coroutineScope
-                )
-            )
+            activeClips.add(clip)
+            clip.addLineListener(ReleaseLineListener(clip = clip))
             clip.start()
         }
     }
 
     override fun pause() {
-
+        for (clip in activeClips.toTypedArray()) {
+            stopAndClose(clip = clip)
+        }
+        activeClips.clear()
     }
 
-    private class ReleaseLineListener(
-        private val clip: Clip,
-        private val coroutineScope: CoroutineScope
+    private inner class ReleaseLineListener(
+        private val clip: Clip
     ) : LineListener {
         override fun update(event: LineEvent) {
             if (event.type == LineEvent.Type.STOP) {
                 coroutineScope.launch {
-                    clip.stop()
-                    clip.close()
+                    stopAndClose(clip = clip)
                 }
+            }
+        }
+    }
+
+    private fun stopAndClose(clip: Clip) {
+        activeClips.remove(clip)
+        runCatching {
+            if (clip.isOpen) {
+                clip.stop()
+                clip.close()
             }
         }
     }
@@ -80,6 +93,11 @@ class DesktopSoundPlayer(private val coroutineScope: CoroutineScope) : SoundPlay
     }
 
     override fun release() {
+        if (released) {
+            return
+        }
+        released = true
+        pause()
         soundMap.clear()
         coroutineScope.cancel()
     }

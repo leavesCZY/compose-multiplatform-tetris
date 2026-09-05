@@ -1,27 +1,22 @@
 package github.leavesczy.compose_tetris
 
 import android.os.Bundle
-import androidx.activity.compose.LocalActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.Modifier
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import github.leavesczy.compose_tetris.base.logic.Action
+import github.leavesczy.compose_tetris.base.logic.GameAction
 import github.leavesczy.compose_tetris.base.logic.SoundPlayer
 import github.leavesczy.compose_tetris.base.logic.TetrisViewModel
 import github.leavesczy.compose_tetris.base.ui.TetrisPage
 import kotlin.reflect.KClass
 
-/**
- * @Author: leavesCZY
- * @Date: 2026/4/16 20:02
- * @Desc:
- */
 class MainActivity : AppCompatActivity() {
 
     private class TetrisViewModelFactory(
@@ -33,37 +28,48 @@ class MainActivity : AppCompatActivity() {
                 @Suppress("UNCHECKED_CAST")
                 return TetrisViewModel(soundPlayer = soundPlayer) as T
             }
-            throw IllegalArgumentException("Unknown ViewModel class")
+            throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.simpleName}")
         }
 
     }
 
     private val tetrisViewModel by viewModels<TetrisViewModel> {
-        TetrisViewModelFactory(soundPlayer = AndroidSoundPlayer(application = application))
+        TetrisViewModelFactory(
+            soundPlayer = AndroidSoundPlayer(application = application)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                lightScrim = android.graphics.Color.TRANSPARENT,
+                darkScrim = android.graphics.Color.TRANSPARENT,
+                detectDarkMode = {
+                    false
+                }
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                lightScrim = android.graphics.Color.TRANSPARENT,
+                darkScrim = android.graphics.Color.TRANSPARENT,
+                detectDarkMode = {
+                    false
+                }
+            )
+        )
         super.onCreate(savedInstanceState)
         setContent {
-            val activity = LocalActivity.current
-            val windowSizeClass = calculateWindowSizeClass(activity = activity!!)
+            val windowSizeClass = calculateWindowSizeClass(activity = this@MainActivity)
             TetrisPage(
                 modifier = Modifier,
                 windowSizeClass = windowSizeClass,
-                tetrisViewModel = tetrisViewModel
+                viewModel = tetrisViewModel
             )
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        tetrisViewModel.dispatch(action = Action.Resume)
-    }
-
     override fun onPause() {
         super.onPause()
-        tetrisViewModel.dispatch(action = Action.Background)
+        tetrisViewModel.dispatch(action = GameAction.EnterBackground)
     }
 
 }

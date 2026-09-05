@@ -2,11 +2,6 @@ package github.leavesczy.compose_tetris.base.logic
 
 import github.leavesczy.compose_tetris.resources.Res
 
-/**
- * @Author: leavesCZY
- * @Date: 2026/4/16 20:03
- * @Desc:
- */
 interface SoundPlayer {
 
     suspend fun init()
@@ -18,45 +13,19 @@ interface SoundPlayer {
     fun release()
 
     fun getMediaFileUri(soundType: SoundType): String {
-        val resourcePath = getMediaFilePath(soundType = soundType)
-        return Res.getUri(resourcePath)
+        return Res.getUri(path = getMediaFilePath(soundType = soundType))
     }
 
     fun getMediaFilePath(soundType: SoundType): String {
-        val resourceName = getMediaFileName(soundType = soundType)
-        return "files/$resourceName"
-    }
-
-    private fun getMediaFileName(soundType: SoundType): String {
-        return when (soundType) {
-            SoundType.Welcome -> {
-                "welcome.wav"
-            }
-
-            SoundType.Transformation -> {
-                "transformation.wav"
-            }
-
-            SoundType.Rotate -> {
-                "rotate.wav"
-            }
-
-            SoundType.Fall -> {
-                "fall.wav"
-            }
-
-            SoundType.Clean -> {
-                "clean.wav"
-            }
-        }
+        return "files/${soundType.fileName}"
     }
 
 }
 
-enum class SoundType {
-    Welcome,
-    Transformation,
-    Rotate,
-    Fall,
-    Clean;
+enum class SoundType(val fileName: String) {
+    Welcome(fileName = "welcome.wav"),
+    Transform(fileName = "transformation.wav"),
+    Rotate(fileName = "rotate.wav"),
+    HardDrop(fileName = "fall.wav"),
+    LineClear(fileName = "clean.wav")
 }

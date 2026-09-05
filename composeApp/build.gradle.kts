@@ -25,7 +25,7 @@ kotlin {
     android {
         namespace = "github.leavesczy.compose_tetris.base"
         compileSdk {
-            version = release(version = 36)
+            version = release(version = 37)
         }
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_21)
@@ -45,14 +45,14 @@ kotlin {
                 implementation(libs.jetbrains.compose.components.resources)
                 implementation(libs.jetbrains.compose.material3)
                 implementation(libs.jetbrains.compose.material3.window.size)
-                implementation(libs.jetbrains.compose.material.icons.extended)
                 implementation(libs.jetbrains.lifecycle.viewmodel.compose)
             }
         }
-        val desktopMain by getting
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
+        getByName("desktopMain") {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.swing)
+            }
         }
     }
 }
@@ -118,7 +118,7 @@ compose {
                 macOS {
                     bundleID = mPackageName
                     setDockNameSameAsPackageName = true
-                    appStore = true
+                    appStore = false
                     iconFile.set(resourcesDir.resolve("macos_launch_icon.icns"))
                 }
                 linux {
@@ -133,6 +133,7 @@ compose {
                     obfuscate.set(true)
                     optimize.set(true)
                     joinOutputJars.set(true)
+                    version.set("7.7.0")
                     configurationFiles.from("proguard-rules.pro")
                 }
             }

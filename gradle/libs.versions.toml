@@ -1,17 +1,16 @@
 [versions]
-android-application = "9.2.1"
-jetbrains-kotlin = "2.4.0"
-jetbrains-compose-multiplatform = "1.11.1"
+android-application = "9.4.0"
+jetbrains-kotlin = "2.4.20-RC3"
+jetbrains-compose-multiplatform = "1.12.0"
 
-androidx-appcompat = "1.7.1"
+androidx-appcompat = "1.8.0"
 androidx-activity-compose = "1.13.0"
 
 kotlinx-coroutines = "1.11.0"
 
-jetbrains-compose-material-icons-extended = "1.7.3"
-jetbrains-compose-material3 = "1.11.0-alpha07"
-jetbrains-compose-material3-window-size = "1.11.0-alpha07"
-jetbrains-lifecycle-viewmodel-compose = "2.11.0-beta01"
+jetbrains-compose-material3 = "1.12.0-alpha03"
+jetbrains-compose-material3-window-size = "1.12.0-alpha03"
+jetbrains-lifecycle-viewmodel-compose = "2.11.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-application" }
@@ -29,7 +28,6 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
 jetbrains-compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "jetbrains-compose-multiplatform" }
-jetbrains-compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "jetbrains-compose-material-icons-extended" }
 jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "jetbrains-compose-material3" }
 jetbrains-compose-material3-window-size = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "jetbrains-compose-material3-window-size" }
 jetbrains-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrains-lifecycle-viewmodel-compose" }

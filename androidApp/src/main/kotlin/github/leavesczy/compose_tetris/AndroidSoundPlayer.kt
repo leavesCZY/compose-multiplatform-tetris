@@ -1,65 +1,85 @@
 package github.leavesczy.compose_tetris
 
 import android.app.Application
+import android.content.res.AssetFileDescriptor
 import android.media.AudioAttributes
-import android.media.AudioManager
 import android.media.SoundPool
 import github.leavesczy.compose_tetris.base.logic.SoundPlayer
 import github.leavesczy.compose_tetris.base.logic.SoundType
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/**
- * @Author: leavesCZY
- * @Date: 2026/4/16 20:02
- * @Desc:
- */
 class AndroidSoundPlayer(private val application: Application) : SoundPlayer {
 
-    private val soundPool = run {
-        val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_GAME)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .build()
-        SoundPool.Builder()
-            .setMaxStreams(2)
-            .setMaxStreams(AudioManager.STREAM_MUSIC)
-            .setAudioAttributes(audioAttributes)
-            .build()
-    }
+    private val soundPool: SoundPool = SoundPool.Builder()
+        .setMaxStreams(4)
+        .setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+        )
+        .build()
 
-    private val soundMap = mutableMapOf<SoundType, Int>()
-
-    private var streamId = 0
+    private val soundIds = mutableMapOf<SoundType, Int>()
+    private var released = false
 
     override suspend fun init() {
-        withContext(context = Dispatchers.Main.immediate) {
-            for (value in SoundType.entries) {
-                soundMap[value] = loadSoundId(soundType = value)
+        withContext(context = Dispatchers.IO) {
+            val loaded = CompletableDeferred<Unit>()
+            val total = SoundType.entries.size
+            var completed = 0
+            soundPool.setOnLoadCompleteListener { _, _, _ ->
+                completed++
+                if (completed >= total && !loaded.isCompleted) {
+                    loaded.complete(value = Unit)
+                }
+            }
+            val openDescriptors = mutableListOf<AssetFileDescriptor>()
+            try {
+                for (soundType in SoundType.entries) {
+                    val uriString = getMediaFileUri(soundType = soundType)
+                    val assetPath = uriString.replace(
+                        oldValue = "file:///android_asset/",
+                        newValue = ""
+                    )
+                    val assetFileDescriptor = application.assets.openFd(assetPath)
+                    openDescriptors.add(assetFileDescriptor)
+                    soundIds[soundType] = soundPool.load(assetFileDescriptor, 1)
+                }
+                loaded.await()
+            } finally {
+                for (descriptor in openDescriptors) {
+                    runCatching { descriptor.close() }
+                }
+                soundPool.setOnLoadCompleteListener(null)
             }
         }
     }
 
-    private suspend fun loadSoundId(soundType: SoundType): Int {
-        return withContext(context = Dispatchers.IO) {
-            val uriString = getMediaFileUri(soundType = soundType)
-            val assetPath = uriString.replace("file:///android_asset/", "")
-            val assetFileDescriptor = application.assets.openFd(assetPath)
-            soundPool.load(assetFileDescriptor, 1)
-        }
-    }
-
     override fun play(soundType: SoundType) {
-        val soundId = soundMap[soundType] ?: return
-        streamId = soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
+        if (released) {
+            return
+        }
+        val soundId = soundIds[soundType] ?: return
+        soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
     }
 
     override fun pause() {
-        soundPool.pause(streamId)
+        if (!released) {
+            soundPool.autoPause()
+        }
     }
 
     override fun release() {
-        soundMap.clear()
+        if (released) {
+            return
+        }
+        released = true
+        soundIds.clear()
+        soundPool.setOnLoadCompleteListener(null)
+        soundPool.autoPause()
         soundPool.release()
     }
 
