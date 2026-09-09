@@ -1,6 +1,6 @@
 [versions]
 android-application = "9.4.0"
-jetbrains-kotlin = "2.4.20-RC3"
+jetbrains-kotlin = "2.4.20"
 jetbrains-compose-multiplatform = "1.12.0"
 
 androidx-appcompat = "1.8.0"
@@ -9,7 +9,6 @@ androidx-activity-compose = "1.13.0"
 kotlinx-coroutines = "1.11.0"
 
 jetbrains-compose-material3 = "1.12.0-alpha03"
-jetbrains-compose-material3-window-size = "1.12.0-alpha03"
 jetbrains-lifecycle-viewmodel-compose = "2.11.0"
 
 [plugins]
@@ -29,5 +28,5 @@ kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 
 jetbrains-compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "jetbrains-compose-multiplatform" }
 jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "jetbrains-compose-material3" }
-jetbrains-compose-material3-window-size = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "jetbrains-compose-material3-window-size" }
+jetbrains-compose-material3-window-size = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "jetbrains-compose-material3" }
 jetbrains-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrains-lifecycle-viewmodel-compose" }
