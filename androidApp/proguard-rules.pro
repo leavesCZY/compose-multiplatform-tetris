@@ -1,7 +1,5 @@
--optimizationpasses 20
--processkotlinnullchecks remove
+-repackageclasses
+-allowaccessmodification
+-dontusemixedcaseclassnames
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
--obfuscationdictionary dictionary.txt
--packageobfuscationdictionary dictionary.txt
--classobfuscationdictionary dictionary.txt
